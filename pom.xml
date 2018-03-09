@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.0.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>com.centit.framework</groupId>
+    <artifactId>centit-framework-cloud</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <spring-cloud.version>Finchley.M8</spring-cloud.version>
+
+        <centit.ip.version>1.0.2-SNAPSHOT</centit.ip.version>
+
+        <centit.framework.version>4.0-SNAPSHOT</centit.framework.version>
+        <centit.commons.version>2.2.5</centit.commons.version>
+        <centit.persistence.version>1.0.2</centit.persistence.version>
+
+        <centit.ui.version>3.1.0</centit.ui.version>
+
+        <spring.security.version>4.2.3.RELEASE</spring.security.version>
+        <spring.ldap.version>2.2.0.RELEASE</spring.ldap.version>
+        <cas.version>5.2.0</cas.version>
+        <servlet-api.version>3.1.0</servlet-api.version>
+
+        <spring-security-oauth2.version>2.1.1.RELEASE</spring-security-oauth2.version>
+        <ehcache.version>2.10.4</ehcache.version>
+        <commons-codec.version>1.10</commons-codec.version>
+
+        <ojdbc6.version>11.2.0.4</ojdbc6.version>
+        <junit.version>4.12</junit.version>
+        <mysql.version>5.1.9</mysql.version>
+    </properties>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>江苏南大先腾信息产业股份有限公司</name>
+        <url>www.centit.com</url>
+    </organization>
+
+</project>

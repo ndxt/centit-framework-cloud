@@ -1,0 +1,14 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://codefanpc:10080/eureka/
+server:
+  port: 10088
+spring:
+  application:
+    name: SERVICE-GATEWAY
+zuul:
+  routes:
+    api-a:
+      path: /system/**
+      serviceId: SERVICE-FRAMEWORK
