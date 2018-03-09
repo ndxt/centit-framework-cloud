@@ -6,9 +6,10 @@ eureka:
 server:
   port: 10081
 
+
 spring:
   application:
-    name: SERVICE-FRAMEWORK
+    name: service-hi
   datasource:
     type: org.apache.commons.dbcp2.BasicDataSource
     driver-class-name: com.mysql.jdbc.Driver
