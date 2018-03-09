@@ -10,11 +10,11 @@ spring:
   application:
     name: SERVICE-FRAMEWORK
   datasource:
-    url: jdbc:mysql://192.168.128.32:3306/frameworkdb?useUnicode=true&characterEncoding=utf-8
+    type: org.apache.commons.dbcp2.BasicDataSource
     driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.128.32:3306/frameworkdb?useUnicode=true&characterEncoding=utf-8
     username: framework
     password: framework
-    type: org.apache.commons.dbcp2.BasicDataSource
     dbcp2:
       max-wait-millis: 10000
       max-idle: 15
@@ -22,3 +22,33 @@ spring:
       validation-query: SELECT 1
       connection-properties: characterEncoding=utf8
 
+#用户目录
+userdirectory:
+  default:
+    rank: YG
+    station: ZY
+    rolecode: G-SYSADMIN
+  ldap:
+    url: LDAP://192.168.128.5:389
+    username: accounts@centit.com
+    userpassword: yhs@yhs1
+    searchbase: CN=Users,DC=centit,DC=com
+
+#系统属性
+app:
+  home: /D/Projects/RunData/ip_home
+#业务配置信息
+opt:
+  name: 框架测试项目
+  subsystem: false
+
+#框架相关的表主键生成规制， 目前关联的就是 userinfo 和 uintinfo 两个表
+#default value {"prefix":"U","length":8,"pad":"0"}
+framework:
+  userinfo:
+    id:
+      generator: {"length":1}
+#default value {"prefix":"D","length":6,"pad":"0"}
+  unitinfo:
+    id:
+      generator: {"length":1}
