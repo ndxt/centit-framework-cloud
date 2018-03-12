@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 @SpringBootApplication
 @EnableEurekaClient
 @ComponentScan(basePackages="com.centit.framework")
-@PropertySource(value = "classpath:application.yml", ignoreResourceNotFound = true)
+//@PropertySource(value = "classpath:application.yml", ignoreResourceNotFound = true)
 public class FrameworkSystemCloudApplication {
 
 	public static void main(String[] args) {

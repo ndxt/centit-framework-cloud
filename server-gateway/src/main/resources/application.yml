@@ -7,8 +7,103 @@ server:
 spring:
   application:
     name: SERVICE-GATEWAY
+  datasource:
+    type: org.apache.commons.dbcp2.BasicDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.128.32:3306/frameworkdb?useUnicode=true&characterEncoding=utf-8
+    username: framework
+    password: framework
+    dbcp2:
+      max-wait-millis: 10000
+      max-idle: 15
+      initial-size: 10
+      validation-query: SELECT 1
+      connection-properties: characterEncoding=utf8
+
 zuul:
   routes:
     api-a:
       path: /system/**
       serviceId: SERVICE-FRAMEWORK
+
+http:
+  csrf:
+    enable: false
+  filter:
+    chain:
+      continueBeforeSuccessfulAuthentication: false
+
+login:
+  failure:
+    targetUrl:
+    writeLog: false
+  success:
+    targetUrl:
+    writeLog: true
+    registToken: true
+  captcha:
+    checkTime: 0
+    checkType: 0
+  retry:
+    checkType: H
+    maxTryTimes: 0
+    lockMinites: 10
+    checkTimeTnterval: 3
+
+access:
+  resource:
+    must:
+      be:
+        audited: false
+
+#用户目录
+userdirectory:
+  default:
+    rank: YG
+    station: ZY
+    rolecode: G-SYSADMIN
+  ldap:
+    url: LDAP://192.168.128.5:389
+    username: accounts@centit.com
+    userpassword: yhs@yhs1
+    searchbase: CN=Users,DC=centit,DC=com
+
+#系统属性
+app:
+  home: /D/Projects/RunData/ip_home
+#业务配置信息
+opt:
+  name: 框架测试项目
+  subsystem: false
+
+jdbc:
+  url:
+#单点登录相关配置信息
+cas:
+  sso: false
+  home: https://zou_wy:8443/centit-cas
+#登录成功后的首页
+local:
+  home: http://zouwuyangpc:8084/product-ip
+  firstpage: /system/mainframe/index
+
+#是否开放实施人员入口
+deploy:
+  enabled: true
+#框架相关的表主键生成规制， 目前关联的就是 userinfo 和 uintinfo 两个表
+#default value {"prefix":"U","length":8,"pad":"0"}
+framework:
+  userinfo:
+    id:
+      generator: \{"length":1\}
+#default value {"prefix":"D","length":6,"pad":"0"}
+  unitinfo:
+    id:
+      generator: \{"length":1\}
+  roleinfo:
+    id:
+      generator: \{"length":1\}
+#多国语言设置
+sys:
+  multi_lang: true
+  defalut_lang: zh_CN
