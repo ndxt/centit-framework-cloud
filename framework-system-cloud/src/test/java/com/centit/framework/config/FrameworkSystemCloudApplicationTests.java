@@ -1,4 +1,4 @@
-package com.centit.framework.frameworksystem;
+package com.centit.framework.config;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
