@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.0.RELEASE</version>
+        <version>1.5.10.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -21,10 +21,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <spring-cloud.version>Finchley.M8</spring-cloud.version>
-        <centit.ip.version>1.0-SNAPSHOT</centit.ip.version>
+        <spring-cloud.version>Edgware.SR2</spring-cloud.version>
 
-        <centit.framework.version>4.0-SNAPSHOT</centit.framework.version>
+        <centit.framework.version>4.1-SNAPSHOT</centit.framework.version>
         <centit.persistence.version>1.0-SNAPSHOT</centit.persistence.version>
 
         <centit.commons.version>2.2.5</centit.commons.version>

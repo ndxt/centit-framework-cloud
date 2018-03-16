@@ -14,6 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 public class ServerGatewayApplication {
 
 	public static void main(String[] args) {
+		//com.centit.framework.system.config.SystemBeanConfig
 		SpringApplication.run(ServerGatewayApplication.class, args);
 	}
 }

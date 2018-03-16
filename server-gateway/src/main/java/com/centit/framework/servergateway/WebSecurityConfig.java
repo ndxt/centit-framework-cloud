@@ -10,11 +10,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -26,16 +25,12 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.security.web.csrf.CsrfLogoutHandler;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Configuration
-@EnableWebMvcSecurity
+@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    @Qualifier("passwordEncoder")
-    protected PasswordEncoder passwordEncoder;
+    AuthenticationManager authenticationManager;
 
     @Autowired
     protected CsrfTokenRepository csrfTokenRepository;
@@ -84,7 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         AjaxAuthenticationSuccessHandler ajaxSuccessHandler = new AjaxAuthenticationSuccessHandler();
         //String defaultTargetUrl = env.getProperty("login.success.targetUrl");
         ajaxSuccessHandler.setDefaultTargetUrl(StringBaseOpt.emptyValue(defaultSuccessTargetUrl,"/"));
-
+        ajaxSuccessHandler.setSessionRegistry(centitSessionRegistry);
         ajaxSuccessHandler.setWriteLog(loginSuccessWritelog);
         ajaxSuccessHandler.setRegistToken(loginSuccessRegistToken);
         ajaxSuccessHandler.setUserDetailsService(centitUserDetailsService);
@@ -123,8 +118,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.headers().frameOptions().sameOrigin();
 
-        AuthenticationProvider authenticationProvider = createAuthenticationProvider();
-        AuthenticationManager authenticationManager = createAuthenticationManager(authenticationProvider);
+        //AuthenticationProvider authenticationProvider = createAuthenticationProvider();
+        //AuthenticationManager authenticationManager = createAuthenticationManager(authenticationProvider);
+
         DaoFilterSecurityInterceptor centitPowerFilter = createCentitPowerFilter(authenticationManager,
                 createCentitAccessDecisionManager(),createCentitSecurityMetadataSource());
 
@@ -193,17 +189,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 new SecurityContextLogoutHandler());
     }
 
-    public AuthenticationProvider createAuthenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setHideUserNotFoundExceptions(false);
-        authenticationProvider.setUserDetailsService(centitUserDetailsService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder);
-        return authenticationProvider;
-    }
 
-    public  AuthenticationManager createAuthenticationManager(AuthenticationProvider authenticationProvider) {
-        List<AuthenticationProvider> providerList = new ArrayList<>();
-        providerList.add(authenticationProvider);
-        return new ProviderManager(providerList);
-    }
+
+
 }

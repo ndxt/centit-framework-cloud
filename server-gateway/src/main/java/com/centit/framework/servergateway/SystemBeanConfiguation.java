@@ -18,7 +18,7 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 
-@Configuration("environmentConfiguation")
+@Configuration
 public class SystemBeanConfiguation {
 
     @Bean({"passwordEncoder"})
