@@ -3,6 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>framework-cloud-client</module>
+    </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -24,6 +27,7 @@
         <spring-cloud.version>Edgware.SR2</spring-cloud.version>
 
         <centit.framework.version>4.1-SNAPSHOT</centit.framework.version>
+        <centit.framework.cloud.version>1.0-SNAPSHOT</centit.framework.cloud.version>
         <centit.persistence.version>1.0-SNAPSHOT</centit.persistence.version>
 
         <centit.commons.version>2.2.5</centit.commons.version>
@@ -54,5 +58,28 @@
         <name>江苏南大先腾信息产业股份有限公司</name>
         <url>www.centit.com</url>
     </organization>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
 </project>
