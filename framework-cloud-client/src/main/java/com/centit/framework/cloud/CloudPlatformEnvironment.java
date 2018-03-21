@@ -35,7 +35,7 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     private String topOptId;
 
     public CloudPlatformEnvironment() {
-
+        topOptId = "mainframe";
     }
 
     /**
@@ -283,14 +283,15 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return List 所有用户
      */
     @Override
-    @Cacheable(value = "UserInfo",key = "'userList'" )
-    @HystrixCommand(fallbackMethod = "dummyListAllUsers")
+    //@Cacheable(value = "UserInfo",key = "'userList'" )
+    //@HystrixCommand(fallbackMethod = "dummyListAllUsers")
     public List<UserInfo> listAllUsers() {
 
-        ResponseJSON responseJSON =
+        String jsonString =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/allusers/"+topOptId,
-                        ResponseJSON.class);
+                        String.class);
+        ResponseJSON responseJSON = ResponseJSON.valueOfJson(jsonString);
         return responseJSON.getDataAsArray(UserInfo.class);
 
     }
