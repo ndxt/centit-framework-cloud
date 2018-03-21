@@ -11,8 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableEurekaClient
 @EnableDiscoveryClient
 @EnableHystrix
-@ComponentScan(basePackages="com.centit.framework",
-		excludeFilters = @ComponentScan.Filter(value = org.springframework.stereotype.Controller.class))
+@ComponentScan(basePackages="com.centit.framework")
 public class FrameworkCloudDemoApplication {
 
 	public static void main(String[] args) {
