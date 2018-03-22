@@ -34,7 +34,12 @@
             <groupId>com.centit.framework</groupId>
             <artifactId>framework-system-static</artifactId>
             <version>${centit.framework.version}</version>
-
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-dbcp2</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>
