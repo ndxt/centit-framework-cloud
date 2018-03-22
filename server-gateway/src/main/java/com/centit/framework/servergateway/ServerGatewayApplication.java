@@ -9,8 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableZuulProxy
 @EnableEurekaClient
 @SpringBootApplication
-@ComponentScan(basePackages="com.centit.framework",
-		excludeFilters = @ComponentScan.Filter(value = org.springframework.stereotype.Controller.class))
+@ComponentScan(basePackages="com.centit.framework"/*,
+		excludeFilters = @ComponentScan.Filter(value = org.springframework.stereotype.Controller.class)*/)
 public class ServerGatewayApplication {
 
 	public static void main(String[] args) {
