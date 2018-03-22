@@ -38,12 +38,6 @@
 			<groupId>com.centit.framework</groupId>
 			<artifactId>framework-cloud-client</artifactId>
 			<version>${centit.framework.cloud.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.commons</groupId>
-					<artifactId>commons-dbcp2</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<dependency>
