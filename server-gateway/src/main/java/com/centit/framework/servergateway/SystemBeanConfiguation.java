@@ -11,10 +11,13 @@ import com.centit.framework.security.model.CentitUserDetailsService;
 import com.centit.framework.security.model.MemorySessionRegistryImpl;
 import com.centit.framework.system.security.DaoUserDetailsService;
 import com.centit.framework.system.service.impl.DBPlatformEnvironment;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.web.client.RestTemplate;
@@ -22,6 +25,11 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class SystemBeanConfiguation {
+
+    @Bean("passwordEncoder")
+    public CentitPasswordEncoderImpl passwordEncoder() {
+        return new CentitPasswordEncoderImpl();
+    }
 
     @Bean
     @LoadBalanced

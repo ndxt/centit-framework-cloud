@@ -1,8 +1,10 @@
 package com.centit.framework.security;
 
+import com.centit.framework.common.ResponseJSON;
 import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.security.model.CentitSessionRegistry;
 import com.centit.framework.security.model.CentitUserDetails;
+import com.centit.framework.system.security.CentitUserDetailsImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
@@ -11,12 +13,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.*;
 import java.io.IOException;
 
 public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
         implements Filter {
+
+    private static String AUTHORIZE_SERVICE_URL="http://AUTHORIZE-SERVICE";
+    private static CentitUserDetails anonymousUser = AnonymousUserDetails.createAnonymousUser();
+    private RestTemplate restTemplate;
 
     private FilterInvocationSecurityMetadataSource securityMetadataSource;
 
@@ -27,6 +34,9 @@ public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
     }
     // ~ Methods
     // ========================================================================================================
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     /**
      * Method that is actually called by the filter chain. Simply delegates to
@@ -67,17 +77,33 @@ public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
         if(authentication==null || "anonymousUser".equals(authentication.getName())){
 
             String accessToken = fi.getHttpRequest().getParameter(SecurityContextUtils.SecurityContextTokenName);
-            if(StringUtils.isBlank(accessToken))
-                accessToken = String.valueOf(fi.getHttpRequest().getAttribute(SecurityContextUtils.SecurityContextTokenName) );
-            CentitUserDetails ud = sessionRegistry.getCurrentUserDetails(accessToken);
-            if(ud!=null){
-                alwaysReauthenticate = this.isAlwaysReauthenticate();
-                if(alwaysReauthenticate)
-                    this.setAlwaysReauthenticate(false);
-                SecurityContextHolder.getContext().setAuthentication(ud);
-                //设置用户默认语言
-                WebOptUtils.setCurrentLang(fi.getHttpRequest(),
-                        ud.getUserSettingValue(WebOptUtils.LOCAL_LANGUAGE_LABLE));
+            if(StringUtils.isBlank(accessToken)) {
+                accessToken = fi.getHttpRequest().getHeader("Authorization");
+            }
+
+            CentitUserDetails ud = null;
+            if(StringUtils.isNotBlank(accessToken)) {
+                try {
+                    String jsonString =
+                            restTemplate.getForObject(AUTHORIZE_SERVICE_URL + "/user/" + accessToken,
+                                    String.class);
+                    ResponseJSON responseJSON = ResponseJSON.valueOfJson(jsonString);
+                    ud = responseJSON.getDataAsObject(CentitUserDetailsImpl.class);
+                } catch (Exception e) {
+                    ud = null;
+                }
+
+                if(ud!=null){
+                    alwaysReauthenticate = this.isAlwaysReauthenticate();
+                    if(alwaysReauthenticate)
+                        this.setAlwaysReauthenticate(false);
+                    SecurityContextHolder.getContext().setAuthentication(ud);
+                }else if(authentication==null){
+                    alwaysReauthenticate = this.isAlwaysReauthenticate();
+                    if(alwaysReauthenticate)
+                        this.setAlwaysReauthenticate(false);
+                    SecurityContextHolder.getContext().setAuthentication(anonymousUser);
+                }
             }
         }
 

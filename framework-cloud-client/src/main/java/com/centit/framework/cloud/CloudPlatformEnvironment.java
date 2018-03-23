@@ -1,19 +1,18 @@
 package com.centit.framework.cloud;
 
-import com.alibaba.fastjson.JSON;
-import com.centit.framework.appclient.RestfulHttpRequest;
 import com.centit.framework.common.ResponseJSON;
 import com.centit.framework.model.adapter.PlatformEnvironment;
-import com.centit.framework.model.basedata.*;
+import com.centit.framework.model.basedata.IOptInfo;
+import com.centit.framework.model.basedata.IOptMethod;
+import com.centit.framework.model.basedata.IUserInfo;
+import com.centit.framework.model.basedata.IUserSetting;
 import com.centit.framework.security.model.CentitSecurityMetadata;
 import com.centit.framework.security.model.CentitUserDetails;
 import com.centit.framework.security.model.OptTreeNode;
 import com.centit.framework.staticsystem.po.*;
 import com.centit.framework.staticsystem.security.StaticCentitUserDetails;
-import com.centit.support.network.HttpExecutor;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +33,7 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Autowired
     RestTemplate restTemplate;
 
-    private static String FRAMEWORK_SERVER_URL="http://SERVICE-FRAMEWORK/platform";
+    private static String FRAMEWORK_SERVER_URL="http://FRAMEWORK-SERVICE/platform";
     private Logger logger = LoggerFactory.getLogger(CloudPlatformEnvironment.class);
 
     private String topOptId;
@@ -364,12 +362,14 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      */
     @Override
     @Cacheable(value = "UserInfo",key = "'userList'" )
-    @HystrixCommand(fallbackMethod = "dummyListAllUsers")
+    //@HystrixCommand(fallbackMethod = "dummyListAllUsers")
     public List<UserInfo> listAllUsers() {
-        ResponseJSON responseJSON =
+        String jsonString =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/allusers/"+topOptId,
-                        ResponseJSON.class);
+                        String.class);
+        ResponseJSON responseJSON = ResponseJSON.valueOfJson(jsonString);
+
         return responseJSON.getDataAsArray(UserInfo.class);
 
     }

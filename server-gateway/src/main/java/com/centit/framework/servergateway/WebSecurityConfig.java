@@ -11,10 +11,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    RestTemplate restTemplate;
 
     @Autowired
     protected CsrfTokenRepository csrfTokenRepository;
@@ -25,6 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             DaoInvocationSecurityMetadataSource centitSecurityMetadataSource) {
 
         CloudFilterSecurityInterceptor centitPowerFilter = new CloudFilterSecurityInterceptor();
+        centitPowerFilter.setRestTemplate(restTemplate);
         centitPowerFilter.setAccessDecisionManager(centitAccessDecisionManagerBean);
         centitPowerFilter.setSecurityMetadataSource(centitSecurityMetadataSource);
         return centitPowerFilter;

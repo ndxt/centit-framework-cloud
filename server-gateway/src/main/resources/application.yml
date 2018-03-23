@@ -36,3 +36,17 @@ http:
   filter:
     chain:
       continueBeforeSuccessfulAuthentication: false
+
+#框架相关的表主键生成规制， 目前关联的就是 userinfo 和 uintinfo 两个表
+#default value {"prefix":"U","length":8,"pad":"0"}
+framework:
+  userinfo:
+    id:
+      generator: \{"length":1\}
+#default value {"prefix":"D","length":6,"pad":"0"}
+  unitinfo:
+    id:
+      generator: \{"length":1\}
+  roleinfo:
+    id:
+      generator: \{"length":1\}
