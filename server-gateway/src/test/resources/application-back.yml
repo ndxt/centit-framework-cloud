@@ -4,11 +4,11 @@ eureka:
       defaultZone: http://codefanpc:10080/eureka/
 
 server:
-  port: 10087
+  port: 10088
 
 spring:
   application:
-    name: AUTHORIZE-SERVICE
+    name: GATEWAY-SERVICE
   datasource:
     type: org.apache.commons.dbcp2.BasicDataSource
     driver-class-name: com.mysql.jdbc.Driver
@@ -22,6 +22,14 @@ spring:
       validation-query: SELECT 1
       connection-properties: characterEncoding=utf8
 
+zuul:
+  routes:
+    api-system:
+      path: /system/**
+      serviceId: FRAMEWORK-SERVICE
+    api-auth:
+      path: /auth/**
+      serviceId: AUTHORIZE-SERVICE
 http:
   csrf:
     enable: false
@@ -46,7 +54,47 @@ login:
     lockMinites: 10
     checkTimeTnterval: 3
 
-#\u6846\u67B6\u76F8\u5173\u7684\u8868\u4E3B\u952E\u751F\u6210\u89C4\u5236\uFF0C \u76EE\u524D\u5173\u8054\u7684\u5C31\u662F userinfo \u548C uintinfo \u4E24\u4E2A\u8868
+access:
+  resource:
+    must:
+      be:
+        audited: false
+
+#用户目录
+userdirectory:
+  default:
+    rank: YG
+    station: ZY
+    rolecode: G-SYSADMIN
+  ldap:
+    url: LDAP://192.168.128.5:389
+    username: accounts@centit.com
+    userpassword: yhs@yhs1
+    searchbase: CN=Users,DC=centit,DC=com
+
+#系统属性
+app:
+  home: /D/Projects/RunData/ip_home
+#业务配置信息
+opt:
+  name: 框架测试项目
+  subsystem: false
+
+jdbc:
+  url:
+#单点登录相关配置信息
+cas:
+  sso: false
+  home: https://zou_wy:8443/centit-cas
+#登录成功后的首页
+local:
+  home: http://zouwuyangpc:8084/product-ip
+  firstpage: /system/mainframe/index
+
+#是否开放实施人员入口
+deploy:
+  enabled: true
+#框架相关的表主键生成规制， 目前关联的就是 userinfo 和 uintinfo 两个表
 #default value {"prefix":"U","length":8,"pad":"0"}
 framework:
   userinfo:
@@ -59,3 +107,7 @@ framework:
   roleinfo:
     id:
       generator: \{"length":1\}
+#多国语言设置
+sys:
+  multi_lang: true
+  defalut_lang: zh_CN

@@ -1,8 +1,6 @@
 package com.centit.framework.authorizeserver;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -14,8 +12,8 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 @EnableAuthorizationServer
 public class Auth2SecurityConfig extends AuthorizationServerConfigurerAdapter {
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+    //@Autowired
+    //AuthenticationManager authenticationManager;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -28,7 +26,13 @@ public class Auth2SecurityConfig extends AuthorizationServerConfigurerAdapter {
                 .secret("123456")
                 .and().withClient("client_2")
                 .resourceIds("order")
-                .authorizedGrantTypes("password", "refresh_token")
+                .authorizedGrantTypes("authorization_code", "refresh_token")
+                .scopes("select")
+                .authorities("client")
+                .secret("123456")
+                .and().withClient("client_3")
+                .resourceIds("order")
+                .authorizedGrantTypes("implicit", "refresh_token")
                 .scopes("select")
                 .authorities("client")
                 .secret("123456");
@@ -37,8 +41,8 @@ public class Auth2SecurityConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
-                .tokenStore(new InMemoryTokenStore())
-                .authenticationManager(authenticationManager);
+                .tokenStore(new InMemoryTokenStore());
+                //.authenticationManager(authenticationManager);
     }
 
     @Override

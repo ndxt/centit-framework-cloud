@@ -11,7 +11,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -37,25 +36,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     protected CentitUserDetailsService centitUserDetailsService;
 
-    protected DaoFilterSecurityInterceptor createCentitPowerFilter(AuthenticationManager authenticationManager,
-                                                                   DaoAccessDecisionManager centitAccessDecisionManagerBean,
-                                                                   DaoInvocationSecurityMetadataSource centitSecurityMetadataSource) {
-
-        DaoFilterSecurityInterceptor centitPowerFilter = new DaoFilterSecurityInterceptor();
-        centitPowerFilter.setAuthenticationManager(authenticationManager);
-        centitPowerFilter.setAccessDecisionManager(centitAccessDecisionManagerBean);
-        centitPowerFilter.setSecurityMetadataSource(centitSecurityMetadataSource);
-        centitPowerFilter.setSessionRegistry(centitSessionRegistry);
-        return centitPowerFilter;
-    }
-
     @Value("${login.failure.targetUrl}")
     String defaultFailureTargetUrl;
     @Value("${login.failure.writeLog:false}")
     boolean loginFailureWritelog;
 
-    protected AjaxAuthenticationFailureHandler createAjaxFailureHandler() {
-        AjaxAuthenticationFailureHandler ajaxFailureHandler = new AjaxAuthenticationFailureHandler();
+    protected TokenAuthenticationFailureHandler createFailureHandler() {
+        TokenAuthenticationFailureHandler ajaxFailureHandler = new TokenAuthenticationFailureHandler();
         //String defaultTargetUrl = env.getProperty("login.failure.targetUrl");
         ajaxFailureHandler.setDefaultFailureUrl(
                 StringBaseOpt.emptyValue(defaultFailureTargetUrl,
@@ -68,33 +55,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     String defaultSuccessTargetUrl;
     @Value("${login.success.writeLog:true}")
     boolean loginSuccessWritelog;
-    @Value("${login.success.registToken:false}")
-    boolean loginSuccessRegistToken;
 
-    protected AjaxAuthenticationSuccessHandler createAjaxSuccessHandler(CentitUserDetailsService centitUserDetailsService) {
-        AjaxAuthenticationSuccessHandler ajaxSuccessHandler = new AjaxAuthenticationSuccessHandler();
+
+    protected TokenAuthenticationSuccessHandler createSuccessHandler(CentitUserDetailsService centitUserDetailsService) {
+        TokenAuthenticationSuccessHandler ajaxSuccessHandler = new TokenAuthenticationSuccessHandler();
         //String defaultTargetUrl = env.getProperty("login.success.targetUrl");
         ajaxSuccessHandler.setDefaultTargetUrl(StringBaseOpt.emptyValue(defaultSuccessTargetUrl,"/"));
         ajaxSuccessHandler.setSessionRegistry(centitSessionRegistry);
         ajaxSuccessHandler.setWriteLog(loginSuccessWritelog);
-        ajaxSuccessHandler.setRegistToken(loginSuccessRegistToken);
         ajaxSuccessHandler.setUserDetailsService(centitUserDetailsService);
         return ajaxSuccessHandler;
     }
-
-    @Value("${access.resource.must.be.audited:false}")
-    boolean accessResourceMustBeAudited;
-
-    protected DaoAccessDecisionManager createCentitAccessDecisionManager() {
-        DaoAccessDecisionManager accessDecisionManager = new DaoAccessDecisionManager();
-        accessDecisionManager.setAllResourceMustBeAudited(accessResourceMustBeAudited);
-        return accessDecisionManager;
-    }
-
-    protected DaoInvocationSecurityMetadataSource createCentitSecurityMetadataSource() {
-        return new DaoInvocationSecurityMetadataSource();
-    }
-
 
     @Value("${http.csrf.enable:false}")
     boolean httpCsrfEnable;
@@ -117,18 +88,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //AuthenticationProvider authenticationProvider = createAuthenticationProvider();
         //AuthenticationManager authenticationManager = createAuthenticationManager(authenticationProvider);
 
-        DaoFilterSecurityInterceptor centitPowerFilter = createCentitPowerFilter(authenticationManager,
-                createCentitAccessDecisionManager(),createCentitSecurityMetadataSource());
 
-        AuthenticationFailureHandler ajaxFailureHandler = createAjaxFailureHandler();
-        AjaxAuthenticationSuccessHandler ajaxSuccessHandler = createAjaxSuccessHandler(centitUserDetailsService);
+
+        AuthenticationFailureHandler ajaxFailureHandler = createFailureHandler();
+        TokenAuthenticationSuccessHandler ajaxSuccessHandler = createSuccessHandler(centitUserDetailsService);
 
         UsernamePasswordAuthenticationFilter pretreatmentAuthenticationProcessingFilter =
                 createPretreatmentAuthenticationProcessingFilter(
                         authenticationManager, ajaxSuccessHandler, ajaxFailureHandler);
 
         http.addFilterAt(pretreatmentAuthenticationProcessingFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(centitPowerFilter, FilterSecurityInterceptor.class)
                 .addFilterAt(logoutFilter(), LogoutFilter.class);
     }
 
@@ -152,7 +121,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     boolean httpFilterChainContinueBeforeSuccessfulAuthentication;
 
     private UsernamePasswordAuthenticationFilter createPretreatmentAuthenticationProcessingFilter(
-            AuthenticationManager authenticationManager,AjaxAuthenticationSuccessHandler ajaxSuccessHandler,
+            AuthenticationManager authenticationManager,TokenAuthenticationSuccessHandler ajaxSuccessHandler,
             AuthenticationFailureHandler ajaxFailureHandler) {
 
         PretreatmentAuthenticationProcessingFilter
@@ -184,8 +153,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 new CookieClearingLogoutHandler("JSESSIONID","remember-me"),
                 new SecurityContextLogoutHandler());
     }
-
-
-
 
 }

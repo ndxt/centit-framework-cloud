@@ -21,7 +21,7 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 @Configuration
 public class SystemBeanConfiguation {
 
-    @Bean({"passwordEncoder"})
+    @Bean("passwordEncoder")
     public CentitPasswordEncoderImpl passwordEncoder() {
         return new CentitPasswordEncoderImpl();
     }

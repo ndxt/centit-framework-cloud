@@ -9,7 +9,7 @@ server:
 
 spring:
   application:
-    name: SERVICE-FRAMEWORK
+    name: FRAMEWORK-SERVICE
   datasource:
     type: org.apache.commons.dbcp2.BasicDataSource
     driver-class-name: com.mysql.jdbc.Driver
