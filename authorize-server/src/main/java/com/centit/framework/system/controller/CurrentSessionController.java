@@ -16,12 +16,12 @@ public class CurrentSessionController extends BaseController {
     protected CentitSessionRegistry centitSessionRegistry;
 
     @GetMapping( "/user/{token}")
-    public String getUserInfoByToken(@PathVariable String token) {
+    public ResponseMapData getUserInfoByToken(@PathVariable String token) {
 
         ResponseMapData resData = new ResponseMapData();
         CentitUserDetails ud =centitSessionRegistry.getCurrentUserDetails(token);
         resData.addResponseData("userInfo", ud);
 
-        return resData.toJSONString();
+        return resData;//.toJSONString();
     }
 }

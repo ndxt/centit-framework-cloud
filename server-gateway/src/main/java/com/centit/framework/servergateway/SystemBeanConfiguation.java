@@ -11,43 +11,28 @@ import com.centit.framework.security.model.CentitUserDetailsService;
 import com.centit.framework.security.model.MemorySessionRegistryImpl;
 import com.centit.framework.system.security.DaoUserDetailsService;
 import com.centit.framework.system.service.impl.DBPlatformEnvironment;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.web.client.RestTemplate;
 
 
 @Configuration
 public class SystemBeanConfiguation {
 
-    @Bean({"passwordEncoder"})
-    public CentitPasswordEncoderImpl passwordEncoder() {
-        return new CentitPasswordEncoderImpl();
-    }
-
     @Bean
-    public PlatformEnvironment platformEnvironment() {
-        DBPlatformEnvironment platformEnvironment = new DBPlatformEnvironment();
-        return platformEnvironment;
-    }
-
-    @Bean
-    public CentitUserDetailsService centitUserDetailsService() {
-        DaoUserDetailsService userDetailsService = new DaoUserDetailsService();
-        return userDetailsService;
+    @LoadBalanced
+    RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
     @Bean
     public CsrfTokenRepository csrfTokenRepository() {
         return new HttpSessionCsrfTokenRepository();
     }
-
-    @Bean
-    public CentitSessionRegistry centitSessionRegistry() {
-        return new MemorySessionRegistryImpl();
-    }
-
 
     @Bean
     public NotificationCenter notificationCenter() {
@@ -65,9 +50,6 @@ public class SystemBeanConfiguation {
         return operationLog;
     }
 
-    @Bean
-    public InstantiationServiceBeanPostProcessor instantiationServiceBeanPostProcessor() {
-        return new InstantiationServiceBeanPostProcessor();
-    }
+
 }
 
