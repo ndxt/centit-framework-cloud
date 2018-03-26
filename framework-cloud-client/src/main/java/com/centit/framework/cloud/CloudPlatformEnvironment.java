@@ -808,7 +808,18 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
 
     }
 
+    /**
+     * 新增菜单和操作
+     *
+     * @param optInfos   菜单对象集合
+     * @param optMethods 操作对象集合
+     */
     @Override
+    public void insertOrUpdateMenu(List<? extends IOptInfo> optInfos, List<? extends IOptMethod> optMethods) {
+
+    }
+
+    //@Override
     public void insertOpt(List<? extends IOptInfo> list, List<? extends IOptMethod> list1) {
 
     }
