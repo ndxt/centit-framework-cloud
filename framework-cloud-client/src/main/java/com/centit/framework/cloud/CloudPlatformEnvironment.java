@@ -110,7 +110,7 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
             OptInfo oi = optRepo.get(ou.getOptId());
             if(oi!=null){
                 String  optDefUrl = oi.getOptUrl()+ou.getOptUrl();
-                List<List<String>> sOpt = CentitSecurityMetadata.parseUrl(
+                List<List<String>> sOpt = CentitSecurityMetadata.parsePowerDefineUrl(
                         optDefUrl,ou.getOptReq());
 
                 for(List<String> surls : sOpt){
