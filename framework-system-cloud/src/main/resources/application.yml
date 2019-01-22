@@ -1,11 +1,11 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://codefanpc:10080/eureka/
+      defaultZone: http://localhost:10080/eureka/
 
 server:
   port: 10081
-
+  context-path: /framework
 
 spring:
   application:
