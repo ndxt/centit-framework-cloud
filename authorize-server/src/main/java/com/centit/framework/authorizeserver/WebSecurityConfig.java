@@ -1,7 +1,8 @@
 package com.centit.framework.authorizeserver;
 
-import com.centit.framework.security.*;
-import com.centit.framework.security.model.CentitSessionRegistry;
+import com.centit.framework.security.PretreatmentAuthenticationProcessingFilter;
+import com.centit.framework.security.TokenAuthenticationFailureHandler;
+import com.centit.framework.security.TokenAuthenticationSuccessHandler;
 import com.centit.framework.security.model.CentitUserDetailsService;
 import com.centit.support.algorithm.StringBaseOpt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     protected CsrfTokenRepository csrfTokenRepository;
 
-    @Autowired
-    protected CentitSessionRegistry centitSessionRegistry;
+//    @Autowired
+//    protected CentitSessionRegistry centitSessionRegistry;
 
     @Autowired
     protected CentitUserDetailsService centitUserDetailsService;
@@ -61,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         TokenAuthenticationSuccessHandler ajaxSuccessHandler = new TokenAuthenticationSuccessHandler();
         //String defaultTargetUrl = env.getProperty("login.success.targetUrl");
         ajaxSuccessHandler.setDefaultTargetUrl(StringBaseOpt.emptyValue(defaultSuccessTargetUrl,"/"));
-        ajaxSuccessHandler.setSessionRegistry(centitSessionRegistry);
+//        ajaxSuccessHandler.setSessionRegistry(centitSessionRegistry);
         ajaxSuccessHandler.setWriteLog(loginSuccessWritelog);
         ajaxSuccessHandler.setUserDetailsService(centitUserDetailsService);
         return ajaxSuccessHandler;

@@ -1,29 +1,21 @@
 package com.centit.framework.cloud;
 
-import com.centit.framework.common.ResponseJSON;
+import com.alibaba.fastjson.JSONArray;
+import com.centit.framework.appclient.HttpReceiveJSON;
 import com.centit.framework.model.adapter.PlatformEnvironment;
-import com.centit.framework.model.basedata.IOptInfo;
-import com.centit.framework.model.basedata.IOptMethod;
-import com.centit.framework.model.basedata.IUserInfo;
-import com.centit.framework.model.basedata.IUserSetting;
-import com.centit.framework.security.model.CentitSecurityMetadata;
+import com.centit.framework.model.basedata.*;
 import com.centit.framework.security.model.CentitUserDetails;
-import com.centit.framework.security.model.OptTreeNode;
+import com.centit.framework.security.model.JsonCentitUserDetails;
 import com.centit.framework.staticsystem.po.*;
-import com.centit.framework.staticsystem.security.StaticCentitUserDetails;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.access.SecurityConfig;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +39,7 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      *
      * @return 是否刷新
      */
-    @Override
+//    @Override
     @CacheEvict(value ={
             "DataDictionary","OptInfo","RoleInfo","UserInfo","UnitInfo",
             "UnitUsers","UserUnits","AllUserUnits"},allEntries = true)
@@ -58,10 +50,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
 
     @HystrixCommand(fallbackMethod = "dummyListAllRolePower")
     public List<RolePower>  listAllRolePower(){
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/allrolepowers/"+topOptId,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsArray(RolePower.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsArray(RolePower.class);
     }
 
     public List<RolePower>  dummyListAllRolePower(){
@@ -70,59 +62,14 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
 
     @HystrixCommand(fallbackMethod = "dummyListAllOptMethod")
     public List<OptMethod> listAllOptMethod(){
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/alloptmethods/"+topOptId,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsArray(OptMethod.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsArray(OptMethod.class);
     }
 
     public List<OptMethod>  dummyListAllOptMethod(){
         return null;
-    }
-
-    /**
-     * 刷新权限相关的元数据
-     *
-     * @return 是否刷新
-     */
-    @Override
-    public boolean reloadSecurityMetadata() {
-        //这个要定时刷新 或者 通过集成平台来主动刷新
-        CentitSecurityMetadata.optMethodRoleMap.clear();
-        List<RolePower> rplist = listAllRolePower();
-        if(rplist==null || rplist.size()==0)
-            return false;
-        for(RolePower rp: rplist ){
-            List<ConfigAttribute/*roleCode*/> roles = CentitSecurityMetadata.optMethodRoleMap.get(rp.getOptCode());
-            if(roles == null){
-                roles = new ArrayList<ConfigAttribute/*roleCode*/>();
-            }
-            roles.add(new SecurityConfig(CentitSecurityMetadata.ROLE_PREFIX + StringUtils.trim(rp.getRoleCode())));
-            CentitSecurityMetadata.optMethodRoleMap.put(rp.getOptCode(), roles);
-        }
-        //将操作和角色对应关系中的角色排序，便于权限判断中的比较
-        CentitSecurityMetadata.sortOptMethodRoleMap();
-        Map<String, OptInfo> optRepo = getOptInfoRepo();
-        List<OptMethod> oulist = listAllOptMethod();
-        CentitSecurityMetadata.optTreeNode.setChildList(null);
-        CentitSecurityMetadata.optTreeNode.setOptCode(null);
-        for(OptMethod ou:oulist){
-            OptInfo oi = optRepo.get(ou.getOptId());
-            if(oi!=null){
-                String  optDefUrl = oi.getOptUrl()+ou.getOptUrl();
-                List<List<String>> sOpt = CentitSecurityMetadata.parseUrl(
-                        optDefUrl,ou.getOptReq());
-
-                for(List<String> surls : sOpt){
-                    OptTreeNode opt = CentitSecurityMetadata.optTreeNode;
-                    for(String surl : surls)
-                        opt = opt.setChildPath(surl);
-                    opt.setOptCode(ou.getOptCode());
-                }
-            }
-        }
-        //CentitSecurityMetadata.optTreeNode.printTreeNode();
-        return true;
     }
 
     /**
@@ -148,10 +95,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListUserMenuOptInfosUnderSuperOptId")
     public List<OptInfo> listUserMenuOptInfosUnderSuperOptId(String userCode, String superOptId, boolean asAdmin) {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/usermenu/"+superOptId+"/"+userCode+"?asAdmin="+asAdmin,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsArray(OptInfo.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsArray(OptInfo.class);
 
     }
 
@@ -165,13 +112,13 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @param userCode 用户代码
      * @return List 用户所有菜单功能
      */
-    @Override
+//    @Override
     @HystrixCommand(fallbackMethod = "dummyListUserRolesByUserCode")
     public List<RoleInfo> listUserRolesByUserCode(String userCode) {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/userroleinfos/"+userCode,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsArray(RoleInfo.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsArray(RoleInfo.class);
     }
 
     public List<RoleInfo> dummyListUserRolesByUserCode(String userCode) {
@@ -184,13 +131,13 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @param roleCode 角色代码
      * @return List 用户所有菜单功能
      */
-    @Override
+//    @Override
     @HystrixCommand(fallbackMethod = "dummyListRoleUserByRoleCode")
     public List<UserInfo> listRoleUserByRoleCode(String roleCode) {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/roleuserinfos/"+roleCode,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsArray(UserInfo.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsArray(UserInfo.class);
     }
 
     public List<UserInfo> dummyListRoleUserByRoleCode(String roleCode) {
@@ -206,10 +153,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListUserRoles")
     public List<UserRole> listUserRoles(String userCode){
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/userroles/"+userCode,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsArray(UserRole.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsArray(UserRole.class);
     }
 
     public List<UserRole> dummyListUserRoles(String userCode){
@@ -225,10 +172,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListRoleUsers")
     public List<UserRole> listRoleUsers(String roleCode) {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/roleusers/"+roleCode,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsArray(UserRole.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsArray(UserRole.class);
     }
 
     public List<UserRole> dummyListRoleUsers(String roleCode) {
@@ -244,10 +191,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListUnitRoles")
     public List<UnitRole> listUnitRoles(String unitCode) {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/unitroles/"+unitCode,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsArray(UnitRole.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsArray(UnitRole.class);
     }
 
     public List<UnitRole> dummyListUnitRoles(String unitCode) {
@@ -263,10 +210,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListRoleUnits")
     public List<UnitRole> listRoleUnits(String roleCode) {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/roleunits/"+roleCode,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsArray(UnitRole.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsArray(UnitRole.class);
     }
 
     public List<UnitRole> dummyListRoleUnits(String roleCode) {
@@ -279,13 +226,13 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @param userCode userCode
      * @return 用户信息
      */
-    @Override
+//    @Override
     @HystrixCommand(fallbackMethod = "dummyGetUserInfoByUserCode")
     public UserInfo getUserInfoByUserCode(String userCode) {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/userinfo/"+userCode,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsObject(UserInfo.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsObject(UserInfo.class);
     }
 
     public UserInfo dummyGetUserInfoByUserCode(String userCode) {
@@ -298,13 +245,13 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @param loginName loginName
      * @return 登录名获取用户信息
      */
-    @Override
+//    @Override
     @HystrixCommand(fallbackMethod = "dummyGetUserInfoByLoginName")
     public UserInfo getUserInfoByLoginName(String loginName) {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/userinfobyloginname/"+loginName,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsObject(UserInfo.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsObject(UserInfo.class);
 
     }
 
@@ -318,13 +265,13 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @param unitCode unitCode
      * @return 用户信息
      */
-    @Override
+//    @Override
     @HystrixCommand(fallbackMethod = "dummyGetUnitInfoByUnitCode")
     public UnitInfo getUnitInfoByUnitCode(String unitCode) {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/unitinfo/"+unitCode,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsObject(UnitInfo.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsObject(UnitInfo.class);
 
     }
 
@@ -368,9 +315,9 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/allusers/"+topOptId,
                         String.class);
-        ResponseJSON responseJSON = ResponseJSON.valueOfJson(jsonString);
+        HttpReceiveJSON httpReceiveJSON = HttpReceiveJSON.valueOfJson(jsonString);
 
-        return responseJSON.getDataAsArray(UserInfo.class);
+        return httpReceiveJSON.getDataAsArray(UserInfo.class);
 
     }
 
@@ -387,11 +334,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Cacheable(value="UnitInfo",key="'unitList'")
     @HystrixCommand(fallbackMethod = "dummyListAllUnits")
     public List<UnitInfo> listAllUnits() {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/allunits/"+topOptId,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsArray(UnitInfo.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsArray(UnitInfo.class);
     }
 
     public List<UnitInfo> dummyListAllUnits() {
@@ -407,11 +354,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Cacheable(value="AllUserUnits",key="'allUserUnits'")
     @HystrixCommand(fallbackMethod = "dummyListAllUserUnits")
     public List<UserUnit> listAllUserUnits() {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/alluserunits/"+topOptId,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsArray(UserUnit.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsArray(UserUnit.class);
     }
 
     public List<UserUnit> dummyListAllUserUnits() {
@@ -428,11 +375,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Cacheable(value="UserUnits",key="#userCode")
     @HystrixCommand(fallbackMethod = "dummyListUserUnits")
     public List<UserUnit> listUserUnits(String userCode) {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/userunits/"+topOptId+"/"+userCode,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsArray(UserUnit.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsArray(UserUnit.class);
     }
 
     public List<UserUnit> dummyListUserUnits(String userCode) {
@@ -449,11 +396,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Cacheable(value="UnitUsers",key="#unitCode")
     @HystrixCommand(fallbackMethod = "dummyListUnitUsers")
     public List<UserUnit> listUnitUsers(String unitCode) {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/unitusers/"+topOptId+"/"+unitCode,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsArray(UserUnit.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsArray(UserUnit.class);
     }
 
     public List<UserUnit> dummyListUnitUsers(String unitCode) {
@@ -465,18 +412,18 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      *
      * @return Map 机构代码映射表
      */
-    @Override
+//    @Override
     @Cacheable(value="UnitInfo",key="'unitCodeMap'")
     @HystrixCommand(fallbackMethod = "dummyGetUnitRepo")
     public Map<String, UnitInfo> getUnitRepo() {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/unitrepo/"+topOptId,
-                        ResponseJSON.class);
-        if (null == responseJSON) {
+                        HttpReceiveJSON.class);
+        if (null == HttpReceiveJSON) {
             return null;
         }
-        return responseJSON.getDataAsMap(UnitInfo.class);
+        return HttpReceiveJSON.getDataAsMap(UnitInfo.class);
     }
 
     public Map<String, UnitInfo> dummyGetUnitRepo() {
@@ -488,18 +435,18 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      *
      * @return map 部门编码映射表
      */
-    @Override
+//    @Override
     @Cacheable(value = "UserInfo",key = "'userCodeMap'" )
     @HystrixCommand(fallbackMethod = "dummyGetUserRepo")
     public Map<String, UserInfo> getUserRepo() {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/userrepo/"+topOptId,
-                        ResponseJSON.class);
-        if (null == responseJSON) {
+                        HttpReceiveJSON.class);
+        if (null == HttpReceiveJSON) {
             return null;
         }
-        return responseJSON.getDataAsMap(UserInfo.class);
+        return HttpReceiveJSON.getDataAsMap(UserInfo.class);
     }
 
     public Map<String, UserInfo> dummyGetUserRepo() {
@@ -511,18 +458,18 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      *
      * @return Map 机构代码映射表
      */
-    @Override
+//    @Override
     @Cacheable(value = "UserInfo",key = "'loginNameMap'")
     @HystrixCommand(fallbackMethod = "dummyGetLoginNameRepo")
     public Map<String, UserInfo> getLoginNameRepo() {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/loginnamerepo/"+topOptId,
-                        ResponseJSON.class);
-        if (null == responseJSON) {
+                        HttpReceiveJSON.class);
+        if (null == HttpReceiveJSON) {
             return null;
         }
-        return responseJSON.getDataAsMap(UserInfo.class);
+        return HttpReceiveJSON.getDataAsMap(UserInfo.class);
     }
 
     public Map<String, UserInfo> dummyGetLoginNameRepo() {
@@ -534,18 +481,18 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      *
      * @return Map 部门编码映射表
      */
-    @Override
+//    @Override
     @Cacheable(value="UnitInfo",key="'depNoMap'")
     @HystrixCommand(fallbackMethod = "dummyGetDepNoRepo")
     public Map<String, UnitInfo> getDepNoRepo() {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/depnorepo/"+topOptId,
-                        ResponseJSON.class);
-        if (null == responseJSON) {
+                        HttpReceiveJSON.class);
+        if (null == HttpReceiveJSON) {
             return null;
         }
-        return responseJSON.getDataAsMap(UnitInfo.class);
+        return HttpReceiveJSON.getDataAsMap(UnitInfo.class);
 
     }
 
@@ -558,18 +505,18 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      *
      * @return Map 所有角色信息
      */
-    @Override
+//    @Override
     @Cacheable(value="RoleInfo",key="'roleCodeMap'")
     @HystrixCommand(fallbackMethod = "dummyGetRoleRepo")
     public Map<String, RoleInfo> getRoleRepo() {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/rolerepo/"+topOptId,
-                        ResponseJSON.class);
-        if (null == responseJSON) {
+                        HttpReceiveJSON.class);
+        if (null == HttpReceiveJSON) {
             return null;
         }
-        return responseJSON.getDataAsMap(RoleInfo.class);
+        return HttpReceiveJSON.getDataAsMap(RoleInfo.class);
     }
 
     public Map<String, RoleInfo> dummyGetRoleRepo() {
@@ -581,18 +528,18 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      *
      * @return Map 业务信息
      */
-    @Override
+//    @Override
     @Cacheable(value="OptInfo",key="'optIdMap'")
     @HystrixCommand(fallbackMethod = "dummyGetOptInfoRepo")
     public Map<String, OptInfo> getOptInfoRepo() {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/optinforepo/"+topOptId,
-                        ResponseJSON.class);
-        if (null == responseJSON) {
+                        HttpReceiveJSON.class);
+        if (null == HttpReceiveJSON) {
             return null;
         }
-        return responseJSON.getDataAsMap(OptInfo.class);
+        return HttpReceiveJSON.getDataAsMap(OptInfo.class);
     }
 
     public Map<String, OptInfo> dummyGetOptInfoRepo() {
@@ -604,18 +551,18 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      *
      * @return Map 操作方法信息
      */
-    @Override
+//    @Override
     @Cacheable(value="OptInfo",key="'optCodeMap'")
     @HystrixCommand(fallbackMethod = "dummyGetOptMethodRepo")
     public Map<String, OptMethod> getOptMethodRepo() {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/optmethodrepo/"+topOptId,
-                        ResponseJSON.class);
-        if (null == responseJSON) {
+                        HttpReceiveJSON.class);
+        if (null == HttpReceiveJSON) {
             return null;
         }
-        return responseJSON.getDataAsMap(OptMethod.class);
+        return HttpReceiveJSON.getDataAsMap(OptMethod.class);
     }
 
     public Map<String, OptMethod> dummyGetOptMethodRepo() {
@@ -631,11 +578,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Cacheable(value = "DataDictionary",key="'CatalogCode'")
     @HystrixCommand(fallbackMethod = "dummyListAllDataCatalogs")
     public List<DataCatalog> listAllDataCatalogs() {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/catalogs/"+topOptId,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsArray(DataCatalog.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsArray(DataCatalog.class);
 
     }
 
@@ -653,11 +600,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Cacheable(value = "DataDictionary",key="#catalogCode")
     @HystrixCommand(fallbackMethod = "dummyListDataDictionaries")
     public List<DataDictionary> listDataDictionaries(String catalogCode) {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/dictionary/"+topOptId+"/"+catalogCode,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsArray(DataDictionary.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsArray(DataDictionary.class);
     }
 
     public List<DataDictionary> dummyListDataDictionaries(String catalogCode) {
@@ -729,18 +676,19 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     }
 
     private CentitUserDetails loadUserDetails(String queryParam, String qtype) {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON resJson =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/userdetails/"+topOptId+"/"+queryParam+"?qtype="+qtype,
-                        ResponseJSON.class);
+                        HttpReceiveJSON.class);
 
-        if(responseJSON==null || responseJSON.getCode()!=0) {
+        if(resJson==null || resJson.getCode()!=0) {
             return null;
         }
-        StaticCentitUserDetails userDetails =
-                responseJSON.getDataAsObject("userDetails", StaticCentitUserDetails.class);
-        userDetails.getUserInfo().setUserUnits(
-                responseJSON.getDataAsArray("userUnits", UserUnit.class) );
+        JsonCentitUserDetails userDetails =
+                resJson.getDataAsObject("userDetails", JsonCentitUserDetails.class);
+        userDetails.getUserInfo().put("userPin", resJson.getDataAsString("userPin"));
+        userDetails.setUserUnits(
+                (JSONArray) resJson.getData("userUnits"));//, UserUnit.class));
         userDetails.setAuthoritiesByRoles(userDetails.getUserRoles());
         return userDetails;
     }
@@ -750,14 +698,14 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      *
      * @return 个人设置列表
      */
-    @Override
+//    @Override
     @HystrixCommand(fallbackMethod = "dummyGetAllSettings")
     public List<UserSetting> getAllSettings() {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/allsettings/"+topOptId,
-                        ResponseJSON.class);
-        return responseJSON.getDataAsArray(UserSetting.class);
+                        HttpReceiveJSON.class);
+        return HttpReceiveJSON.getDataAsArray(UserSetting.class);
     }
 
     public List<UserSetting> dummyGetAllSettings() {
@@ -784,14 +732,14 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyGetUserSetting")
     public UserSetting getUserSetting(String userCode, String paramCode) {
-        ResponseJSON responseJSON =
+        HttpReceiveJSON HttpReceiveJSON =
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/usersetting/"+userCode+"/"+paramCode,
-                        ResponseJSON.class);
-        if (null == responseJSON) {
+                        HttpReceiveJSON.class);
+        if (null == HttpReceiveJSON) {
             return null;
         }
-        return responseJSON.getDataAsObject(UserSetting.class);
+        return HttpReceiveJSON.getDataAsObject(UserSetting.class);
     }
 
     public UserSetting dummyGetUserSetting(String userCode, String paramCode) {
@@ -822,5 +770,20 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     //@Override
     public void insertOpt(List<? extends IOptInfo> list, List<? extends IOptMethod> list1) {
 
+    }
+
+    @Override
+    public List<? extends IRoleInfo> listAllRoleInfo() {
+        return null;
+    }
+
+    @Override
+    public List<? extends IOptInfo> listAllOptInfo() {
+        return null;
+    }
+
+    @Override
+    public List<? extends IUserSetting> listUserSettings(String userCode) {
+        return null;
     }
 }
