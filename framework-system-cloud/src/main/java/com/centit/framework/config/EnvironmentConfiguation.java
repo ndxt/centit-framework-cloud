@@ -6,8 +6,9 @@ import com.centit.framework.model.adapter.NotificationCenter;
 import com.centit.framework.model.adapter.OperationLogWriter;
 import com.centit.framework.model.adapter.PlatformEnvironment;
 import com.centit.framework.security.model.CentitPasswordEncoderImpl;
+import com.centit.framework.security.model.CentitSessionRegistry;
 import com.centit.framework.security.model.CentitUserDetailsService;
-import com.centit.framework.security.model.StandardPasswordEncoderImpl;
+import com.centit.framework.security.model.MemorySessionRegistryImpl;
 import com.centit.framework.system.security.DaoUserDetailsService;
 import com.centit.framework.system.service.impl.DBPlatformEnvironment;
 import org.springframework.context.annotation.Bean;
@@ -17,12 +18,12 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 
-@Configuration("environmentConfiguration")
-public class EnvironmentConfiguration {
+@Configuration("environmentConfiguation")
+public class EnvironmentConfiguation {
 
     @Bean({"passwordEncoder"})
-    public StandardPasswordEncoderImpl passwordEncoder() {
-        return new StandardPasswordEncoderImpl();
+    public CentitPasswordEncoderImpl passwordEncoder() {
+        return new CentitPasswordEncoderImpl();
     }
 
     @Bean
@@ -43,9 +44,15 @@ public class EnvironmentConfiguration {
     }
 
     @Bean
+    public CentitSessionRegistry centitSessionRegistry() {
+        return new MemorySessionRegistryImpl();
+    }
+
+
+    @Bean
     public NotificationCenter notificationCenter() {
         NotificationCenterImpl notificationCenter = new NotificationCenterImpl();
-        notificationCenter.initDummyMsgSenders();
+        notificationCenter.initMsgSenders();
         //notificationCenter.registerMessageSender("innerMsg",innerMessageManager);
         return notificationCenter;
     }

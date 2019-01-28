@@ -3,7 +3,7 @@ server:
 
 eureka:
   instance:
-    hostname: localhost
+    hostname: codefanpc
   client:
     registerWithEureka: false
     fetchRegistry: false

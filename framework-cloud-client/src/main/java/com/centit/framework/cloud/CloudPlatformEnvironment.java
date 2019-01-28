@@ -73,6 +73,51 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     }
 
     /**
+     * 刷新权限相关的元数据
+     *
+     * @return 是否刷新
+     */
+    @Override
+    public boolean reloadSecurityMetadata() {
+        //这个要定时刷新 或者 通过集成平台来主动刷新
+        CentitSecurityMetadata.optMethodRoleMap.clear();
+        List<RolePower> rplist = listAllRolePower();
+        if(rplist==null || rplist.size()==0)
+            return false;
+        for(RolePower rp: rplist ){
+            List<ConfigAttribute/*roleCode*/> roles = CentitSecurityMetadata.optMethodRoleMap.get(rp.getOptCode());
+            if(roles == null){
+                roles = new ArrayList<ConfigAttribute/*roleCode*/>();
+            }
+            roles.add(new SecurityConfig(CentitSecurityMetadata.ROLE_PREFIX + StringUtils.trim(rp.getRoleCode())));
+            CentitSecurityMetadata.optMethodRoleMap.put(rp.getOptCode(), roles);
+        }
+        //将操作和角色对应关系中的角色排序，便于权限判断中的比较
+        CentitSecurityMetadata.sortOptMethodRoleMap();
+        Map<String, OptInfo> optRepo = getOptInfoRepo();
+        List<OptMethod> oulist = listAllOptMethod();
+        CentitSecurityMetadata.optTreeNode.setChildList(null);
+        CentitSecurityMetadata.optTreeNode.setOptCode(null);
+        for(OptMethod ou:oulist){
+            OptInfo oi = optRepo.get(ou.getOptId());
+            if(oi!=null){
+                String  optDefUrl = oi.getOptUrl()+ou.getOptUrl();
+                List<List<String>> sOpt = CentitSecurityMetadata.parsePowerDefineUrl(
+                        optDefUrl,ou.getOptReq());
+
+                for(List<String> surls : sOpt){
+                    OptTreeNode opt = CentitSecurityMetadata.optTreeNode;
+                    for(String surl : surls)
+                        opt = opt.setChildPath(surl);
+                    opt.setOptCode(ou.getOptCode());
+                }
+            }
+        }
+        //CentitSecurityMetadata.optTreeNode.printTreeNode();
+        return true;
+    }
+
+    /**
      * 获取用户所有菜单功能
      *
      * @param userCode userCode
