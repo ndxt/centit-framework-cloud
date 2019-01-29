@@ -27,6 +27,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
 
     private String topOptId;
 
+    public void setTopOptId(String topOptId) {
+        this.topOptId = topOptId;
+    }
+
     public CloudPlatformEnvironment() {
 
     }
