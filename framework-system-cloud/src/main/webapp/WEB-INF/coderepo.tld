@@ -135,13 +135,13 @@
         <function-signature>java.lang.Boolean checkUserOptPower(java.lang.String, java.lang.String)</function-signature>
     </function>
 
-	<function>
+  <function>
         <description>获取用户设置的参数值 </description>
         <name>USERSETTING</name>
         <function-class>com.centit.framework.components.CodeRepositoryUtil</function-class>
         <function-signature>java.lang.String getUserSettingValue(java.lang.String)</function-signature>
     </function>
-    
+
     <function>
         <description>获取System.properties文件属性值</description>
         <name>SYS_VALUE</name>

@@ -20,32 +20,32 @@ import java.util.List;
 @ComponentScan(basePackages="com.centit.framework")
 public class AuthorizeServerApplication extends WebMvcConfigurerAdapter {
 
-	private FastJsonHttpMessageConverter fastJsonHttpMessageConverter(){
-		FastJsonHttpMessageConverter fastJsonHttpMessageConverter =
-				new FastJsonHttpMessageConverter();
-		List<MediaType> supportedMediaTypes = new ArrayList<>();
-		supportedMediaTypes.add(MediaType.APPLICATION_JSON);
-		supportedMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
+    private FastJsonHttpMessageConverter fastJsonHttpMessageConverter(){
+        FastJsonHttpMessageConverter fastJsonHttpMessageConverter =
+                new FastJsonHttpMessageConverter();
+        List<MediaType> supportedMediaTypes = new ArrayList<>();
+        supportedMediaTypes.add(MediaType.APPLICATION_JSON);
+        supportedMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
 
-		fastJsonHttpMessageConverter.setSupportedMediaTypes(supportedMediaTypes);
+        fastJsonHttpMessageConverter.setSupportedMediaTypes(supportedMediaTypes);
 
-		FastJsonConfig fastJsonConfig = new FastJsonConfig();
-		fastJsonConfig.setFeatures(Feature.AllowArbitraryCommas,Feature.AllowUnQuotedFieldNames,
-				Feature.DisableCircularReferenceDetect);
-		fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
+        FastJsonConfig fastJsonConfig = new FastJsonConfig();
+        fastJsonConfig.setFeatures(Feature.AllowArbitraryCommas,Feature.AllowUnQuotedFieldNames,
+                Feature.DisableCircularReferenceDetect);
+        fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
 
-		fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
-		return fastJsonHttpMessageConverter;
-	}
+        fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
+        return fastJsonHttpMessageConverter;
+    }
 
-	@Override
-	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-		converters.add(fastJsonHttpMessageConverter());
-		converters.add(new StringHttpMessageConverter());
-	}
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(fastJsonHttpMessageConverter());
+        converters.add(new StringHttpMessageConverter());
+    }
 
 
-	public static void main(String[] args) {
-		SpringApplication.run(AuthorizeServerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(AuthorizeServerApplication.class, args);
+    }
 }

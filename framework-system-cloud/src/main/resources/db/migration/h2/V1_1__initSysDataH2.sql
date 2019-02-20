@@ -181,17 +181,17 @@ values ('public', '1000080', parsedatetime('25-02-2016', 'dd-MM-yyyy','en'), par
 
 /*
 insert into f_optdef (opt_code,opt_id,opt_name,opt_method,opt_desc,
-			is_in_workflow,UPDATE_DATE,create_date,opt_url,opt_req,CREATOR,UPDATOR)
+      is_in_workflow,UPDATE_DATE,create_date,opt_url,opt_req,CREATOR,UPDATOR)
 select NEXT VALUE FOR s_optdefcode ,opt_id , '查看', 'list',  '查看',
-		'F',today(),today(),'/*','R' ,CREATOR,UPDATOR
-		from f_optinfo  where opt_id not in (select opt_id from f_optdef );
+    'F',today(),today(),'/*','R' ,CREATOR,UPDATOR
+    from f_optinfo  where opt_id not in (select opt_id from f_optdef );
 */
 
 insert into F_ROLEPOWER(role_code,opt_code,update_Date,create_date,opt_scope_codes,CREATOR,UPDATOR)
-	select 'SYSADMIN',opt_code,today(),today(),'',CREATOR,UPDATOR from f_optdef ;
+  select 'SYSADMIN',opt_code,today(),today(),'',CREATOR,UPDATOR from f_optdef ;
 
 insert into F_USERROLE (USER_CODE, ROLE_CODE, OBTAIN_DATE,
-			SECEDE_DATE, CHANGE_DESC, UPDATE_DATE, CREATE_DATE,CREATOR,UPDATOR)
+      SECEDE_DATE, CHANGE_DESC, UPDATE_DATE, CREATE_DATE,CREATOR,UPDATOR)
 values ('u0000000', 'SYSADMIN', parsedatetime('23-05-2012','dd-MM-yyyy','en'),
-	parsedatetime('01-10-2020', 'dd-MM-yyyy','en'),'' ,today(), today(),'u0000000','u0000000');
+  parsedatetime('01-10-2020', 'dd-MM-yyyy','en'),'' ,today(), today(),'u0000000','u0000000');
 
