@@ -33,7 +33,7 @@ public class CloudSessionManagerImpl implements SessionManager {
         return httpReceiveJSON.getDataAsObject(JsonCentitUserDetails.class);
     }
 
-    public CentitUserDetails createAnonymousUser(){
+    public static CentitUserDetails createAnonymousUser(){
         JsonCentitUserDetails userDetails = new JsonCentitUserDetails();
          UserInfo userInfo = new UserInfo(
                 "anonymousUser",

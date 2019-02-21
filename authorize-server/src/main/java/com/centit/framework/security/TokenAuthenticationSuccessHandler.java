@@ -9,7 +9,6 @@ import com.centit.framework.security.model.CentitUserDetailsService;
 import com.centit.support.algorithm.DatetimeOpt;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
@@ -20,27 +19,19 @@ import java.io.IOException;
 public class TokenAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
     private boolean writeLog = false;
-    
+
     public void setWriteLog(boolean writeLog) {
         this.writeLog = writeLog;
-    } 
-
-    private SessionRegistry sessionRegistry;
-    private CentitUserDetailsService userDetailsService;
-
-    public void setSessionRegistry(SessionRegistry sessionManger) {
-        this.sessionRegistry = sessionManger;
     }
 
+    private CentitUserDetailsService userDetailsService;
     public void setUserDetailsService(CentitUserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
-
-
     public TokenAuthenticationSuccessHandler() {
     }
- 
+
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
 
@@ -53,8 +44,8 @@ public class TokenAuthenticationSuccessHandler extends SavedRequestAwareAuthenti
             if(! lang.equals(userLang)){
                 ud.setUserSettingValue(WebOptUtils.LOCAL_LANGUAGE_LABLE, userLang);
                 if(userDetailsService!=null){
-                    userDetailsService.saveUserSetting(ud.getUserInfo().getUserCode(),
-                            WebOptUtils.LOCAL_LANGUAGE_LABLE, lang, "SYS", "用户默认区域语言");
+                    userDetailsService.saveUserSetting(ud.getUserCode(),
+                        WebOptUtils.LOCAL_LANGUAGE_LABLE, lang, "SYS", "用户默认区域语言");
                 }
             }
         }else{
@@ -65,30 +56,34 @@ public class TokenAuthenticationSuccessHandler extends SavedRequestAwareAuthenti
                 request.setAttribute(WebOptUtils.LOCAL_LANGUAGE_LABLE,lang);
             }
         }
-        ud.setLoginIp(request.getRemoteHost()+":"+request.getRemotePort());
-        ud.setActiveTime(DatetimeOpt.currentUtilDate());
-        request.getSession().setAttribute(
-                SecurityContextUtils.SecurityContextUserdetail,ud);
-        //ud.setAuthenticated(true);
-        String tokenKey =request.getSession().getId();
 
         //tokenKey = UuidOpt.getUuidAsString();
-        sessionRegistry.registerNewSession(tokenKey,ud);
-        request.getSession().setAttribute(SecurityContextUtils.SecurityContextTokenName, tokenKey);
+        // 这个代码应该迁移到 AuthenticationProcessingFilter 的 successfulAuthentication 方法中
+        ud.setLoginIp(WebOptUtils.getRequestAddr(request));
 
         if(writeLog){
-            OperationLogCenter.log(ud.getUserInfo().getUserCode(),"login", "login",
-                    "用户 ："+ud.getUserInfo().getUserCode()+"于"+DatetimeOpt.convertDatetimeToString(DatetimeOpt.currentUtilDate())
+            String remoteHost = request.getRemoteHost();
+            String loginIp = WebOptUtils.getRequestAddr(request);
+            if(!loginIp.startsWith(remoteHost)){
+                loginIp = remoteHost + ":" + loginIp;
+            }
+            OperationLogCenter.log(ud.getUserCode(),"mainframe", "login",
+                "用户 ："+ud.getUserInfo().getString("userName")+"于"+DatetimeOpt.convertDatetimeToString(DatetimeOpt.currentUtilDate())
+                    + "从主机"+loginIp+"登录。");
+        }
+
+        if(writeLog){
+            OperationLogCenter.log(ud.getUserInfo().getString("userCode"),"login", "login",
+                    "用户 ："+ud.getUserInfo().getString("userCode")+"于"+DatetimeOpt.convertDatetimeToString(DatetimeOpt.currentUtilDate())
                     + "从主机"+request.getRemoteHost()+":"+request.getRemotePort()+"登录。");
         }
 
         ResponseMapData resData = new ResponseMapData();
 
-        resData.addResponseData(SecurityContextUtils.SecurityContextTokenName, tokenKey);
+        resData.addResponseData(SecurityContextUtils.SecurityContextTokenName, request.getSession().getId());
         resData.addResponseData("userInfo", ud);
         JsonResultUtils.writeResponseDataAsJson(resData, response);
         //request.getSession().setAttribute("SPRING_SECURITY_AUTHENTICATION", authentication);
         //JsonResultUtils.writeSingleErrorDataJson(0,authentication.getName() + " login ok！",request.getSession().getId(), response);
-
     }
 }

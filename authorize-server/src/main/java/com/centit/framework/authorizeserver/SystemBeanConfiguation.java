@@ -5,8 +5,8 @@ import com.centit.framework.components.impl.TextOperationLogWriterImpl;
 import com.centit.framework.model.adapter.NotificationCenter;
 import com.centit.framework.model.adapter.OperationLogWriter;
 import com.centit.framework.model.adapter.PlatformEnvironment;
-import com.centit.framework.security.model.CentitPasswordEncoderImpl;
 import com.centit.framework.security.model.CentitUserDetailsService;
+import com.centit.framework.security.model.StandardPasswordEncoderImpl;
 import com.centit.framework.system.security.DaoUserDetailsService;
 import com.centit.framework.system.service.impl.DBPlatformEnvironment;
 import org.springframework.context.annotation.Bean;
@@ -18,12 +18,6 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 @Configuration
 public class SystemBeanConfiguation {
-
-    @Bean("passwordEncoder")
-    public CentitPasswordEncoderImpl passwordEncoder() {
-        return new CentitPasswordEncoderImpl();
-    }
-
     @Bean
     public PlatformEnvironment platformEnvironment() {
         DBPlatformEnvironment platformEnvironment = new DBPlatformEnvironment();
@@ -34,6 +28,11 @@ public class SystemBeanConfiguation {
     public CentitUserDetailsService centitUserDetailsService() {
         DaoUserDetailsService userDetailsService = new DaoUserDetailsService();
         return userDetailsService;
+    }
+
+    @Bean("passwordEncoder")
+    public StandardPasswordEncoderImpl passwordEncoder() {
+        return  new StandardPasswordEncoderImpl();
     }
 
     @Bean

@@ -1,10 +1,8 @@
 package com.centit.framework.security;
 
-import com.centit.framework.common.ResponseJSON;
-import com.centit.framework.common.WebOptUtils;
-import com.centit.framework.security.model.CentitSessionRegistry;
+import com.centit.framework.appclient.HttpReceiveJSON;
 import com.centit.framework.security.model.CentitUserDetails;
-import com.centit.framework.system.security.CentitUserDetailsImpl;
+import com.centit.framework.security.model.JsonCentitUserDetails;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
@@ -27,11 +25,6 @@ public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
 
     private FilterInvocationSecurityMetadataSource securityMetadataSource;
 
-    private CentitSessionRegistry sessionRegistry;
-
-    public void setSessionRegistry(CentitSessionRegistry sessionManger) {
-        this.sessionRegistry = sessionManger;
-    }
     // ~ Methods
     // ========================================================================================================
     public void setRestTemplate(RestTemplate restTemplate) {
@@ -87,8 +80,8 @@ public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
                     String jsonString =
                             restTemplate.getForObject(AUTHORIZE_SERVICE_URL + "/user/" + accessToken,
                                     String.class);
-                    ResponseJSON responseJSON = ResponseJSON.valueOfJson(jsonString);
-                    ud = responseJSON.getDataAsObject(CentitUserDetailsImpl.class);
+                    HttpReceiveJSON responseJSON = HttpReceiveJSON.valueOfJson(jsonString);
+                    ud = responseJSON.getDataAsObject(JsonCentitUserDetails.class);
                 } catch (Exception e) {
                     ud = null;
                 }
