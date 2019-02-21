@@ -72,14 +72,7 @@ public class TokenAuthenticationSuccessHandler extends SavedRequestAwareAuthenti
                     + "从主机"+loginIp+"登录。");
         }
 
-        if(writeLog){
-            OperationLogCenter.log(ud.getUserInfo().getString("userCode"),"login", "login",
-                    "用户 ："+ud.getUserInfo().getString("userCode")+"于"+DatetimeOpt.convertDatetimeToString(DatetimeOpt.currentUtilDate())
-                    + "从主机"+request.getRemoteHost()+":"+request.getRemotePort()+"登录。");
-        }
-
         ResponseMapData resData = new ResponseMapData();
-
         resData.addResponseData(SecurityContextUtils.SecurityContextTokenName, request.getSession().getId());
         resData.addResponseData("userInfo", ud);
         JsonResultUtils.writeResponseDataAsJson(resData, response);
