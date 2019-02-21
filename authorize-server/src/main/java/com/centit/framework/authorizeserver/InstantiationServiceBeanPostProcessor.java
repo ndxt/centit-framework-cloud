@@ -1,9 +1,11 @@
 package com.centit.framework.authorizeserver;
 
+import com.centit.framework.components.CodeRepositoryCache;
 import com.centit.framework.components.OperationLogCenter;
 import com.centit.framework.model.adapter.MessageSender;
 import com.centit.framework.model.adapter.NotificationCenter;
 import com.centit.framework.model.adapter.OperationLogWriter;
+import com.centit.framework.model.adapter.PlatformEnvironment;
 import com.centit.framework.system.service.SysRoleManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -25,13 +27,14 @@ public class InstantiationServiceBeanPostProcessor implements ApplicationListene
     @Autowired(required = false)
     private MessageSender innerMessageManager;
 
-   /* @Autowired
-    @NotNull
-    private SysRoleManager sysRoleManager;*/
+    @Autowired(required = false)
+    protected PlatformEnvironment platformEnvironment;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         //sysRoleManager.loadRoleSecurityMetadata();
+        CodeRepositoryCache.setPlatformEnvironment(platformEnvironment);
+        CodeRepositoryCache.setAllCacheFreshPeriod(CodeRepositoryCache.CACHE_KEEP_FRESH);
 
         if(innerMessageManager!=null)
             notificationCenter.registerMessageSender("innerMsg", innerMessageManager);
