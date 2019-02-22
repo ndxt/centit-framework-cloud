@@ -18,4 +18,9 @@ public class FrameworkHttpSessionConfiguration {
         sessionStrategy.setCookieFirst(cookieFist);
         return sessionStrategy;
     }
+
+    @Bean
+    public SessionProperties sessionProperties(){
+        return new SessionProperties();
+    }
 }
