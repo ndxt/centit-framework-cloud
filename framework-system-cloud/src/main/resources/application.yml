@@ -1,7 +1,7 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://codefanpc:10080/eureka/
+      defaultZone: http://localhost:10080/eureka/
 
 server:
   port: 10081
@@ -74,3 +74,8 @@ framework:
 sys:
   multi_lang: true
   defalut_lang: zh_CN
+
+session:
+    redis:
+      host: 192.168.134.9
+      port: 6379

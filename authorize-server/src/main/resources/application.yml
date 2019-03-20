@@ -1,7 +1,7 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://codefanpc:10080/eureka/
+      defaultZone: http://localhost:10080/eureka/
 
 server:
   port: 10087
@@ -59,3 +59,8 @@ framework:
   roleinfo:
     id:
       generator: \{"length":1\}
+
+session:
+  redis:
+    host: 192.168.134.9
+    port: 6379
