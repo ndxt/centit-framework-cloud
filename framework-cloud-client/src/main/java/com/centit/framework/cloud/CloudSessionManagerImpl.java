@@ -9,6 +9,7 @@ import com.centit.framework.security.model.JsonCentitUserDetails;
 import com.centit.framework.staticsystem.po.RoleInfo;
 import com.centit.framework.staticsystem.po.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,7 +22,8 @@ public class CloudSessionManagerImpl implements SessionManager {
     @Autowired
     RestTemplate restTemplate;
 
-    private static String AUTHORIZE_SERVICE_URL="http://AUTHORIZE-SERVICE";
+    @Value("${serives.authorize.url:http://AUTHORIZE-SERVICE}")
+    private String AUTHORIZE_SERVICE_URL="http://AUTHORIZE-SERVICE";
 
     @Override
     //@HystrixCommand(fallbackMethod = "createAnonymousUser")

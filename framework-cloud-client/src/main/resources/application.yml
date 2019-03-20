@@ -1,0 +1,7 @@
+
+#\u767B\u5F55\u6210\u529F\u540E\u7684\u9996\u9875
+serives:
+  framework:
+    url: http://FRAMEWORK-SERVICE
+  authorize:
+    url: http://AUTHORIZE-SERVICE

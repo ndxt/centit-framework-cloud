@@ -11,6 +11,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,7 +23,13 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Autowired
     RestTemplate restTemplate;
 
-    private static String FRAMEWORK_SERVER_URL="http://FRAMEWORK-SERVICE/platform";
+    protected String FRAMEWORK_SERVER_URL;
+
+    @Value("${serives.framework.url:http://FRAMEWORK-SERVICE}")
+    public void setFrameworkUrl(String frameworkUrl){
+        FRAMEWORK_SERVER_URL = frameworkUrl +"/platform";
+    }
+
     private Logger logger = LoggerFactory.getLogger(CloudPlatformEnvironment.class);
 
     private String topOptId;

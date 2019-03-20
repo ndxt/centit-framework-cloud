@@ -32,3 +32,9 @@ cas:
 local:
   home: http://zouwuyangpc:8084/product-ip
   firstpage: /system/mainframe/index
+
+serives:
+  framework:
+    url: http://FRAMEWORK-SERVICE
+  authorize:
+    url: http://AUTHORIZE-SERVICE
