@@ -45,10 +45,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListAllRolePower")
     public List<RolePower>  listAllRolePower(){
-        HttpReceiveJSON HttpReceiveJSON =
+        HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/allrolepowers/"+topOptId,
-                        HttpReceiveJSON.class);
-        return HttpReceiveJSON.getDataAsArray(RolePower.class);
+                        String.class));
+        return receiveJSON.getDataAsArray(RolePower.class);
     }
 
     public List<RolePower>  dummyListAllRolePower(){
@@ -58,10 +58,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListAllOptMethod")
     public List<OptMethod> listAllOptMethod(){
-        HttpReceiveJSON HttpReceiveJSON =
+        HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/alloptmethods/"+topOptId,
-                        HttpReceiveJSON.class);
-        return HttpReceiveJSON.getDataAsArray(OptMethod.class);
+                        String.class));
+        return receiveJSON.getDataAsArray(OptMethod.class);
     }
 
     public List<OptMethod>  dummyListAllOptMethod(){
@@ -90,10 +90,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListUserMenuOptInfosUnderSuperOptId")
     public List<OptInfo> listUserMenuOptInfosUnderSuperOptId(String userCode, String superOptId, boolean asAdmin) {
-        HttpReceiveJSON HttpReceiveJSON =
+        HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/usermenu/"+superOptId+"/"+userCode+"?asAdmin="+asAdmin,
-                        HttpReceiveJSON.class);
-        return HttpReceiveJSON.getDataAsArray(OptInfo.class);
+                        String.class));
+        return receiveJSON.getDataAsArray(OptInfo.class);
 
     }
 
@@ -110,10 +110,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListUserRoles")
     public List<UserRole> listUserRoles(String userCode){
-        HttpReceiveJSON HttpReceiveJSON =
+        HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/userroles/"+userCode,
-                        HttpReceiveJSON.class);
-        return HttpReceiveJSON.getDataAsArray(UserRole.class);
+                        String.class));
+        return receiveJSON.getDataAsArray(UserRole.class);
     }
 
     public List<UserRole> dummyListUserRoles(String userCode){
@@ -129,10 +129,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListRoleUsers")
     public List<UserRole> listRoleUsers(String roleCode) {
-        HttpReceiveJSON HttpReceiveJSON =
+        HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/roleusers/"+roleCode,
-                        HttpReceiveJSON.class);
-        return HttpReceiveJSON.getDataAsArray(UserRole.class);
+                        String.class));
+        return receiveJSON.getDataAsArray(UserRole.class);
     }
 
     public List<UserRole> dummyListRoleUsers(String roleCode) {
@@ -148,10 +148,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListUnitRoles")
     public List<UnitRole> listUnitRoles(String unitCode) {
-        HttpReceiveJSON HttpReceiveJSON =
+        HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/unitroles/"+unitCode,
-                        HttpReceiveJSON.class);
-        return HttpReceiveJSON.getDataAsArray(UnitRole.class);
+                        String.class));
+        return receiveJSON.getDataAsArray(UnitRole.class);
     }
 
     public List<UnitRole> dummyListUnitRoles(String unitCode) {
@@ -167,10 +167,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListRoleUnits")
     public List<UnitRole> listRoleUnits(String roleCode) {
-        HttpReceiveJSON HttpReceiveJSON =
+        HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/roleunits/"+roleCode,
-                        HttpReceiveJSON.class);
-        return HttpReceiveJSON.getDataAsArray(UnitRole.class);
+                        String.class));
+        return receiveJSON.getDataAsArray(UnitRole.class);
     }
 
     public List<UnitRole> dummyListRoleUnits(String roleCode) {
@@ -230,11 +230,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListAllUnits")
     public List<UnitInfo> listAllUnits() {
-        HttpReceiveJSON HttpReceiveJSON =
+        HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/allunits/"+topOptId,
-                        HttpReceiveJSON.class);
-        return HttpReceiveJSON.getDataAsArray(UnitInfo.class);
+                        String.class));
+        return receiveJSON.getDataAsArray(UnitInfo.class);
     }
 
     public List<UnitInfo> dummyListAllUnits() {
@@ -249,11 +249,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListAllUserUnits")
     public List<UserUnit> listAllUserUnits() {
-        HttpReceiveJSON HttpReceiveJSON =
+        HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/alluserunits/"+topOptId,
-                        HttpReceiveJSON.class);
-        return HttpReceiveJSON.getDataAsArray(UserUnit.class);
+                        String.class));
+        return receiveJSON.getDataAsArray(UserUnit.class);
     }
 
     public List<UserUnit> dummyListAllUserUnits() {
@@ -269,11 +269,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListUserUnits")
     public List<UserUnit> listUserUnits(String userCode) {
-        HttpReceiveJSON HttpReceiveJSON =
+        HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/userunits/"+topOptId+"/"+userCode,
-                        HttpReceiveJSON.class);
-        return HttpReceiveJSON.getDataAsArray(UserUnit.class);
+                        String.class));
+        return receiveJSON.getDataAsArray(UserUnit.class);
     }
 
     public List<UserUnit> dummyListUserUnits(String userCode) {
@@ -289,11 +289,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListUnitUsers")
     public List<UserUnit> listUnitUsers(String unitCode) {
-        HttpReceiveJSON HttpReceiveJSON =
+        HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/unitusers/"+topOptId+"/"+unitCode,
-                        HttpReceiveJSON.class);
-        return HttpReceiveJSON.getDataAsArray(UserUnit.class);
+                        String.class));
+        return receiveJSON.getDataAsArray(UserUnit.class);
     }
 
     public List<UserUnit> dummyListUnitUsers(String unitCode) {
@@ -309,11 +309,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListAllDataCatalogs")
     public List<DataCatalog> listAllDataCatalogs() {
-        HttpReceiveJSON HttpReceiveJSON =
+        HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/catalogs/"+topOptId,
-                        HttpReceiveJSON.class);
-        return HttpReceiveJSON.getDataAsArray(DataCatalog.class);
+                        String.class));
+        return receiveJSON.getDataAsArray(DataCatalog.class);
 
     }
 
@@ -330,11 +330,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyListDataDictionaries")
     public List<DataDictionary> listDataDictionaries(String catalogCode) {
-        HttpReceiveJSON HttpReceiveJSON =
+        HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/dictionary/"+topOptId+"/"+catalogCode,
-                        HttpReceiveJSON.class);
-        return HttpReceiveJSON.getDataAsArray(DataDictionary.class);
+                        String.class));
+        return receiveJSON.getDataAsArray(DataDictionary.class);
     }
 
     public List<DataDictionary> dummyListDataDictionaries(String catalogCode) {
@@ -406,10 +406,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     }
 
     private CentitUserDetails loadUserDetails(String queryParam, String qtype) {
-        HttpReceiveJSON resJson =
+        HttpReceiveJSON resJson = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/userdetails/"+topOptId+"/"+queryParam+"?qtype="+qtype,
-                        HttpReceiveJSON.class);
+                        String.class));
 
         if(resJson==null || resJson.getCode()!=0) {
             return null;
@@ -443,14 +443,14 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     @HystrixCommand(fallbackMethod = "dummyGetUserSetting")
     public UserSetting getUserSetting(String userCode, String paramCode) {
-        HttpReceiveJSON HttpReceiveJSON =
+        HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(
                         FRAMEWORK_SERVER_URL+"/usersetting/"+userCode+"/"+paramCode,
-                        HttpReceiveJSON.class);
-        if (null == HttpReceiveJSON) {
+                        String.class));
+        if (null == receiveJSON) {
             return null;
         }
-        return HttpReceiveJSON.getDataAsObject(UserSetting.class);
+        return receiveJSON.getDataAsObject(UserSetting.class);
     }
 
     public UserSetting dummyGetUserSetting(String userCode, String paramCode) {
