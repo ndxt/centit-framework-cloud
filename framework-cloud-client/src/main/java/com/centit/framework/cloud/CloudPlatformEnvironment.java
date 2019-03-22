@@ -39,7 +39,7 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     }
 
     public CloudPlatformEnvironment() {
-
+        this.topOptId="DUMMY";
     }
 
     @Override
