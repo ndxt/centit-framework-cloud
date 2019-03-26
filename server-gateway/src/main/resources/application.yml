@@ -30,6 +30,9 @@ zuul:
     api-auth:
       path: /auth/**
       serviceId: AUTHORIZE-SERVICE
+    api-workflow:
+      path: /workflow/**
+      serviceId: WORKFLOW-SERVICE
 http:
   csrf:
     enable: false

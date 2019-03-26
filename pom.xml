@@ -77,6 +77,29 @@
         </dependencies>
     </dependencyManagement>
 
+    <distributionManagement>
+        <!--<repository>
+            <id>ossrh</id>
+            <name>sonatype-releases</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>-->
+        <repository>
+            <id>centit-releases</id>
+            <name>centit-release</name>
+            <url>http://nexus.centit.com:8081/nexus/content/repositories/centit-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>centit-snapshots</id>
+            <name>centit-snapshots</name>
+            <url>http://nexus.centit.com:8081/nexus/content/repositories/centit-snapshots/</url>
+        </snapshotRepository>
+        <!--<snapshotRepository>
+            <id>ossrh</id>
+            <name>sonatype-snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>-->
+    </distributionManagement>
+
     <repositories>
         <repository>
             <id>spring-milestones</id>
