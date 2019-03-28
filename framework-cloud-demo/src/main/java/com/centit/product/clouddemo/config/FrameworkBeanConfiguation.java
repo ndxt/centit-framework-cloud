@@ -1,4 +1,4 @@
-package com.centit.framework.config;
+package com.centit.product.clouddemo.config;
 
 import com.centit.framework.components.impl.NotificationCenterImpl;
 import com.centit.framework.components.impl.TextOperationLogWriterImpl;
@@ -7,45 +7,41 @@ import com.centit.framework.model.adapter.OperationLogWriter;
 import com.centit.framework.model.adapter.PlatformEnvironment;
 import com.centit.framework.security.model.CentitUserDetailsService;
 import com.centit.framework.security.model.StandardPasswordEncoderImpl;
-import com.centit.framework.system.security.DaoUserDetailsService;
-import com.centit.framework.system.service.impl.DBPlatformEnvironment;
+import com.centit.framework.staticsystem.service.impl.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.web.client.RestTemplate;
 
 
-@Configuration("environmentConfiguation")
-public class EnvironmentConfiguation {
+@Configuration
+public class FrameworkBeanConfiguation {
 
-    @Bean({"passwordEncoder"})
+    @Bean
+    @LoadBalanced
+    RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
+    @Bean("passwordEncoder")
     public StandardPasswordEncoderImpl passwordEncoder() {
         return new StandardPasswordEncoderImpl();
     }
 
     @Bean
-    public PlatformEnvironment platformEnvironment() {
-        DBPlatformEnvironment platformEnvironment = new DBPlatformEnvironment();
-        return platformEnvironment;
-    }
-
-    @Bean
-    public CentitUserDetailsService centitUserDetailsService() {
-        DaoUserDetailsService userDetailsService = new DaoUserDetailsService();
-        return userDetailsService;
-    }
-
-    @Bean
-    public CsrfTokenRepository csrfTokenRepository() {
+    public HttpSessionCsrfTokenRepository csrfTokenRepository() {
         return new HttpSessionCsrfTokenRepository();
     }
 
-    /*@Bean
-    public CentitSessionRegistry centitSessionRegistry() {
-        return new MemorySessionRegistryImpl();
+    @Bean
+    public CentitUserDetailsService centitUserDetailsService(@Autowired PlatformEnvironment platformEnvironment) {
+        UserDetailsServiceImpl userDetailsService = new UserDetailsServiceImpl();
+        userDetailsService.setPlatformEnvironment(platformEnvironment);
+        return userDetailsService;
     }
-    */
 
     @Bean
     public NotificationCenter notificationCenter() {
@@ -68,3 +64,4 @@ public class EnvironmentConfiguation {
         return new InstantiationServiceBeanPostProcessor();
     }
 }
+

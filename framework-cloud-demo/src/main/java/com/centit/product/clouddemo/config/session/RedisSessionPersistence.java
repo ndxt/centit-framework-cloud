@@ -1,4 +1,4 @@
-package com.centit.framework.config.session;
+package com.centit.product.clouddemo.config.session;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

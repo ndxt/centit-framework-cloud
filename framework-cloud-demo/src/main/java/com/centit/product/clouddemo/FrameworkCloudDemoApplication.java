@@ -1,4 +1,4 @@
-package com.centit.framework.frameworkclouddemo;
+package com.centit.product.clouddemo;
 
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
@@ -27,7 +27,7 @@ import java.util.List;
 @EnableEurekaClient
 @EnableDiscoveryClient
 @EnableHystrix
-@ComponentScan(basePackages="com.centit.framework")
+@ComponentScan(basePackages="com.centit")
 public class FrameworkCloudDemoApplication extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
     private FastJsonHttpMessageConverter fastJsonHttpMessageConverter(){

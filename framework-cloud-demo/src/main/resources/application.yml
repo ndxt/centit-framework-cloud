@@ -38,3 +38,8 @@ serives:
     url: http://FRAMEWORK-SERVICE
   authorize:
     url: http://AUTHORIZE-SERVICE
+
+session:
+  redis:
+    host: 192.168.134.9
+    port: 6379

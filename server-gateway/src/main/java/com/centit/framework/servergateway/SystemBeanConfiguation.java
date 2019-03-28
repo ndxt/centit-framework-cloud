@@ -5,6 +5,7 @@ import com.centit.framework.components.impl.TextOperationLogWriterImpl;
 import com.centit.framework.model.adapter.NotificationCenter;
 import com.centit.framework.model.adapter.OperationLogWriter;
 import com.centit.framework.security.model.CentitPasswordEncoderImpl;
+import com.centit.framework.security.model.StandardPasswordEncoderImpl;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +19,8 @@ import org.springframework.web.client.RestTemplate;
 public class SystemBeanConfiguation {
 
     @Bean("passwordEncoder")
-    public CentitPasswordEncoderImpl passwordEncoder() {
-        return new CentitPasswordEncoderImpl();
+    public StandardPasswordEncoderImpl passwordEncoder() {
+        return new StandardPasswordEncoderImpl();
     }
 
     @Bean
