@@ -1,4 +1,4 @@
-package com.centit.framework.frameworkclouddemo;
+package com.centit.product.clouddemo;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

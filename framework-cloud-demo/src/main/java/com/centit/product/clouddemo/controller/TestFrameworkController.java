@@ -1,4 +1,4 @@
-package com.centit.framework.frameworkclouddemo;
+package com.centit.product.clouddemo.controller;
 
 import com.centit.framework.cloud.SessionManager;
 import com.centit.framework.common.ResponseMapData;
