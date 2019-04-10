@@ -8,30 +8,23 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
 @Configuration
 @EnableAuthorizationServer
-public class Auth2SecurityConfig extends AuthorizationServerConfigurerAdapter {
+public class OAuth2SecurityConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
     AuthenticationManager authenticationManager;
 
+    @Autowired
+    ClientDetailsService centitClientDetailsService;
+
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         //配置两个客户端,一个用于password认证一个用于client认证
-        clients.inMemory().withClient("client_1")
-                .resourceIds("order")
-                .authorizedGrantTypes("client_credentials", "refresh_token")
-                .scopes("select")
-                .authorities("client")
-                .secret("{noop}123456")
-                .and().withClient("client_2")
-                .resourceIds("order")
-                .authorizedGrantTypes("password", "refresh_token")
-                .scopes("select")
-                .authorities("client")
-                .secret("{noop}123456");
+        clients.withClientDetails(centitClientDetailsService);
     }
 
     @Override
