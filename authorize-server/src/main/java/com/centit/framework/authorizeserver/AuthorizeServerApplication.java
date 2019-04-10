@@ -10,7 +10,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import java.util.List;
 
 @EnableEurekaClient
 @SpringBootApplication
-@EnableResourceServer
+//EnableResourceServer
 @ComponentScan(basePackages="com.centit.framework")
 public class AuthorizeServerApplication extends WebMvcConfigurerAdapter {
 
