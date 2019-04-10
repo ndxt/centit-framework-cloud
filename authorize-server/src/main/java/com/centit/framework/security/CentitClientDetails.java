@@ -53,7 +53,7 @@ public class CentitClientDetails implements ClientDetails {
      */
     @Override
     public String getClientSecret() {
-        return "{noop}123456";
+        return "$2a$11$DbyFNhHeCES5CKoMuM5sXepY7GM35sZkUSqQbjYJnFTzJ2GDIYGLK";
     }
 
     /**
