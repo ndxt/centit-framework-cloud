@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 @Configuration
@@ -31,12 +32,20 @@ public class OAuth2SecurityConfig extends AuthorizationServerConfigurerAdapter {
         clients.withClientDetails(centitClientDetailsService);
     }
 
+    //获取
+    public static ResourceServerTokenServices resourceServerTokenServices;
+
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
                 .tokenStore(new RedisTokenStore(redisConnectionFactory))
                 //.tokenStore(new InMemoryTokenStore())
-                .authenticationManager(authenticationManager);
+                .authenticationManager(authenticationManager)
+                .setClientDetailsService(centitClientDetailsService);
+        resourceServerTokenServices = endpoints.getResourceServerTokenServices();
+        //if(resourceServerTokenServices instanceof DefaultTokenServices){
+        //    ((DefaultTokenServices)resourceServerTokenServices).setClientDetailsService(centitClientDetailsService);
+        //}
     }
 
     @Override
