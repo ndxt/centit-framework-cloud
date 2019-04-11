@@ -1,4 +1,4 @@
-package com.centit.framework.session;
+package com.centit.framework.config;
 
 import org.springframework.session.web.http.CookieHttpSessionIdResolver;
 import org.springframework.session.web.http.DefaultCookieSerializer;

@@ -1,5 +1,6 @@
 package com.centit.framework.config;
 
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.centit.framework.components.impl.NotificationCenterImpl;
 import com.centit.framework.components.impl.TextOperationLogWriterImpl;
 import com.centit.framework.model.adapter.NotificationCenter;
@@ -18,6 +19,11 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 @Configuration("environmentConfiguation")
 public class EnvironmentConfiguation {
+
+    @Bean
+    public FastJsonHttpMessageConverter fastJsonHttpMessageConverter(){
+        return ApplicationBaseConfig.fastJsonHttpMessageConverter();
+    }
 
     @Bean({"passwordEncoder"})
     public StandardPasswordEncoderImpl passwordEncoder() {

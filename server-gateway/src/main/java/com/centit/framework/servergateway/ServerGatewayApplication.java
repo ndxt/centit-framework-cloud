@@ -3,6 +3,7 @@ package com.centit.framework.servergateway;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -23,27 +24,13 @@ import java.util.List;
         excludeFilters = @ComponentScan.Filter(value = org.springframework.stereotype.Controller.class)*/)
 public class ServerGatewayApplication extends WebMvcConfigurerAdapter {
 
-    private FastJsonHttpMessageConverter fastJsonHttpMessageConverter(){
-        FastJsonHttpMessageConverter fastJsonHttpMessageConverter =
-                new FastJsonHttpMessageConverter();
-        List<MediaType> supportedMediaTypes = new ArrayList<>();
-        supportedMediaTypes.add(MediaType.APPLICATION_JSON);
-        supportedMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
+    @Autowired
+    private FastJsonHttpMessageConverter fastJsonHttpMessageConverter;
 
-        fastJsonHttpMessageConverter.setSupportedMediaTypes(supportedMediaTypes);
-
-        FastJsonConfig fastJsonConfig = new FastJsonConfig();
-        fastJsonConfig.setFeatures(Feature.AllowArbitraryCommas,Feature.AllowUnQuotedFieldNames,
-                Feature.DisableCircularReferenceDetect);
-        fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
-        return fastJsonHttpMessageConverter;
-    }
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(fastJsonHttpMessageConverter());
+        converters.add(fastJsonHttpMessageConverter);
         converters.add(new StringHttpMessageConverter());
     }
 

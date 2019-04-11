@@ -11,6 +11,7 @@
         <module>config-server</module>
         <module>authorize-server</module>
         <module>eureka-server</module>
+        <module>framework-cloud-config</module>
     </modules>
 
     <parent>

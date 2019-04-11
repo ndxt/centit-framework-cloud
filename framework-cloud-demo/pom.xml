@@ -20,6 +20,13 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>com.centit.framework</groupId>
+      <artifactId>framework-cloud-config</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -73,29 +80,6 @@
           <groupId>com.github.xiaoymin</groupId>
           <artifactId>swagger-bootstrap-ui</artifactId>
           <version>1.8.2</version>
-      </dependency>
-
-      <!--<dependency>
-          <groupId>org.springframework.session</groupId>
-          <artifactId>spring-session</artifactId>
-          <version>${spring.session.version}</version>
-      </dependency>
--->
-      <dependency>
-          <groupId>org.springframework.session</groupId>
-          <artifactId>spring-session-data-redis</artifactId>
-      </dependency>
-
-      <!--<dependency>
-         <groupId>biz.paluch.redis</groupId>
-         <artifactId>lettuce</artifactId>
-         <version>4.5.0.Final</version>
-     </dependency>-->
-
-      <dependency>
-          <groupId>redis.clients</groupId>
-          <artifactId>jedis</artifactId>
-          <version>2.9.0</version>
       </dependency>
 
   </dependencies>
