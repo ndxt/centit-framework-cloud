@@ -18,10 +18,6 @@ public class SmartHttpSessionResolver implements HttpSessionIdResolver {
     private CookieHttpSessionIdResolver browser;//= new CookieHttpSessionStrategy();
     private HeaderHttpSessionIdResolver api; // = new HeaderHttpSessionStrategy();
 
-    public void setCookieFirst(boolean cookieFirst) {
-        this.cookieFirst = cookieFirst;
-    }
-
     private boolean cookieFirst;
 
     public SmartHttpSessionResolver(boolean cookieFirst, String cookiePath) {

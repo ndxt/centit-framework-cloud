@@ -8,6 +8,14 @@ public class SessionProperties {
 
     private Redis redis;
 
+    public Cookie getCookie() {
+        return cookie;
+    }
+
+    public void setCookie(Cookie cookie) {
+        this.cookie = cookie;
+    }
+
     private Cookie cookie;
 
     public static class Redis{
@@ -33,7 +41,28 @@ public class SessionProperties {
 
 
     public static class Cookie{
-        String path;
+        private String path;
+        private boolean cookieFirst;
+
+        public Cookie(){
+            path = "/";
+            cookieFirst = false;
+        }
+        public String getPath() {
+            return path;
+        }
+
+        public void setPath(String path) {
+            this.path = path;
+        }
+
+        public boolean isCookieFirst() {
+            return cookieFirst;
+        }
+
+        public void setCookieFirst(boolean cookieFirst) {
+            this.cookieFirst = cookieFirst;
+        }
     }
 
     public Redis getRedis() {

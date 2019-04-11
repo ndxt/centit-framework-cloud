@@ -5,9 +5,7 @@ import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.security.model.CentitUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.session.data.redis.RedisOperationsSessionRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,9 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class CurrentSessionController extends BaseController {
-
-    @Autowired
-    private RedisOperationsSessionRepository sessionRepository;
 
     @GetMapping( "/oauthUser")
     @WrapUpResponseBody
