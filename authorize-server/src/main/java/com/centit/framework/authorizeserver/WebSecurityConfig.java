@@ -79,7 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             http.csrf().disable();
         }
         http.authorizeRequests()
-                .antMatchers("/system/mainframe/login","/system/exception").permitAll()
+                .antMatchers("/system/mainframe/login", "/system/exception", "/oauth/check_token").permitAll()
                 .and().exceptionHandling().accessDeniedPage("/system/exception/error/403")
                 .and().sessionManagement().invalidSessionUrl("/system/exception/error/401")
                 .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint());
@@ -88,8 +88,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         //AuthenticationProvider authenticationProvider = createAuthenticationProvider();
         //AuthenticationManager authenticationManager = createAuthenticationManager(authenticationProvider);
-
-
 
         AuthenticationFailureHandler ajaxFailureHandler = createFailureHandler();
         TokenAuthenticationSuccessHandler ajaxSuccessHandler = createSuccessHandler(centitUserDetailsService);

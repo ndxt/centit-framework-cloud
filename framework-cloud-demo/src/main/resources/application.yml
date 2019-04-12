@@ -19,20 +19,6 @@ jdbc:
 app:
   home: /D/Projects/RunData/ip_home
 
-#\u662F\u5426\u5F00\u653E\u5B9E\u65BD\u4EBA\u5458\u5165\u53E3
-deploy:
-  enabled: false
-
-#\u5355\u70B9\u767B\u5F55\u76F8\u5173\u914D\u7F6E\u4FE1\u606F
-cas:
-  sso: false
-  home: https://zou_wy:8443/centit-cas
-
-#\u767B\u5F55\u6210\u529F\u540E\u7684\u9996\u9875
-local:
-  home: http://zouwuyangpc:8084/product-ip
-  firstpage: /system/mainframe/index
-
 serives:
   framework:
     url: http://FRAMEWORK-SERVICE
@@ -41,5 +27,5 @@ serives:
 
 session:
   redis:
-    host: 192.168.134.9
+    host: 127.0.0.1
     port: 6379

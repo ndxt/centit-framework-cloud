@@ -1,19 +1,20 @@
 package com.centit.product.clouddemo.config;
 
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.centit.framework.components.impl.NotificationCenterImpl;
 import com.centit.framework.components.impl.TextOperationLogWriterImpl;
+import com.centit.framework.config.ApplicationBaseConfig;
 import com.centit.framework.model.adapter.NotificationCenter;
 import com.centit.framework.model.adapter.OperationLogWriter;
 import com.centit.framework.model.adapter.PlatformEnvironment;
-import com.centit.framework.security.model.CentitPasswordEncoderImpl;
 import com.centit.framework.security.model.CentitUserDetailsService;
+import com.centit.framework.security.model.StandardPasswordEncoderImpl;
 import com.centit.framework.staticsystem.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,20 +23,23 @@ import org.springframework.web.client.RestTemplate;
 public class FrameworkBeanConfiguation {
 
     @Bean
+    public FastJsonHttpMessageConverter fastJsonHttpMessageConverter(){
+        return ApplicationBaseConfig.fastJsonHttpMessageConverter();
+    }
+
+    @Bean
     @LoadBalanced
     RestTemplate restTemplate() {
         return new RestTemplate();
     }
 
     @Bean("passwordEncoder")
-    public CentitPasswordEncoderImpl passwordEncoder() {
-        return new CentitPasswordEncoderImpl();
+    public StandardPasswordEncoderImpl passwordEncoder() {
+        return new StandardPasswordEncoderImpl();
     }
 
-    //org.springframework.security.web.csrf.CsrfTokenRepository
-
     @Bean
-    public CsrfTokenRepository csrfTokenRepository() {
+    public HttpSessionCsrfTokenRepository csrfTokenRepository() {
         return new HttpSessionCsrfTokenRepository();
     }
 

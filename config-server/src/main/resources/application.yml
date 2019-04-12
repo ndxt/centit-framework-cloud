@@ -4,7 +4,7 @@ eureka:
       defaultZone: http://localhost:10080/eureka/
 
 server:
-  port: 10088
+  port: 10089
 
 spring:
   application:
@@ -14,7 +14,7 @@ spring:
       label: master
       server:
         git:
-          uri: https://github.com/ndxt/centit-framework-cloud.git
+          uri: http://gitlab.centit.com/gitlab/ctm/centit-framework-cloud.git
           search-paths: config-server/respo
           username: accounts
           password: yhs@yhs1
