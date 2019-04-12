@@ -1,0 +1,31 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://codefanpc:10080/eureka/
+
+server:
+  port: 10085
+
+spring:
+  application:
+    name: CLOUD-DEMO
+  datasource:
+    url: jdbc:mysql://192.168.128.32:3306/frameworkdb?useUnicode=true&characterEncoding=utf-8
+
+jdbc:
+  url:
+
+#\u7CFB\u7EDF\u5C5E\u6027
+app:
+  home: /D/Projects/RunData/ip_home
+
+serives:
+  framework:
+    url: http://FRAMEWORK-SERVICE
+  authorize:
+    url: http://AUTHORIZE-SERVICE
+
+session:
+  redis:
+    host: 127.0.0.1
+    port: 6379

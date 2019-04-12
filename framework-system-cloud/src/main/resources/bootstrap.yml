@@ -1,0 +1,18 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:10080/eureka/
+
+server:
+  port: 10081
+
+spring:
+  application:
+    name: FRAMEWORK-SERVICE
+  cloud:
+    config:
+      label: master
+      profile: dev
+      discovery:
+        enabled: true
+        serviceId: CONFIG-SERVER

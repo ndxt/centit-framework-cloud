@@ -18,7 +18,7 @@ import java.util.List;
 @SpringBootApplication
 @EnableEurekaClient
 @ComponentScan(basePackages="com.centit.framework")
-//@PropertySource(value = "classpath:application.yml", ignoreResourceNotFound = true)
+//@PropertySource(value = "classpath:application.yml.bak", ignoreResourceNotFound = true)
 public class FrameworkSystemCloudApplication extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
 
