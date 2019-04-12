@@ -14,7 +14,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.List;
@@ -24,7 +23,7 @@ import java.util.List;
 @EnableDiscoveryClient
 @EnableHystrix
 @ComponentScan(basePackages="com.centit")
-@EnableResourceServer
+//@EnableResourceServer
 public class FrameworkCloudDemoApplication extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
     @Autowired
