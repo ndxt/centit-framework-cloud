@@ -12,6 +12,7 @@
         <module>authorize-server</module>
         <module>eureka-server</module>
         <module>framework-cloud-config</module>
+        <module>share-session-config</module>
     </modules>
 
     <parent>

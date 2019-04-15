@@ -73,12 +73,11 @@ public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
             if(StringUtils.isBlank(accessToken)) {
                 accessToken = fi.getHttpRequest().getHeader("Authorization");
             }
-
             CentitUserDetails ud = null;
             if(StringUtils.isNotBlank(accessToken)) {
                 try {
                     String jsonString =
-                            restTemplate.getForObject(AUTHORIZE_SERVICE_URL + "/user/" + accessToken,
+                            restTemplate.getForObject(AUTHORIZE_SERVICE_URL + "/oauthUser/",
                                     String.class);
                     HttpReceiveJSON responseJSON = HttpReceiveJSON.valueOfJson(jsonString);
                     ud = responseJSON.getDataAsObject(JsonCentitUserDetails.class);

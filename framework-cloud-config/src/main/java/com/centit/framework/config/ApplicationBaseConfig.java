@@ -4,17 +4,38 @@ import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.centit.framework.core.controller.WrapUpResponseBodyReturnValueHandler;
+import com.centit.framework.utils.RestRequestContextInterceptor;
 import org.springframework.beans.BeansException;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-
+@Configuration
 public class ApplicationBaseConfig {
+
+    @Bean
+    @LoadBalanced
+    RestTemplate restTemplate() {
+        RestTemplate template = new RestTemplate();
+        List interceptors = template.getInterceptors();
+        if (interceptors == null) {
+            template.setInterceptors(Collections.singletonList(new RestRequestContextInterceptor()));
+        } else {
+            interceptors.add(new RestRequestContextInterceptor());
+            template.setInterceptors(interceptors);
+        }
+
+        return template;
+    }
 
     public static FastJsonHttpMessageConverter fastJsonHttpMessageConverter(){
         FastJsonHttpMessageConverter fastJsonHttpMessageConverter =

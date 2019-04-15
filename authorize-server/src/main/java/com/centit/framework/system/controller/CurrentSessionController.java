@@ -19,15 +19,16 @@ import java.util.Map;
 public class CurrentSessionController extends BaseController {
 
     @GetMapping( "/oauthUser")
-    @ResponseBody
-    public Map<String, Object> getOAuthUserInfo(HttpServletRequest request) {
+    @WrapUpResponseBody
+    public Object getOAuthUserInfo(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         if(token.startsWith("Bearer")){
             token = token.substring(6).trim();
         }
         OAuth2Authentication auth = OAuth2SecurityConfig.resourceServerTokenServices.loadAuthentication(token);
-        return CollectionsOpt.createHashMap("user", auth.getUserAuthentication().getPrincipal(),
-            "authorities", AuthorityUtils.authorityListToSet(auth.getUserAuthentication().getAuthorities()));
+        //return CollectionsOpt.createHashMap("user", auth.getUserAuthentication().getPrincipal(),
+        //    "authorities", AuthorityUtils.authorityListToSet(auth.getUserAuthentication().getAuthorities()));
+        return auth.getUserAuthentication().getPrincipal();
     }
 
     @GetMapping( "/loginUser")

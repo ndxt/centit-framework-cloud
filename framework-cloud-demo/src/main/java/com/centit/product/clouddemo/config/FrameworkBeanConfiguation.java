@@ -27,12 +27,6 @@ public class FrameworkBeanConfiguation {
         return ApplicationBaseConfig.fastJsonHttpMessageConverter();
     }
 
-    @Bean
-    @LoadBalanced
-    RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
-
     @Bean("passwordEncoder")
     public StandardPasswordEncoderImpl passwordEncoder() {
         return new StandardPasswordEncoderImpl();
