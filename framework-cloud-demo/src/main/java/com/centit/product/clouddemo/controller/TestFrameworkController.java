@@ -7,6 +7,9 @@ import com.centit.framework.model.adapter.PlatformEnvironment;
 import com.centit.framework.model.basedata.IUserInfo;
 import com.centit.framework.security.model.CentitUserDetails;
 import com.centit.framework.security.model.JsonCentitUserDetails;
+import com.centit.framework.utils.RestRequestContext;
+import com.centit.framework.utils.RestRequestContextHolder;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,13 +44,17 @@ public class TestFrameworkController {
 
     @GetMapping(value = "/currentUser")
     @WrapUpResponseBody
-    public CentitUserDetails testCurrentUser(){
-        String jsonString =
-            restTemplate.getForObject(AUTHORIZE_SERVICE_URL + "/oauthUser/",
-                String.class);
-        HttpReceiveJSON responseJSON = HttpReceiveJSON.valueOfJson(jsonString);
-        CentitUserDetails ud = responseJSON.getDataAsObject(JsonCentitUserDetails.class);
-        return ud;
+    public Object testCurrentUser() {
+        RestRequestContext context = RestRequestContextHolder.getContext();
+        if (StringUtils.isNotBlank(context.getAuthorizationToken())){
+            String jsonString =
+                restTemplate.getForObject(AUTHORIZE_SERVICE_URL + "/oauthUser/",
+                    String.class);
+            HttpReceiveJSON responseJSON = HttpReceiveJSON.valueOfJson(jsonString);
+            CentitUserDetails ud = responseJSON.getDataAsObject(JsonCentitUserDetails.class);
+            return ud;
+        }
+        return context;
     }
 
 }

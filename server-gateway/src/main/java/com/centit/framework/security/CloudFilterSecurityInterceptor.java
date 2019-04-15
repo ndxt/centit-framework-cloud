@@ -65,14 +65,10 @@ public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
 
         boolean alwaysReauthenticate = false;
 
-
         //从token中获取用户信息
         if(authentication==null || "anonymousUser".equals(authentication.getName())){
 
-            String accessToken = fi.getHttpRequest().getParameter(SecurityContextUtils.SecurityContextTokenName);
-            if(StringUtils.isBlank(accessToken)) {
-                accessToken = fi.getHttpRequest().getHeader("Authorization");
-            }
+            String accessToken = fi.getHttpRequest().getHeader("Authorization");
             CentitUserDetails ud = null;
             if(StringUtils.isNotBlank(accessToken)) {
                 try {

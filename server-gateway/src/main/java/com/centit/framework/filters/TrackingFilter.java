@@ -35,13 +35,13 @@ public class TrackingFilter extends ZuulFilter {
         return SHOULD_FILTER;
     }
 
-    private String generateCorrelationId(){
-        return java.util.UUID.randomUUID().toString();
-    }
-
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            return null;
+        }
+
         String correlationId = request.getHeader(RestRequestContext.CORRELATION_ID);
         if (StringUtils.isBlank(correlationId)) {
             correlationId = ctx.getZuulRequestHeaders().get(RestRequestContext.CORRELATION_ID);
@@ -55,7 +55,7 @@ public class TrackingFilter extends ZuulFilter {
         ctx.addZuulRequestHeader(RestRequestContext.CORRELATION_ID, correlationId);
         ctx.addZuulRequestHeader(RestRequestContext.SESSION_ID_TOKEN, request.getSession().getId());
         ctx.addZuulRequestHeader(RestRequestContext.AUTHORIZATION_TOKEN, request.getHeader(RestRequestContext.AUTHORIZATION_TOKEN));
-
+        //  如何确保 zuul 过滤器在 spring session 的过滤器之后
         CentitUserDetails ud = WebOptUtils.getLoginUser(request);
         if(ud != null){
             ctx.addZuulRequestHeader(RestRequestContext.USER_CODE_ID, ud.getUserCode());
