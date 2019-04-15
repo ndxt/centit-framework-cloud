@@ -16,10 +16,11 @@ public class RestRequestContextInterceptor implements ClientHttpRequestIntercept
 
         RestRequestContext restRequestContext = RestRequestContextHolder.getContext();
         HttpHeaders headers = request.getHeaders();
-        headers.add(RestRequestContext.CORRELATION_ID, RestRequestContextHolder.getContext().getCorrelationId());
-        headers.add(RestRequestContext.AUTH_TOKEN, RestRequestContextHolder.getContext().getAuthToken());
-        headers.add(RestRequestContext.USER_CODE_ID, RestRequestContextHolder.getContext().getUserCode());
-        headers.add(RestRequestContext.CURRENT_UNIT_CODE, RestRequestContextHolder.getContext().getCurrUnitCode());
+        headers.add(RestRequestContext.CORRELATION_ID, restRequestContext.getCorrelationId());
+        headers.add(RestRequestContext.SESSION_ID_TOKEN,restRequestContext.getSessionIdToken());
+        headers.add(RestRequestContext.AUTHORIZATION_TOKEN,restRequestContext.getAuthorizationToken());
+        headers.add(RestRequestContext.USER_CODE_ID,restRequestContext.getUserCode());
+        headers.add(RestRequestContext.CURRENT_UNIT_CODE, restRequestContext.getCurrUnitCode());
         return execution.execute(request, body);
     }
 }

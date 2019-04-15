@@ -1,24 +1,30 @@
 package com.centit.product.clouddemo.controller;
 
+import com.centit.framework.appclient.HttpReceiveJSON;
 import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.model.adapter.PlatformEnvironment;
 import com.centit.framework.model.basedata.IUserInfo;
 import com.centit.framework.security.model.CentitUserDetails;
-import com.centit.support.algorithm.CollectionsOpt;
+import com.centit.framework.security.model.JsonCentitUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class TestFrameworkController {
 
+    private static String AUTHORIZE_SERVICE_URL="http://AUTHORIZE-SERVICE";
+
     @Autowired
     PlatformEnvironment platformEnvironment;
+
+    @Autowired
+    RestTemplate restTemplate;
 
     @GetMapping(value = "/users")
     @WrapUpResponseBody
@@ -35,9 +41,13 @@ public class TestFrameworkController {
 
     @GetMapping(value = "/currentUser")
     @WrapUpResponseBody
-    public Map<String, Object> testCurrentUser(){
-
-        return CollectionsOpt.createHashMap();
+    public CentitUserDetails testCurrentUser(){
+        String jsonString =
+            restTemplate.getForObject(AUTHORIZE_SERVICE_URL + "/oauthUser/",
+                String.class);
+        HttpReceiveJSON responseJSON = HttpReceiveJSON.valueOfJson(jsonString);
+        CentitUserDetails ud = responseJSON.getDataAsObject(JsonCentitUserDetails.class);
+        return ud;
     }
 
 }

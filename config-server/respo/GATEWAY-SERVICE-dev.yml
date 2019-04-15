@@ -33,6 +33,9 @@ zuul:
     api-workflow:
       path: /workflow/**
       serviceId: WORKFLOW-SERVICE
+    api-demo:
+      path: /demo/**
+      serviceId: CLOUD-DEMO
 http:
   csrf:
     enable: false
