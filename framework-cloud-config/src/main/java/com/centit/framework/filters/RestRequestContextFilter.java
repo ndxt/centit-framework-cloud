@@ -14,13 +14,22 @@ import java.io.IOException;
 public class RestRequestContextFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(RestRequestContextFilter.class);
 
+    /*@Value("rest.check.user:false")
+    protected boolean checkUserCode;*/
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+        String correlationId = httpServletRequest.getHeader(RestRequestContext.CORRELATION_ID);
+        String userCode = httpServletRequest.getHeader(RestRequestContext.USER_CODE_ID);
+        /*if(StringUtils.isBlank(correlationId) || (checkUserCode && StringUtils.isBlank(userCode))){
+            JsonResultUtils.writeErrorMessageJson("请走Zuul网关调用该服务！",(HttpServletResponse)servletResponse);
+            return;
+        }*/
         RestRequestContext restRequestContext = RestRequestContextHolder.getContext();
-        restRequestContext.setCorrelationId(httpServletRequest.getHeader(RestRequestContext.CORRELATION_ID) );
-        restRequestContext.setUserCode(httpServletRequest.getHeader(RestRequestContext.USER_CODE_ID));
+        restRequestContext.setCorrelationId(correlationId);
+        restRequestContext.setUserCode(userCode);
         restRequestContext.setSessionIdToken(httpServletRequest.getHeader(RestRequestContext.SESSION_ID_TOKEN));
         restRequestContext.setCurrUnitCode(httpServletRequest.getHeader(RestRequestContext.CURRENT_UNIT_CODE));
         restRequestContext.setAuthorizationToken(httpServletRequest.getHeader(RestRequestContext.AUTHORIZATION_TOKEN));
