@@ -53,7 +53,11 @@ public class TrackingFilter extends ZuulFilter {
         }
 
         ctx.addZuulRequestHeader(RestRequestContext.CORRELATION_ID, correlationId);
-        ctx.addZuulRequestHeader(RestRequestContext.SESSION_ID_TOKEN, request.getSession().getId());
+        String sessionId = request.getHeader(RestRequestContext.SESSION_ID_TOKEN);
+        if(StringUtils.isBlank(sessionId)){
+            sessionId = request.getSession().getId();
+        }
+        ctx.addZuulRequestHeader(RestRequestContext.SESSION_ID_TOKEN, sessionId);
         ctx.addZuulRequestHeader(RestRequestContext.AUTHORIZATION_TOKEN, request.getHeader(RestRequestContext.AUTHORIZATION_TOKEN));
         //  如何确保 zuul 过滤器在 spring session 的过滤器之后
         CentitUserDetails ud = WebOptUtils.getLoginUser(request);

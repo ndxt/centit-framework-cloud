@@ -71,5 +71,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(centitPowerFilter, FilterSecurityInterceptor.class);
     }
 
-
 }

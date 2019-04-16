@@ -6,7 +6,11 @@ import com.centit.framework.components.impl.TextOperationLogWriterImpl;
 import com.centit.framework.config.ApplicationBaseConfig;
 import com.centit.framework.model.adapter.NotificationCenter;
 import com.centit.framework.model.adapter.OperationLogWriter;
+import com.centit.framework.model.adapter.PlatformEnvironment;
+import com.centit.framework.security.model.CentitUserDetailsService;
 import com.centit.framework.security.model.StandardPasswordEncoderImpl;
+import com.centit.framework.system.security.DaoUserDetailsService;
+import com.centit.framework.system.service.impl.DBPlatformEnvironment;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +34,18 @@ public class SystemBeanConfiguation {
     }
 
     @Bean
+    public PlatformEnvironment platformEnvironment() {
+        DBPlatformEnvironment platformEnvironment = new DBPlatformEnvironment();
+        return platformEnvironment;
+    }
+
+    @Bean
+    public CentitUserDetailsService centitUserDetailsService() {
+        DaoUserDetailsService userDetailsService = new DaoUserDetailsService();
+        return userDetailsService;
+    }
+
+    @Bean
     public CsrfTokenRepository csrfTokenRepository() {
         return new HttpSessionCsrfTokenRepository();
     }
@@ -50,6 +66,9 @@ public class SystemBeanConfiguation {
         return operationLog;
     }
 
-
+    @Bean
+    public InstantiationServiceBeanPostProcessor instantiationServiceBeanPostProcessor(){
+        return new InstantiationServiceBeanPostProcessor();
+    }
 }
 

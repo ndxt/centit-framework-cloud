@@ -1,6 +1,7 @@
 package com.centit.product.clouddemo.controller;
 
 import com.centit.framework.appclient.HttpReceiveJSON;
+import com.centit.framework.common.ResponseData;
 import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.model.adapter.PlatformEnvironment;
@@ -12,6 +13,7 @@ import com.centit.framework.utils.RestRequestContextHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -46,13 +48,17 @@ public class TestFrameworkController {
     @WrapUpResponseBody
     public Object testCurrentUser() {
         RestRequestContext context = RestRequestContextHolder.getContext();
+
         if (StringUtils.isNotBlank(context.getAuthorizationToken())){
-            String jsonString =
-                restTemplate.getForObject(AUTHORIZE_SERVICE_URL + "/oauthUser/",
+            String jsonString = restTemplate.getForObject(AUTHORIZE_SERVICE_URL + "/oauthUser/",
                     String.class);
             HttpReceiveJSON responseJSON = HttpReceiveJSON.valueOfJson(jsonString);
-            CentitUserDetails ud = responseJSON.getDataAsObject(JsonCentitUserDetails.class);
-            return ud;
+            return responseJSON.getDataAsObject(JsonCentitUserDetails.class);
+        } else if (StringUtils.isNotBlank(context.getSessionIdToken())){
+            String jsonString = restTemplate.getForObject(AUTHORIZE_SERVICE_URL + "/loginUser/",
+                    String.class);
+            HttpReceiveJSON responseJSON = HttpReceiveJSON.valueOfJson(jsonString);
+            return responseJSON.getDataAsObject(JsonCentitUserDetails.class);
         }
         return context;
     }
