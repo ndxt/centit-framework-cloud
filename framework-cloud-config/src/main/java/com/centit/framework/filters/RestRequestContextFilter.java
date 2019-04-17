@@ -18,9 +18,9 @@ import java.io.IOException;
 public class RestRequestContextFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(RestRequestContextFilter.class);
 
-    @Value("filter.rest.context.check.user:false")
+    @Value("${filter.rest.context.check.user:false}")
     protected boolean checkUserCode;
-    @Value("filter.rest.context.check.correlation:false")
+    @Value("${filter.rest.context.check.correlation:false}")
     protected boolean checkCorrelation;
 
     @Override
@@ -29,10 +29,15 @@ public class RestRequestContextFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String correlationId = httpServletRequest.getHeader(RestRequestContext.CORRELATION_ID);
         String userCode = httpServletRequest.getHeader(RestRequestContext.USER_CODE_ID);
-        if(checkCorrelation &&( StringUtils.isBlank(correlationId)
-            || (checkUserCode && StringUtils.isBlank(userCode)))){
-            JsonResultUtils.writeErrorMessageJson("请走Zuul网关调用该服务！",(HttpServletResponse)servletResponse);
-            return;
+        if(checkCorrelation) {
+            if (StringUtils.isBlank(correlationId)) {
+                JsonResultUtils.writeErrorMessageJson("请走Zuul网关调用该服务！", (HttpServletResponse) servletResponse);
+                return;
+            }
+            if(checkUserCode && StringUtils.isBlank(userCode)){
+                JsonResultUtils.writeErrorMessageJson("请先通过auth服务登录！", (HttpServletResponse) servletResponse);
+                return;
+            }
         }
         RestRequestContext restRequestContext = RestRequestContextHolder.getContext();
         restRequestContext.setCorrelationId(correlationId);

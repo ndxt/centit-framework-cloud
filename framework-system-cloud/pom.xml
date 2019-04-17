@@ -33,11 +33,11 @@
       <artifactId>spring-cloud-config-client</artifactId>
     </dependency>
 
-    <!--<dependency>
+    <dependency>
       <groupId>com.centit.framework</groupId>
       <artifactId>framework-cloud-config</artifactId>
       <version>${project.version}</version>
-    </dependency>-->
+    </dependency>
 
     <dependency>
       <groupId>io.springfox</groupId>
