@@ -78,7 +78,7 @@ public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
                     HttpReceiveJSON responseJSON = HttpReceiveJSON.valueOfJson(jsonString);
                     ud = responseJSON.getDataAsObject(JsonCentitUserDetails.class);
                 } catch (Exception e) {
-                    ud = null;
+                    logger.error(e.getMessage());
                 }
 
                 if(ud!=null){
