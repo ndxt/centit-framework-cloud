@@ -57,10 +57,10 @@ framework:
     id:
       generator: \{"length":1\}
 
-session:
-  redis:
-    host: ${redis.address}
-    port: 6379
+#session:
+  #redis:
+    #host: ${redis.address}
+    #port: 6379
 
 filter:
   rest:
