@@ -1,7 +1,7 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:10080/eureka/
+      defaultZone: http://eureka:10080/eureka/
 
 server:
   port: 10087
@@ -12,7 +12,7 @@ spring:
   datasource:
     type: org.apache.commons.dbcp2.BasicDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.128.32:3306/frameworkdb?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://${mysql.address}:3306/frameworkdb?useUnicode=true&characterEncoding=utf-8
     username: framework
     password: framework
     dbcp2:
@@ -62,7 +62,7 @@ framework:
 
 session:
   redis:
-    host: 127.0.0.1
+    host: ${redis.address}
     port: 6379
 
 filter:
