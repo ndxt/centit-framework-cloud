@@ -1,0 +1,73 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:10080/eureka/
+
+server:
+  port: 10087
+
+spring:
+  application:
+    name: AUTHORIZE-SERVICE
+  datasource:
+    type: org.apache.commons.dbcp2.BasicDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.128.32:3306/frameworkdb?useUnicode=true&characterEncoding=utf-8
+    username: framework
+    password: framework
+    dbcp2:
+      max-wait-millis: 10000
+      max-idle: 15
+      initial-size: 10
+      validation-query: SELECT 1
+      connection-properties: characterEncoding=utf8
+
+http:
+  csrf:
+    enable: false
+  filter:
+    chain:
+      continueBeforeSuccessfulAuthentication: false
+
+login:
+  failure:
+    targetUrl:
+    writeLog: false
+  success:
+    targetUrl:
+    writeLog: true
+    registToken: true
+  captcha:
+    checkTime: 0
+    checkType: 0
+  retry:
+    checkType: H
+    maxTryTimes: 0
+    lockMinites: 10
+    checkTimeTnterval: 3
+
+#\u6846\u67B6\u76F8\u5173\u7684\u8868\u4E3B\u952E\u751F\u6210\u89C4\u5236\uFF0C \u76EE\u524D\u5173\u8054\u7684\u5C31\u662F userinfo \u548C uintinfo \u4E24\u4E2A\u8868
+#default value {"prefix":"U","length":8,"pad":"0"}
+framework:
+  userinfo:
+    id:
+      generator: \{"length":1\}
+#default value {"prefix":"D","length":6,"pad":"0"}
+  unitinfo:
+    id:
+      generator: \{"length":1\}
+  roleinfo:
+    id:
+      generator: \{"length":1\}
+
+session:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+filter:
+  rest:
+    context:
+      check:
+        correlation: false
+        user: false
