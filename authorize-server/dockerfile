@@ -1,0 +1,6 @@
+FROM openjdk:8-jdk-alpine
+MAINTAINER hzf "hzf@centit.com"
+ADD target/*.jar /home/authorize-server.jar
+COPY wait-for-it.sh /wait-for-it.sh
+RUN chmod 777 /wait-for-it.sh
+CMD ["java","-jar","/home/authorize-server.jar"]
