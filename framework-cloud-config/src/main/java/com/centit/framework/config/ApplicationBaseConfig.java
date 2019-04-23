@@ -64,13 +64,13 @@ public class ApplicationBaseConfig {
         List<HandlerMethodReturnValueHandler> defaultHandlers = requestMappingHandlerAdapter.getReturnValueHandlers();
 
         // 建议都使用框架的这个注解处理，为了提高性能可以放在最前面：
-        sortedHandlers.add(new WrapUpResponseBodyReturnValueHandler(fastJsonHttpMessageConverter()));
+        sortedHandlers.add(new WrapUpResponseBodyReturnValueHandler(jsonHttpMessageConverter));
         sortedHandlers.addAll(defaultHandlers);
         // 下面的代码式 放到 Spring 定义的  Annotation-based 组中 排在 sortedHandlers 后面
         /*for(HandlerMethodReturnValueHandler handler : defaultHandlers ){
             sortedHandlers.add(handler);
             if(handler instanceof RequestResponseBodyMethodProcessor){
-                sortedHandlers.add(new WrapUpResponseBodyReturnValueHandler(fastJsonHttpMessageConverter()));
+                sortedHandlers.add(new WrapUpResponseBodyReturnValueHandler(jsonHttpMessageConverter));
             }
         }*/
         requestMappingHandlerAdapter.setReturnValueHandlers(sortedHandlers);
