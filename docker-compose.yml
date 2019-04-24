@@ -1,0 +1,60 @@
+version: '3'
+services:
+  eureka:
+    image: 172.29.0.13:8082/eureka-server:v5
+    ports:
+      - 10080:10080
+    network_mode: "host"
+    restart: always
+
+  config-server:
+    image: 172.29.0.13:8082/config-server:v5
+    restart: always
+    ports:
+      - "10089"
+    network_mode: "host"
+    depends_on:
+      - eureka
+
+  authorize-server:
+    image: 172.29.0.13:8082/authorize-server:v5
+    restart: always
+    ports:
+      - "10087"
+    network_mode: "host"
+    environment:
+      - mysql.address=192.168.134.9
+      - redis.address=192.168.134.9
+    depends_on:
+      - eureka
+      - config-server
+    command: ["sh","/wait-for-it.sh","192.168.134.9:10089","-s","-t","30000","--","java","-jar","/home/authorize-server.jar"]
+
+
+  server-gateway:
+    image: 172.29.0.13:8082/server-gateway:v5
+    restart: always
+    ports:
+      - "10088"
+    network_mode: "host"
+    environment:
+      - mysql.address=192.168.134.9
+      - redis.address=192.168.134.9
+    depends_on:
+      - eureka
+      - config-server
+    command: ["sh","/wait-for-it.sh","192.168.134.9:10089","-s","-t","30000","--","java","-jar","/home/server-gateway.jar"]
+
+  framework-system-cloud:
+    image: 172.29.0.13:8082/framework-system-cloud:v5
+    restart: always
+    ports:
+      - "10081"
+    network_mode: "host"
+    environment:
+      - mysql.address=192.168.134.9
+      - redis.address=192.168.134.9
+    depends_on:
+      - eureka
+      - config-server
+    command: ["sh","/wait-for-it.sh","192.168.134.9:10089","-s","-t","30000","--","java","-jar","/home/framework-system-cloud.jar"]
