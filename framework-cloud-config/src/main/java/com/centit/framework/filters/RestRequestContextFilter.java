@@ -27,27 +27,29 @@ public class RestRequestContextFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        String correlationId = httpServletRequest.getHeader(RestRequestContext.CORRELATION_ID);
-        String userCode = httpServletRequest.getHeader(RestRequestContext.USER_CODE_ID);
-        if(checkCorrelation) {
-            if (StringUtils.isBlank(correlationId)) {
-                JsonResultUtils.writeErrorMessageJson("请走Zuul网关调用该服务！", (HttpServletResponse) servletResponse);
-                return;
+        String requestUrl = ((HttpServletRequest) servletRequest).getRequestURI();
+        if(!StringUtils.startsWithAny(requestUrl,"/doc.html","/swagger-resources","/webjars/")) {
+            String correlationId = httpServletRequest.getHeader(RestRequestContext.CORRELATION_ID);
+            String userCode = httpServletRequest.getHeader(RestRequestContext.USER_CODE_ID);
+            if (checkCorrelation) {
+                if (StringUtils.isBlank(correlationId)) {
+                    JsonResultUtils.writeErrorMessageJson("请走Zuul网关调用该服务！", (HttpServletResponse) servletResponse);
+                    return;
+                }
+                if (checkUserCode && StringUtils.isBlank(userCode)) {
+                    JsonResultUtils.writeErrorMessageJson("请先通过auth服务登录！", (HttpServletResponse) servletResponse);
+                    return;
+                }
             }
-            if(checkUserCode && StringUtils.isBlank(userCode)){
-                JsonResultUtils.writeErrorMessageJson("请先通过auth服务登录！", (HttpServletResponse) servletResponse);
-                return;
-            }
+            RestRequestContext restRequestContext = RestRequestContextHolder.getContext();
+            restRequestContext.setCorrelationId(correlationId);
+            restRequestContext.setUserCode(userCode);
+            restRequestContext.setSessionIdToken(httpServletRequest.getHeader(RestRequestContext.SESSION_ID_TOKEN));
+            restRequestContext.setCurrUnitCode(httpServletRequest.getHeader(RestRequestContext.CURRENT_UNIT_CODE));
+            restRequestContext.setAuthorizationToken(httpServletRequest.getHeader(RestRequestContext.AUTHORIZATION_TOKEN));
+
+            logger.debug("Special Routes Service Incoming Correlation id: {}", restRequestContext.getCorrelationId());
         }
-        RestRequestContext restRequestContext = RestRequestContextHolder.getContext();
-        restRequestContext.setCorrelationId(correlationId);
-        restRequestContext.setUserCode(userCode);
-        restRequestContext.setSessionIdToken(httpServletRequest.getHeader(RestRequestContext.SESSION_ID_TOKEN));
-        restRequestContext.setCurrUnitCode(httpServletRequest.getHeader(RestRequestContext.CURRENT_UNIT_CODE));
-        restRequestContext.setAuthorizationToken(httpServletRequest.getHeader(RestRequestContext.AUTHORIZATION_TOKEN));
-
-        logger.debug("Special Routes Service Incoming Correlation id: {}", restRequestContext.getCorrelationId());
-
         filterChain.doFilter(httpServletRequest, servletResponse);
     }
 
