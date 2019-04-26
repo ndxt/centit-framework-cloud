@@ -36,12 +36,6 @@ zuul:
     api-demo:
       path: /demo/**
       serviceId: CLOUD-DEMO
-http:
-  csrf:
-    enable: false
-  filter:
-    chain:
-      continueBeforeSuccessfulAuthentication: false
 
 #框架相关的表主键生成规制， 目前关联的就是 userinfo 和 uintinfo 两个表
 #default value {"prefix":"U","length":8,"pad":"0"}
