@@ -28,7 +28,8 @@ public class RestRequestContextFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String requestUrl = ((HttpServletRequest) servletRequest).getRequestURI();
-        if(!StringUtils.startsWithAny(requestUrl,"/doc.html","/swagger-resources","/webjars/")) {
+        //不过滤swagger相关的api url
+        if(!StringUtils.startsWithAny(requestUrl,"/v2/api-docs","/doc.html","/swagger-resources","/webjars/")) {
             String correlationId = httpServletRequest.getHeader(RestRequestContext.CORRELATION_ID);
             String userCode = httpServletRequest.getHeader(RestRequestContext.USER_CODE_ID);
             if (checkCorrelation) {
