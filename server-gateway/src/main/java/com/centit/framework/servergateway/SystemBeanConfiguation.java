@@ -11,13 +11,21 @@ import com.centit.framework.security.model.CentitUserDetailsService;
 import com.centit.framework.security.model.StandardPasswordEncoderImpl;
 import com.centit.framework.system.security.DaoUserDetailsService;
 import com.centit.framework.system.service.impl.DBPlatformEnvironment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Configuration
@@ -43,6 +51,21 @@ public class SystemBeanConfiguation {
     public CentitUserDetailsService centitUserDetailsService() {
         DaoUserDetailsService userDetailsService = new DaoUserDetailsService();
         return userDetailsService;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(
+        @Autowired CentitUserDetailsService centitUserDetailsService,
+        @Autowired StandardPasswordEncoderImpl passwordEncoder) {
+
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setHideUserNotFoundExceptions(false);
+        authenticationProvider.setUserDetailsService(centitUserDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
+
+        List<AuthenticationProvider> providerList = new ArrayList<>();
+        providerList.add(authenticationProvider);
+        return new ProviderManager(providerList);
     }
 
     @Bean

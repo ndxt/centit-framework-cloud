@@ -44,6 +44,7 @@ public class FrameworkCloudDemoApplication extends WebMvcConfigurerAdapter imple
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         ApplicationBaseConfig.setApplicationContext(applicationContext, fastJsonHttpMessageConverter);
     }
+
     public static void main(String[] args) {
         SpringApplication.run(FrameworkCloudDemoApplication.class, args);
     }
