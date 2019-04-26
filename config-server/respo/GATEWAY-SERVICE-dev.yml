@@ -68,3 +68,27 @@ filter:
       check:
         correlation: false
         user: false
+
+http:
+  csrf:
+    enable: false
+  filter:
+    chain:
+      continueBeforeSuccessfulAuthentication: false
+
+login:
+  failure:
+    targetUrl:
+    writeLog: false
+  success:
+    targetUrl:
+    writeLog: true
+    registToken: true
+  captcha:
+    checkTime: 0
+    checkType: 0
+  retry:
+    checkType: H
+    maxTryTimes: 0
+    lockMinites: 10
+    checkTimeTnterval: 3
