@@ -25,8 +25,6 @@ import org.springframework.web.client.RestTemplate;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    RestTemplate restTemplate;
 
     @Autowired
     protected CsrfTokenRepository csrfTokenRepository;
@@ -41,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     protected CentitUserDetailsService centitUserDetailsService;
 
-    @Value("${login.failure.targetUrl}")
+    @Value("${login.failure.targetUrl:}")
     String defaultFailureTargetUrl;
     @Value("${login.failure.writeLog:false}")
     boolean loginFailureWritelog;
@@ -56,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return ajaxFailureHandler;
     }
 
-    @Value("${login.success.targetUrl}")
+    @Value("${login.success.targetUrl:}")
     String defaultSuccessTargetUrl;
     @Value("${login.success.writeLog:true}")
     boolean loginSuccessWritelog;
@@ -135,7 +133,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             DaoInvocationSecurityMetadataSource centitSecurityMetadataSource) {
 
         CloudFilterSecurityInterceptor centitPowerFilter = new CloudFilterSecurityInterceptor();
-        centitPowerFilter.setRestTemplate(restTemplate);
         centitPowerFilter.setAccessDecisionManager(centitAccessDecisionManagerBean);
         centitPowerFilter.setSecurityMetadataSource(centitSecurityMetadataSource);
         return centitPowerFilter;

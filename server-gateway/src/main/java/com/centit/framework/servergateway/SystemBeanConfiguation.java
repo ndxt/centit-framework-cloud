@@ -3,7 +3,7 @@ package com.centit.framework.servergateway;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.centit.framework.components.impl.NotificationCenterImpl;
 import com.centit.framework.components.impl.TextOperationLogWriterImpl;
-import com.centit.framework.config.ApplicationBaseConfig;
+import com.centit.framework.core.controller.MvcConfigUtil;
 import com.centit.framework.model.adapter.NotificationCenter;
 import com.centit.framework.model.adapter.OperationLogWriter;
 import com.centit.framework.model.adapter.PlatformEnvironment;
@@ -12,7 +12,6 @@ import com.centit.framework.security.model.StandardPasswordEncoderImpl;
 import com.centit.framework.system.security.DaoUserDetailsService;
 import com.centit.framework.system.service.impl.DBPlatformEnvironment;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -22,7 +21,6 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +31,7 @@ public class SystemBeanConfiguation {
 
     @Bean
     public FastJsonHttpMessageConverter fastJsonHttpMessageConverter(){
-        return ApplicationBaseConfig.fastJsonHttpMessageConverter();
+        return MvcConfigUtil.fastJsonHttpMessageConverter();
     }
 
     @Bean("passwordEncoder")

@@ -1,6 +1,7 @@
 package com.centit.framework.config;
 
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.centit.framework.core.controller.MvcConfigUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -40,9 +41,8 @@ public class FrameworkSystemCloudApplication extends WebMvcConfigurerAdapter imp
      */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        ApplicationBaseConfig.setApplicationContext(applicationContext, fastJsonHttpMessageConverter);
+        MvcConfigUtil.setApplicationContext(applicationContext, fastJsonHttpMessageConverter);
     }
-
 
     public static void main(String[] args) {
         SpringApplication.run(FrameworkSystemCloudApplication.class, args);

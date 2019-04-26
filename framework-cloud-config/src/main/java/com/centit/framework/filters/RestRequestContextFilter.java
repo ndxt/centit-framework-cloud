@@ -1,6 +1,7 @@
 package com.centit.framework.filters;
 
 import com.centit.framework.common.JsonResultUtils;
+import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.utils.RestRequestContext;
 import com.centit.framework.utils.RestRequestContextHolder;
 import org.apache.commons.lang3.StringUtils;
@@ -30,8 +31,8 @@ public class RestRequestContextFilter implements Filter {
         String requestUrl = ((HttpServletRequest) servletRequest).getRequestURI();
         //不过滤swagger相关的api url
         if(!StringUtils.startsWithAny(requestUrl,"/v2/api-docs","/doc.html","/swagger-resources","/webjars/")) {
-            String correlationId = httpServletRequest.getHeader(RestRequestContext.CORRELATION_ID);
-            String userCode = httpServletRequest.getHeader(RestRequestContext.USER_CODE_ID);
+            String correlationId = httpServletRequest.getHeader(WebOptUtils.CORRELATION_ID);
+            String userCode = httpServletRequest.getHeader(WebOptUtils.CURRENT_USER_CODE_TAG);
             if (checkCorrelation) {
                 if (StringUtils.isBlank(correlationId)) {
                     JsonResultUtils.writeErrorMessageJson("请走Zuul网关调用该服务！", (HttpServletResponse) servletResponse);
@@ -45,9 +46,10 @@ public class RestRequestContextFilter implements Filter {
             RestRequestContext restRequestContext = RestRequestContextHolder.getContext();
             restRequestContext.setCorrelationId(correlationId);
             restRequestContext.setUserCode(userCode);
-            restRequestContext.setSessionIdToken(httpServletRequest.getHeader(RestRequestContext.SESSION_ID_TOKEN));
-            restRequestContext.setCurrUnitCode(httpServletRequest.getHeader(RestRequestContext.CURRENT_UNIT_CODE));
-            restRequestContext.setAuthorizationToken(httpServletRequest.getHeader(RestRequestContext.AUTHORIZATION_TOKEN));
+            restRequestContext.setSessionIdToken(httpServletRequest.getHeader(WebOptUtils.SESSION_ID_TOKEN));
+            restRequestContext.setCurrUnitCode(httpServletRequest.getHeader(WebOptUtils.CURRENT_UNIT_CODE_TAG));
+            restRequestContext.setCurrStationId(httpServletRequest.getHeader(WebOptUtils.CURRENT_STATION_ID_TAG));
+            restRequestContext.setAuthorizationToken(httpServletRequest.getHeader(WebOptUtils.AUTHORIZATION_TOKEN));
 
             logger.debug("Special Routes Service Incoming Correlation id: {}", restRequestContext.getCorrelationId());
         }
@@ -55,8 +57,12 @@ public class RestRequestContextFilter implements Filter {
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {}
+    public void init(FilterConfig filterConfig) throws ServletException {
+        WebOptUtils.setRequestInSpringCloud(true);
+    }
 
     @Override
-    public void destroy() {}
+    public void destroy() {
+
+    }
 }

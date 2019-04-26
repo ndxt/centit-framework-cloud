@@ -37,12 +37,11 @@
       <version>${project.version}</version>
     </dependency>
 
-    <!--<dependency>
+    <dependency>
       <groupId>com.centit.framework</groupId>
       <artifactId>share-session-config</artifactId>
       <version>${project.version}</version>
     </dependency>
-    -->
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
@@ -73,8 +72,8 @@
 
     <dependency>
       <groupId>com.centit.framework</groupId>
-      <artifactId>framework-system-module</artifactId>
-      <version>${centit.framework.version}</version>
+      <artifactId>centit-ip-module</artifactId>
+      <version>${centit.ip.version}</version>
     </dependency>
 
     <dependency>

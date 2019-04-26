@@ -1,5 +1,7 @@
 package com.centit.framework.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.centit.framework.common.ObjectException;
 import com.centit.framework.common.ResponseData;
 import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.core.controller.BaseController;
@@ -11,46 +13,53 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/session")
 public class UserSeesionController extends BaseController {
 
-    @GetMapping(value = "/usercurrposition")
+    @GetMapping(value = "/usercurrstation")
     @WrapUpResponseBody
-    public ResponseData getUserCurrentStaticn(HttpServletRequest request) {
-        CentitUserDetails currentUser = WebOptUtils.getLoginUser(request);
-        if(currentUser==null){
-            return ResponseData.makeErrorMessage(ResponseData.ERROR_SESSION_TIMEOUT, "用户没有登录或者超时，请重新登录。");
+    public Map<String,Object> getUserCurrentStaticn(HttpServletRequest request) {
+        Object currentUser = WebOptUtils.getLoginUser(request);
+        if(currentUser instanceof CentitUserDetails) {
+            return DictionaryMapUtils.mapJsonObject(
+                ((CentitUserDetails) currentUser).getCurrentStation(),
+                IUserUnit.class);
         }
-        return ResponseData.makeResponseData(
-            DictionaryMapUtils.mapJsonObject(
-                currentUser.getCurrentStation(),
-                IUserUnit.class));
+        throw new ObjectException(ResponseData.ERROR_SESSION_TIMEOUT, "用户没有登录或者超时，请重新登录。");
     }
 
-    @PutMapping(value = "/setuserposition/{userUnitId}")
+    @PutMapping(value = "/setuserstation/{userUnitId}")
     @WrapUpResponseBody
-    public ResponseData setUserCurrentStaticn(@PathVariable String userUnitId,
-                                              HttpServletRequest request, HttpServletResponse response) {
-        CentitUserDetails currentUser = WebOptUtils.getLoginUser(request);
-        if(currentUser==null){
-            return ResponseData.makeErrorMessage(ResponseData.ERROR_SESSION_TIMEOUT,"用户没有登录或者超时，请重新登录。");
+    public void setUserCurrentStaticn(@PathVariable String userUnitId,
+                                              HttpServletRequest request) {
+        Object currentUser = WebOptUtils.getLoginUser(request);
+        if(currentUser instanceof CentitUserDetails) {
+            ((CentitUserDetails) currentUser).setCurrentStationId(userUnitId);
         }
-        currentUser.setCurrentStationId(userUnitId);
-        return ResponseData.makeSuccessResponse();
+
+        throw new ObjectException(ResponseData.ERROR_SESSION_TIMEOUT, "用户没有登录或者超时，请重新登录。");
     }
 
     @RequestMapping(value = "/currentuser",method = RequestMethod.GET)
     @WrapUpResponseBody
-    public ResponseData getCurrentUserDetails(HttpServletRequest request) {
-        CentitUserDetails ud = WebOptUtils.getLoginUser(request);
-        if(ud==null) {
-            return ResponseData.makeErrorMessageWithData(
-                request.getSession().getId(),ResponseData.ERROR_UNAUTHORIZED,"No user login on current session!");
+    public Object getCurrentUserDetails(HttpServletRequest request) {
+        return WebOptUtils.getLoginUser(request);
+    }
+
+    @GetMapping(value = "/userstations")
+    @WrapUpResponseBody
+    public JSONArray listCurrentUserUnits(HttpServletRequest request) {
+        Object currentUser = WebOptUtils.getLoginUser(request);
+        if(currentUser==null){
+            throw new ObjectException(ResponseData.ERROR_SESSION_TIMEOUT, "用户没有登录或者超时，请重新登录。");
         }
-        else {
-            return ResponseData.makeResponseData(ud);
+        if(currentUser instanceof CentitUserDetails) {
+            return DictionaryMapUtils.mapJsonArray(
+                ((CentitUserDetails)currentUser).getUserUnits(), IUserUnit.class);
         }
+        return null;
     }
 }

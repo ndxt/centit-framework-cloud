@@ -37,7 +37,7 @@ public class TestFrameworkController {
 
     @GetMapping(value = "/sessionUser")
     @WrapUpResponseBody
-    public CentitUserDetails getSessionUser(HttpServletRequest request){
+    public Object getSessionUser(HttpServletRequest request){
         return WebOptUtils.getLoginUser(request);
     }
 

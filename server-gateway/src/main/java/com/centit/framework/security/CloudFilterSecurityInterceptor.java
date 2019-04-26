@@ -19,17 +19,10 @@ import java.io.IOException;
 public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
         implements Filter {
 
-    private static String AUTHORIZE_SERVICE_URL="http://AUTHORIZE-SERVICE";
     private static CentitUserDetails anonymousUser = AnonymousUserDetails.createAnonymousUser();
-    private RestTemplate restTemplate;
 
     private FilterInvocationSecurityMetadataSource securityMetadataSource;
 
-    // ~ Methods
-    // ========================================================================================================
-    public void setRestTemplate(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 
     /**
      * Method that is actually called by the filter chain. Simply delegates to
@@ -63,36 +56,9 @@ public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
 
-        boolean alwaysReauthenticate = false;
-
         //从token中获取用户信息
-        if(authentication==null || "anonymousUser".equals(authentication.getName())){
-
-            String accessToken = fi.getHttpRequest().getHeader("Authorization");
-            CentitUserDetails ud = null;
-            if(StringUtils.isNotBlank(accessToken)) {
-                try {
-                    String jsonString =
-                            restTemplate.getForObject(AUTHORIZE_SERVICE_URL + "/oauthUser/",
-                                    String.class);
-                    HttpReceiveJSON responseJSON = HttpReceiveJSON.valueOfJson(jsonString);
-                    ud = responseJSON.getDataAsObject(JsonCentitUserDetails.class);
-                } catch (Exception e) {
-                    logger.error(e.getMessage());
-                }
-
-                if(ud!=null){
-                    alwaysReauthenticate = this.isAlwaysReauthenticate();
-                    if(alwaysReauthenticate)
-                        this.setAlwaysReauthenticate(false);
-                    SecurityContextHolder.getContext().setAuthentication(ud);
-                }else if(authentication==null){
-                    alwaysReauthenticate = this.isAlwaysReauthenticate();
-                    if(alwaysReauthenticate)
-                        this.setAlwaysReauthenticate(false);
-                    SecurityContextHolder.getContext().setAuthentication(anonymousUser);
-                }
-            }
+        if(authentication==null){
+            SecurityContextHolder.getContext().setAuthentication(anonymousUser);
         }
 
         InterceptorStatusToken token = super.beforeInvocation(fi);
@@ -102,8 +68,6 @@ public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
             super.afterInvocation(token, null);
         }
 
-        if(alwaysReauthenticate)
-            this.setAlwaysReauthenticate(true);
     }
 
     public SecurityMetadataSource obtainSecurityMetadataSource() {

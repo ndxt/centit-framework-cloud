@@ -2,13 +2,11 @@ package com.centit.framework.filters;
 
 import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.security.model.CentitUserDetails;
-import com.centit.framework.utils.RestRequestContext;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,28 +40,30 @@ public class TrackingFilter extends ZuulFilter {
             return null;
         }
 
-        String correlationId = request.getHeader(RestRequestContext.CORRELATION_ID);
+        String correlationId = request.getHeader(WebOptUtils.CORRELATION_ID);
         if (StringUtils.isBlank(correlationId)) {
-            correlationId = ctx.getZuulRequestHeaders().get(RestRequestContext.CORRELATION_ID);
+            correlationId = ctx.getZuulRequestHeaders().get(WebOptUtils.CORRELATION_ID);
         }
 
         if (StringUtils.isBlank(correlationId)) {
             correlationId = UUID.randomUUID().toString();
-            ctx.addZuulRequestHeader(RestRequestContext.CORRELATION_ID, correlationId);
+            ctx.addZuulRequestHeader(WebOptUtils.CORRELATION_ID, correlationId);
         }
 
-        ctx.addZuulRequestHeader(RestRequestContext.CORRELATION_ID, correlationId);
-        String sessionId = request.getHeader(RestRequestContext.SESSION_ID_TOKEN);
+        ctx.addZuulRequestHeader(WebOptUtils.CORRELATION_ID, correlationId);
+        String sessionId = request.getHeader(WebOptUtils.SESSION_ID_TOKEN);
         if(StringUtils.isBlank(sessionId)){
             sessionId = request.getSession().getId();
         }
-        ctx.addZuulRequestHeader(RestRequestContext.SESSION_ID_TOKEN, sessionId);
-        ctx.addZuulRequestHeader(RestRequestContext.AUTHORIZATION_TOKEN, request.getHeader(RestRequestContext.AUTHORIZATION_TOKEN));
+        ctx.addZuulRequestHeader(WebOptUtils.SESSION_ID_TOKEN, sessionId);
+        ctx.addZuulRequestHeader(WebOptUtils.AUTHORIZATION_TOKEN, request.getHeader(WebOptUtils.AUTHORIZATION_TOKEN));
         //  如何确保 zuul 过滤器在 spring session 的过滤器之后
-        CentitUserDetails ud = WebOptUtils.getLoginUser(request);
-        if(ud != null){
-            ctx.addZuulRequestHeader(RestRequestContext.USER_CODE_ID, ud.getUserCode());
-            ctx.addZuulRequestHeader(RestRequestContext.CURRENT_UNIT_CODE, ud.getCurrentUnitCode());
+        Object ud = WebOptUtils.getLoginUser(request);
+        if(ud instanceof CentitUserDetails){
+            CentitUserDetails userDetails = (CentitUserDetails)ud;
+            ctx.addZuulRequestHeader(WebOptUtils.CURRENT_USER_CODE_TAG, userDetails.getUserCode());
+            ctx.addZuulRequestHeader(WebOptUtils.CURRENT_UNIT_CODE_TAG, userDetails.getCurrentUnitCode());
+            ctx.addZuulRequestHeader(WebOptUtils.CURRENT_STATION_ID_TAG, userDetails.getCurrentStation().getString("userUnitId"));
         }
         return null;
     }
