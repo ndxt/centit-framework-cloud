@@ -33,7 +33,7 @@ public class OAuth2SecurityConfig extends AuthorizationServerConfigurerAdapter {
     }
 
     //获取
-    public static ResourceServerTokenServices resourceServerTokenServices;
+    //public static ResourceServerTokenServices resourceServerTokenServices;
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
@@ -42,7 +42,7 @@ public class OAuth2SecurityConfig extends AuthorizationServerConfigurerAdapter {
                 //.tokenStore(new InMemoryTokenStore())
                 .authenticationManager(authenticationManager)
                 .setClientDetailsService(centitClientDetailsService);
-        resourceServerTokenServices = endpoints.getResourceServerTokenServices();
+        //resourceServerTokenServices = endpoints.getResourceServerTokenServices();
         //if(resourceServerTokenServices instanceof DefaultTokenServices){
         //    ((DefaultTokenServices)resourceServerTokenServices).setClientDetailsService(centitClientDetailsService);
         //}

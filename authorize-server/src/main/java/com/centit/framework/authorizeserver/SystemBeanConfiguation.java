@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
-
 @Configuration
 public class SystemBeanConfiguation {
 

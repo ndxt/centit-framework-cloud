@@ -27,7 +27,6 @@ public class SecurityBeanConfiguation {
 
     @Bean
     public AuthenticationManager authenticationManager() {
-
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setHideUserNotFoundExceptions(false);
         authenticationProvider.setUserDetailsService(centitUserDetailsService);
