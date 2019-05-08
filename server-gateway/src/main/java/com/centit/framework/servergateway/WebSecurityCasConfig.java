@@ -24,63 +24,63 @@ import javax.servlet.Filter;
 @ConditionalOnClass(name="org.jasig.cas.client.session.SingleSignOutFilter")
 public class WebSecurityCasConfig extends WebSecurityBaseConfig {
 
-    @Override
-    protected String[] getAuthenticatedUrl() {
-        if(BooleanBaseOpt.castObjectToBoolean(env.getProperty("access.resource.notallowed.anonymous"),false)) {
-            return new String[]{"/**"};
-        }
-        return new String[]{"/system/mainframe/logincas"};
-    }
-
-    @Override
-    protected String[] getPermitAllUrl() {
-        return new String[]{"/system/exception"};
-    }
-
-    @Override
-    protected AuthenticationEntryPoint getAuthenticationEntryPoint() {
-        ServiceProperties serviceProperties = createCasServiceProperties();
-        CasAuthenticationEntryPoint casEntryPoint = new CasAuthenticationEntryPoint();
-        casEntryPoint.setLoginUrl(env.getProperty("login.cas.casHome")+"/login");
-        casEntryPoint.setServiceProperties(serviceProperties);
-        return casEntryPoint;
-    }
-
-    @Override
-    protected AbstractAuthenticationProcessingFilter getAuthenticationFilter() {
-        CasAuthenticationFilter casFilter = new CasAuthenticationFilter();
-        casFilter.setAuthenticationManager(authenticationManager);
-        casFilter.setAuthenticationFailureHandler(createFailureHandler());
-        casFilter.setAuthenticationSuccessHandler(createSuccessHandler());
-
-/*
-        if(sessionRegistry != null) {
-            casFilter.setSessionAuthenticationStrategy(
-                new ConcurrentSessionControlAuthenticationStrategy(sessionRegistry));
-        }
-*/
-
-        return casFilter;
-    }
-
-    @Override
-    protected Filter logoutFilter() {
-        return new LogoutFilter(env.getProperty("login.cas.casHome")+"/logout", new SecurityContextLogoutHandler());
-    }
-
-    @Override
-    protected AuthenticationProvider getAuthenticationProvider() {
-        CasAuthenticationProvider casAuthenticationProvider = new CasAuthenticationProvider();
-        casAuthenticationProvider.setUserDetailsService(centitUserDetailsService);
-        casAuthenticationProvider.setServiceProperties(createCasServiceProperties());
-        casAuthenticationProvider.setTicketValidator(new Cas20ServiceTicketValidator(env.getProperty("login.cas.casHome")));
-        casAuthenticationProvider.setKey(env.getProperty("app.key"));
-        return casAuthenticationProvider;
-    }
+//    @Override
+//    protected String[] getAuthenticatedUrl() {
+//        if(BooleanBaseOpt.castObjectToBoolean(env.getProperty("access.resource.notallowed.anonymous"),false)) {
+//            return new String[]{"/**"};
+//        }
+//        return new String[]{"/system/mainframe/logincas"};
+//    }
+//
+//    @Override
+//    protected String[] getPermitAllUrl() {
+//        return new String[]{"/system/exception"};
+//    }
+//
+//    @Override
+//    protected AuthenticationEntryPoint getAuthenticationEntryPoint() {
+//        ServiceProperties serviceProperties = createCasServiceProperties();
+//        CasAuthenticationEntryPoint casEntryPoint = new CasAuthenticationEntryPoint();
+//        casEntryPoint.setLoginUrl(env.getProperty("login.cas.casHome")+"/login");
+//        casEntryPoint.setServiceProperties(serviceProperties);
+//        return casEntryPoint;
+//    }
+//
+//    @Override
+//    protected AbstractAuthenticationProcessingFilter getAuthenticationFilter() {
+//        CasAuthenticationFilter casFilter = new CasAuthenticationFilter();
+//        casFilter.setAuthenticationManager(authenticationManager);
+//        casFilter.setAuthenticationFailureHandler(createFailureHandler());
+//        casFilter.setAuthenticationSuccessHandler(createSuccessHandler());
+//
+///*
+//        if(sessionRegistry != null) {
+//            casFilter.setSessionAuthenticationStrategy(
+//                new ConcurrentSessionControlAuthenticationStrategy(sessionRegistry));
+//        }
+//*/
+//
+//        return casFilter;
+//    }
+//
+//    @Override
+//    protected Filter logoutFilter() {
+//        return new LogoutFilter(env.getProperty("login.cas.casHome")+"/logout", new SecurityContextLogoutHandler());
+//    }
+//
+//    @Override
+//    protected AuthenticationProvider getAuthenticationProvider() {
+//        CasAuthenticationProvider casAuthenticationProvider = new CasAuthenticationProvider();
+//        casAuthenticationProvider.setUserDetailsService(centitUserDetailsService);
+//        casAuthenticationProvider.setServiceProperties(createCasServiceProperties());
+//        casAuthenticationProvider.setTicketValidator(new Cas20ServiceTicketValidator(env.getProperty("login.cas.casHome")));
+//        casAuthenticationProvider.setKey(env.getProperty("app.key"));
+//        return casAuthenticationProvider;
+//    }
 
     private ServiceProperties createCasServiceProperties() {
         ServiceProperties casServiceProperties = new ServiceProperties();
-        casServiceProperties.setService(env.getProperty("login.cas.localHome")+"/login/cas");
+        casServiceProperties.setService(securityProperties.getLogin().getCas().getLocalHome()+"/login/cas");
         casServiceProperties.setSendRenew(false);
         return casServiceProperties;
     }
@@ -88,7 +88,7 @@ public class WebSecurityCasConfig extends WebSecurityBaseConfig {
 
     private SingleSignOutFilter singleSignOutFilter() {
         SingleSignOutFilter singleLogoutFilter = new SingleSignOutFilter();
-        singleLogoutFilter.setCasServerUrlPrefix(env.getProperty("login.cas.casHome"));
+        singleLogoutFilter.setCasServerUrlPrefix(securityProperties.getLogin().getCas().getCasHome());
         return singleLogoutFilter;
     }
 

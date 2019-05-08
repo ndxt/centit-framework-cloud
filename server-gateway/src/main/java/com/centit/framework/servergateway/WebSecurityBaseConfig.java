@@ -40,9 +40,9 @@ public  abstract class WebSecurityBaseConfig extends WebSecurityConfigurerAdapte
         TokenAuthenticationFailureHandler ajaxFailureHandler = new TokenAuthenticationFailureHandler();
         //String defaultTargetUrl = env.getProperty("login.failure.targetUrl");
         ajaxFailureHandler.setDefaultFailureUrl(
-            StringBaseOpt.emptyValue(defaultFailureTargetUrl,
+            StringBaseOpt.emptyValue(securityProperties.getLogin().getFailure().getTargetUrl(),
                 "/system/mainframe/login/error"));
-        ajaxFailureHandler.setWriteLog(loginFailureWritelog);
+        ajaxFailureHandler.setWriteLog(securityProperties.getLogin().getFailure().isWriteLog());
         return ajaxFailureHandler;
     }
 
@@ -55,9 +55,9 @@ public  abstract class WebSecurityBaseConfig extends WebSecurityConfigurerAdapte
     protected TokenAuthenticationSuccessHandler createSuccessHandler(CentitUserDetailsService centitUserDetailsService) {
         TokenAuthenticationSuccessHandler ajaxSuccessHandler = new TokenAuthenticationSuccessHandler();
         //String defaultTargetUrl = env.getProperty("login.success.targetUrl");
-        ajaxSuccessHandler.setDefaultTargetUrl(StringBaseOpt.emptyValue(defaultSuccessTargetUrl,"/"));
+        ajaxSuccessHandler.setDefaultTargetUrl(StringBaseOpt.emptyValue(securityProperties.getLogin().getSuccess().getTargetUrl(),"/"));
 //        ajaxSuccessHandler.setSessionRegistry(centitSessionRegistry);
-        ajaxSuccessHandler.setWriteLog(loginSuccessWritelog);
+        ajaxSuccessHandler.setWriteLog(securityProperties.getLogin().getSuccess().isWriteLog());
         ajaxSuccessHandler.setUserDetailsService(centitUserDetailsService);
         return ajaxSuccessHandler;
     }

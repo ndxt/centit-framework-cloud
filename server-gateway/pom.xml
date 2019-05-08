@@ -15,7 +15,7 @@
     <description>Demo project for Spring Boot</description>
 
     <dependencies>
-        <!--如果不需要cas登录请注射掉cas-client-core、spring-security-cas这个引用-->
+        <!--如果不需要cas登录请注释掉cas-client-core、spring-security-cas这个引用-->
         <dependency>
             <groupId>org.jasig.cas.client</groupId>
             <artifactId>cas-client-core</artifactId>

@@ -25,22 +25,22 @@ public class WebSecurityDaoConfig extends WebSecurityBaseConfig {
 
 
 
-    @Value("${login.failure.targetUrl:}")
-    String defaultFailureTargetUrl;
-    @Value("${login.failure.writeLog:false}")
-    boolean loginFailureWritelog;
-
-
-
-    @Value("${login.success.targetUrl:}")
-    String defaultSuccessTargetUrl;
-    @Value("${login.success.writeLog:true}")
-    boolean loginSuccessWritelog;
-
-
-
-    @Value("${http.csrf.enable:false}")
-    boolean httpCsrfEnable;
+//    @Value("${login.failure.targetUrl:}")
+//    String defaultFailureTargetUrl;
+//    @Value("${login.failure.writeLog:false}")
+//    boolean loginFailureWritelog;
+//
+//
+//
+//    @Value("${login.success.targetUrl:}")
+//    String defaultSuccessTargetUrl;
+//    @Value("${login.success.writeLog:true}")
+//    boolean loginSuccessWritelog;
+//
+//
+//
+//    @Value("${http.csrf.enable:false}")
+//    boolean httpCsrfEnable;
 
 
 
@@ -48,20 +48,20 @@ public class WebSecurityDaoConfig extends WebSecurityBaseConfig {
         return new LoginUrlAuthenticationEntryPoint("/system/mainframe/login");
     }
 
-    @Value("${login.captcha.checkTime:0}")
-    int loginCaptchaCheckTime;
-    @Value("${login.captcha.checkType:0}")
-    int loginCaptchaCheckType;
-    @Value("${login.retry.checkType:'H'}")
-    String loginRetryCheckType;
-    @Value("${login.retry.maxTryTimes:0}")
-    int loginRetryMaxTryTimes;
-    @Value("${login.retry.lockMinites:10}")
-    int loginRetryLockMinites;
-    @Value("${login.retry.checkTimeTnterval:3}")
-    int loginRetryCheckTimeTnterval;
-    @Value("${http.filter.chain.continueBeforeSuccessfulAuthentication:false}")
-    boolean httpFilterChainContinueBeforeSuccessfulAuthentication;
+//    @Value("${login.captcha.checkTime:0}")
+//    int loginCaptchaCheckTime;
+//    @Value("${login.captcha.checkType:0}")
+//    int loginCaptchaCheckType;
+//    @Value("${login.retry.checkType:'H'}")
+//    String loginRetryCheckType;
+//    @Value("${login.retry.maxTryTimes:0}")
+//    int loginRetryMaxTryTimes;
+//    @Value("${login.retry.lockMinites:10}")
+//    int loginRetryLockMinites;
+//    @Value("${login.retry.checkTimeTnterval:3}")
+//    int loginRetryCheckTimeTnterval;
+//    @Value("${http.filter.chain.continueBeforeSuccessfulAuthentication:false}")
+//    boolean httpFilterChainContinueBeforeSuccessfulAuthentication;
 
     private UsernamePasswordAuthenticationFilter createPretreatmentAuthenticationProcessingFilter(
         AuthenticationManager authenticationManager,TokenAuthenticationSuccessHandler ajaxSuccessHandler,
@@ -71,20 +71,20 @@ public class WebSecurityDaoConfig extends WebSecurityBaseConfig {
             pretreatmentAuthenticationProcessingFilter = new PretreatmentAuthenticationProcessingFilter();
         pretreatmentAuthenticationProcessingFilter.setAuthenticationManager(authenticationManager);
         pretreatmentAuthenticationProcessingFilter.setCheckCaptchaTime(
-            loginCaptchaCheckTime);
+            securityProperties.getLogin().getCaptcha().getCheckTime());
         pretreatmentAuthenticationProcessingFilter.setCheckCaptchaType(
-            loginCaptchaCheckType);
-        pretreatmentAuthenticationProcessingFilter.setRetryCheckType(loginRetryCheckType);
+            securityProperties.getLogin().getCaptcha().getCheckType());
+        pretreatmentAuthenticationProcessingFilter.setRetryCheckType(securityProperties.getLogin().getRetry().getCheckType());
 
         pretreatmentAuthenticationProcessingFilter.setRetryMaxTryTimes(
-            loginRetryMaxTryTimes);
+            securityProperties.getLogin().getRetry().getMaxTryTimes());
         pretreatmentAuthenticationProcessingFilter.setRetryLockMinites(
-            loginRetryLockMinites);
+            securityProperties.getLogin().getRetry().getLockMinites());
         pretreatmentAuthenticationProcessingFilter.setRetryCheckTimeTnterval(
-            loginRetryCheckTimeTnterval);
+            securityProperties.getLogin().getRetry().getCheckTimeInterval());
 
         pretreatmentAuthenticationProcessingFilter.setContinueChainBeforeSuccessfulAuthentication(
-            httpFilterChainContinueBeforeSuccessfulAuthentication);
+            securityProperties.getHttp().isFilterContinueAuthentication());
         pretreatmentAuthenticationProcessingFilter.setAuthenticationFailureHandler(ajaxFailureHandler);
         pretreatmentAuthenticationProcessingFilter.setAuthenticationSuccessHandler(ajaxSuccessHandler);
         return pretreatmentAuthenticationProcessingFilter;
@@ -98,15 +98,15 @@ public class WebSecurityDaoConfig extends WebSecurityBaseConfig {
     }
 
 
-    @Value("${access.resource.must.be.audited:false}")
-    boolean accessResourceMustBeAudited;
+//    @Value("${access.resource.must.be.audited:false}")
+//    boolean accessResourceMustBeAudited;
 
 
 
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        if(httpCsrfEnable) {
+        if(securityProperties.getHttp().isCsrfEnable()) {
             http.csrf().csrfTokenRepository(csrfTokenRepository);
         } else {
             http.csrf().disable();
