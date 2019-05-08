@@ -6,15 +6,17 @@ import com.centit.support.algorithm.StringBaseOpt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 
+@Configuration
 @EnableConfigurationProperties(SecurityProperties.class)
 public  abstract class WebSecurityBaseConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private SecurityProperties securityProperties;
+    protected SecurityProperties securityProperties;
 
     @Autowired
     protected CsrfTokenRepository csrfTokenRepository;
