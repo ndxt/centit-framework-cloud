@@ -15,6 +15,18 @@
     <description>Demo project for Spring Boot</description>
 
     <dependencies>
+        <!--如果不需要cas登录请注射掉cas-client-core、spring-security-cas这个引用-->
+        <dependency>
+            <groupId>org.jasig.cas.client</groupId>
+            <artifactId>cas-client-core</artifactId>
+            <version>${cas.client.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-cas</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
@@ -31,11 +43,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!--<dependency>
-          <groupId>com.centit.framework</groupId>
-          <artifactId>framework-cloud-config</artifactId>
-          <version>${project.version}</version>
-        </dependency>-->
         <dependency>
             <groupId>com.centit.framework</groupId>
             <artifactId>framework-core-web</artifactId>
@@ -62,13 +69,6 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-security</artifactId>
         </dependency>
-
-        <!--
-            <dependency>
-              <groupId>org.springframework.security.oauth</groupId>
-              <artifactId>spring-security-oauth2</artifactId>
-            </dependency>
-        -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

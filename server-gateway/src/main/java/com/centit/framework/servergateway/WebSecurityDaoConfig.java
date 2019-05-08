@@ -1,15 +1,14 @@
 package com.centit.framework.servergateway;
 
-import com.centit.framework.security.*;
-import com.centit.framework.security.model.CentitUserDetailsService;
-import com.centit.support.algorithm.StringBaseOpt;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.centit.framework.security.CloudFilterSecurityInterceptor;
+import com.centit.framework.security.PretreatmentAuthenticationProcessingFilter;
+import com.centit.framework.security.TokenAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
@@ -18,41 +17,20 @@ import org.springframework.security.web.authentication.logout.CookieClearingLogo
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.csrf.CsrfLogoutHandler;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
-import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+@ConditionalOnMissingClass("org.jasig.cas.client.session.SingleSignOutFilter")
+public class WebSecurityDaoConfig extends WebSecurityBaseConfig {
 
 
-    @Autowired
-    protected CsrfTokenRepository csrfTokenRepository;
-
-
-    @Autowired
-    AuthenticationManager authenticationManager;
-
-//    @Autowired
-//    protected CentitSessionRegistry centitSessionRegistry;
-
-    @Autowired
-    protected CentitUserDetailsService centitUserDetailsService;
 
     @Value("${login.failure.targetUrl:}")
     String defaultFailureTargetUrl;
     @Value("${login.failure.writeLog:false}")
     boolean loginFailureWritelog;
 
-    protected TokenAuthenticationFailureHandler createFailureHandler() {
-        TokenAuthenticationFailureHandler ajaxFailureHandler = new TokenAuthenticationFailureHandler();
-        //String defaultTargetUrl = env.getProperty("login.failure.targetUrl");
-        ajaxFailureHandler.setDefaultFailureUrl(
-            StringBaseOpt.emptyValue(defaultFailureTargetUrl,
-                "/system/mainframe/login/error"));
-        ajaxFailureHandler.setWriteLog(loginFailureWritelog);
-        return ajaxFailureHandler;
-    }
+
 
     @Value("${login.success.targetUrl:}")
     String defaultSuccessTargetUrl;
@@ -60,15 +38,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     boolean loginSuccessWritelog;
 
 
-    protected TokenAuthenticationSuccessHandler createSuccessHandler(CentitUserDetailsService centitUserDetailsService) {
-        TokenAuthenticationSuccessHandler ajaxSuccessHandler = new TokenAuthenticationSuccessHandler();
-        //String defaultTargetUrl = env.getProperty("login.success.targetUrl");
-        ajaxSuccessHandler.setDefaultTargetUrl(StringBaseOpt.emptyValue(defaultSuccessTargetUrl,"/"));
-//        ajaxSuccessHandler.setSessionRegistry(centitSessionRegistry);
-        ajaxSuccessHandler.setWriteLog(loginSuccessWritelog);
-        ajaxSuccessHandler.setUserDetailsService(centitUserDetailsService);
-        return ajaxSuccessHandler;
-    }
 
     @Value("${http.csrf.enable:false}")
     boolean httpCsrfEnable;
@@ -128,28 +97,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             new SecurityContextLogoutHandler());
     }
 
-    protected CloudFilterSecurityInterceptor createCentitPowerFilter(
-            DaoAccessDecisionManager centitAccessDecisionManagerBean,
-            DaoInvocationSecurityMetadataSource centitSecurityMetadataSource) {
-
-        CloudFilterSecurityInterceptor centitPowerFilter = new CloudFilterSecurityInterceptor();
-        centitPowerFilter.setAccessDecisionManager(centitAccessDecisionManagerBean);
-        centitPowerFilter.setSecurityMetadataSource(centitSecurityMetadataSource);
-        return centitPowerFilter;
-    }
 
     @Value("${access.resource.must.be.audited:false}")
     boolean accessResourceMustBeAudited;
 
-    protected DaoAccessDecisionManager createCentitAccessDecisionManager() {
-        DaoAccessDecisionManager accessDecisionManager = new DaoAccessDecisionManager();
-        //accessDecisionManager.setAllResourceMustBeAudited(accessResourceMustBeAudited);
-        return accessDecisionManager;
-    }
 
-    protected DaoInvocationSecurityMetadataSource createCentitSecurityMetadataSource() {
-        return new DaoInvocationSecurityMetadataSource();
-    }
 
 
     @Override
