@@ -4,7 +4,6 @@ import com.centit.framework.security.*;
 import com.centit.framework.security.model.CentitUserDetailsService;
 import com.centit.support.algorithm.StringBaseOpt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +20,6 @@ public  abstract class WebSecurityBaseConfig extends WebSecurityConfigurerAdapte
     @Autowired
     protected CsrfTokenRepository csrfTokenRepository;
 
-
     @Autowired
     protected AuthenticationManager authenticationManager;
 
@@ -30,11 +28,6 @@ public  abstract class WebSecurityBaseConfig extends WebSecurityConfigurerAdapte
 
     @Autowired
     protected CentitUserDetailsService centitUserDetailsService;
-
-    @Value("${login.failure.targetUrl:}")
-    String defaultFailureTargetUrl;
-    @Value("${login.failure.writeLog:false}")
-    boolean loginFailureWritelog;
 
     protected TokenAuthenticationFailureHandler createFailureHandler() {
         TokenAuthenticationFailureHandler ajaxFailureHandler = new TokenAuthenticationFailureHandler();
@@ -46,12 +39,6 @@ public  abstract class WebSecurityBaseConfig extends WebSecurityConfigurerAdapte
         return ajaxFailureHandler;
     }
 
-    @Value("${login.success.targetUrl:}")
-    String defaultSuccessTargetUrl;
-    @Value("${login.success.writeLog:true}")
-    boolean loginSuccessWritelog;
-
-
     protected TokenAuthenticationSuccessHandler createSuccessHandler(CentitUserDetailsService centitUserDetailsService) {
         TokenAuthenticationSuccessHandler ajaxSuccessHandler = new TokenAuthenticationSuccessHandler();
         //String defaultTargetUrl = env.getProperty("login.success.targetUrl");
@@ -61,26 +48,6 @@ public  abstract class WebSecurityBaseConfig extends WebSecurityConfigurerAdapte
         ajaxSuccessHandler.setUserDetailsService(centitUserDetailsService);
         return ajaxSuccessHandler;
     }
-
-    @Value("${http.csrf.enable:false}")
-    boolean httpCsrfEnable;
-
-
-    @Value("${login.captcha.checkTime:0}")
-    int loginCaptchaCheckTime;
-    @Value("${login.captcha.checkType:0}")
-    int loginCaptchaCheckType;
-    @Value("${login.retry.checkType:'H'}")
-    String loginRetryCheckType;
-    @Value("${login.retry.maxTryTimes:0}")
-    int loginRetryMaxTryTimes;
-    @Value("${login.retry.lockMinites:10}")
-    int loginRetryLockMinites;
-    @Value("${login.retry.checkTimeTnterval:3}")
-    int loginRetryCheckTimeTnterval;
-    @Value("${http.filter.chain.continueBeforeSuccessfulAuthentication:false}")
-    boolean httpFilterChainContinueBeforeSuccessfulAuthentication;
-
 
     protected CloudFilterSecurityInterceptor createCentitPowerFilter(
             DaoAccessDecisionManager centitAccessDecisionManagerBean,
@@ -92,9 +59,6 @@ public  abstract class WebSecurityBaseConfig extends WebSecurityConfigurerAdapte
         return centitPowerFilter;
     }
 
-    @Value("${access.resource.must.be.audited:false}")
-    boolean accessResourceMustBeAudited;
-
     protected DaoAccessDecisionManager createCentitAccessDecisionManager() {
         DaoAccessDecisionManager accessDecisionManager = new DaoAccessDecisionManager();
         //accessDecisionManager.setAllResourceMustBeAudited(accessResourceMustBeAudited);
@@ -104,7 +68,4 @@ public  abstract class WebSecurityBaseConfig extends WebSecurityConfigurerAdapte
     protected DaoInvocationSecurityMetadataSource createCentitSecurityMetadataSource() {
         return new DaoInvocationSecurityMetadataSource();
     }
-
-
-
 }

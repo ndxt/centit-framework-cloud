@@ -3,7 +3,6 @@ package com.centit.framework.servergateway;
 import com.centit.framework.security.CloudFilterSecurityInterceptor;
 import com.centit.framework.security.PretreatmentAuthenticationProcessingFilter;
 import com.centit.framework.security.TokenAuthenticationSuccessHandler;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,45 +22,9 @@ import org.springframework.security.web.csrf.CsrfLogoutHandler;
 @ConditionalOnMissingClass("org.jasig.cas.client.session.SingleSignOutFilter")
 public class WebSecurityDaoConfig extends WebSecurityBaseConfig {
 
-
-
-//    @Value("${login.failure.targetUrl:}")
-//    String defaultFailureTargetUrl;
-//    @Value("${login.failure.writeLog:false}")
-//    boolean loginFailureWritelog;
-//
-//
-//
-//    @Value("${login.success.targetUrl:}")
-//    String defaultSuccessTargetUrl;
-//    @Value("${login.success.writeLog:true}")
-//    boolean loginSuccessWritelog;
-//
-//
-//
-//    @Value("${http.csrf.enable:false}")
-//    boolean httpCsrfEnable;
-
-
-
     private LoginUrlAuthenticationEntryPoint authenticationEntryPoint() {
         return new LoginUrlAuthenticationEntryPoint("/system/mainframe/login");
     }
-
-//    @Value("${login.captcha.checkTime:0}")
-//    int loginCaptchaCheckTime;
-//    @Value("${login.captcha.checkType:0}")
-//    int loginCaptchaCheckType;
-//    @Value("${login.retry.checkType:'H'}")
-//    String loginRetryCheckType;
-//    @Value("${login.retry.maxTryTimes:0}")
-//    int loginRetryMaxTryTimes;
-//    @Value("${login.retry.lockMinites:10}")
-//    int loginRetryLockMinites;
-//    @Value("${login.retry.checkTimeTnterval:3}")
-//    int loginRetryCheckTimeTnterval;
-//    @Value("${http.filter.chain.continueBeforeSuccessfulAuthentication:false}")
-//    boolean httpFilterChainContinueBeforeSuccessfulAuthentication;
 
     private UsernamePasswordAuthenticationFilter createPretreatmentAuthenticationProcessingFilter(
         AuthenticationManager authenticationManager,TokenAuthenticationSuccessHandler ajaxSuccessHandler,
@@ -91,18 +54,11 @@ public class WebSecurityDaoConfig extends WebSecurityBaseConfig {
     }
 
     private LogoutFilter logoutFilter() {
-        return new LogoutFilter("/system/mainframe/login",
+        return new LogoutFilter(securityProperties.getLogout().getTargetUrl(),
             new CsrfLogoutHandler(csrfTokenRepository),
             new CookieClearingLogoutHandler("JSESSIONID","remember-me"),
             new SecurityContextLogoutHandler());
     }
-
-
-//    @Value("${access.resource.must.be.audited:false}")
-//    boolean accessResourceMustBeAudited;
-
-
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
