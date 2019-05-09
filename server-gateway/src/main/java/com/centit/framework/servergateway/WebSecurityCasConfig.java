@@ -2,6 +2,7 @@ package com.centit.framework.servergateway;
 
 import org.jasig.cas.client.session.SingleSignOutFilter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @Configuration
 @EnableWebSecurity
 @ConditionalOnClass(name="org.jasig.cas.client.session.SingleSignOutFilter")
+@EnableConfigurationProperties(SecurityProperties.class)
 public class WebSecurityCasConfig extends WebSecurityBaseConfig {
 
     private ServiceProperties createCasServiceProperties() {

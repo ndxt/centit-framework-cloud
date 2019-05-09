@@ -4,6 +4,7 @@ import com.centit.framework.security.CloudFilterSecurityInterceptor;
 import com.centit.framework.security.PretreatmentAuthenticationProcessingFilter;
 import com.centit.framework.security.TokenAuthenticationSuccessHandler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,6 +21,7 @@ import org.springframework.security.web.csrf.CsrfLogoutHandler;
 @Configuration
 @EnableWebSecurity
 @ConditionalOnMissingClass("org.jasig.cas.client.session.SingleSignOutFilter")
+@EnableConfigurationProperties(SecurityProperties.class)
 public class WebSecurityDaoConfig extends WebSecurityBaseConfig {
 
     private LoginUrlAuthenticationEntryPoint authenticationEntryPoint() {
