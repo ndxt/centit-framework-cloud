@@ -66,8 +66,11 @@ filter:
 security:
   login:
     cas:
+      enabled: false
       localHome:
       casHome:
+    dao:
+      enabled: true
     success:
       write-log: true
       regist-token: false
