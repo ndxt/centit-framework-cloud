@@ -2,6 +2,7 @@ package com.centit.framework.cloud;
 
 import com.alibaba.fastjson.JSONArray;
 import com.centit.framework.appclient.HttpReceiveJSON;
+import com.centit.framework.components.CodeRepositoryCache;
 import com.centit.framework.model.adapter.PlatformEnvironment;
 import com.centit.framework.model.basedata.*;
 import com.centit.framework.security.model.CentitUserDetails;
@@ -15,7 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CloudPlatformEnvironment implements PlatformEnvironment {
@@ -65,6 +66,21 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     }
 
     public List<OptMethod>  dummyListAllOptMethod(){
+        return null;
+    }
+    /**
+     * @return 所有的数据范围定义表达式
+     */
+    @Override
+    @HystrixCommand(fallbackMethod = "dummyListAllOptDataScope")
+    public List<OptDataScope> listAllOptDataScope() {
+        HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
+            restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/alloptdatascopes/"+topOptId,
+                String.class));
+        return receiveJSON.getDataAsArray(OptDataScope.class);
+    }
+
+    public List<OptDataScope>  dummyListAllOptDataScope(){
         return null;
     }
     /**
