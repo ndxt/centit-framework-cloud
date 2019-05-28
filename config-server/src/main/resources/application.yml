@@ -19,3 +19,12 @@ spring:
           username: accounts
           password: yhs@yhs1
 
+#应用监控设置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always

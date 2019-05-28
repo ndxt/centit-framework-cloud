@@ -13,6 +13,7 @@
         <module>eureka-server</module>
         <module>framework-cloud-config</module>
         <module>share-session-config</module>
+        <module>admin-server</module>
     </modules>
 
     <parent>
