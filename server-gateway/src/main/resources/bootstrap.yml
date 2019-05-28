@@ -16,3 +16,13 @@ spring:
       discovery:
         enabled: true
         serviceId: CONFIG-SERVER
+
+#应用监控设置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
