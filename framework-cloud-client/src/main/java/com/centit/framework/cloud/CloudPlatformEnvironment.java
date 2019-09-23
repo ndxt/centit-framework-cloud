@@ -2,7 +2,6 @@ package com.centit.framework.cloud;
 
 import com.alibaba.fastjson.JSONArray;
 import com.centit.framework.appclient.HttpReceiveJSON;
-import com.centit.framework.components.CodeRepositoryCache;
 import com.centit.framework.model.adapter.PlatformEnvironment;
 import com.centit.framework.model.basedata.*;
 import com.centit.framework.security.model.CentitUserDetails;
@@ -16,7 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 public class CloudPlatformEnvironment implements PlatformEnvironment {

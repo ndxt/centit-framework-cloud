@@ -36,6 +36,12 @@
             <version>${centit.framework.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.centit.framework</groupId>
+            <artifactId>centit-ip-adapter</artifactId>
+            <version>${centit.ip.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
