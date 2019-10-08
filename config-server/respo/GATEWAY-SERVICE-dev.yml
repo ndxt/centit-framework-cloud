@@ -95,3 +95,9 @@ security:
     csrf-enable: false
     filter-continue-authentication: false
     x-frame-options-mode: deny
+# SpringBoot应用监控Actuator使用的安全隐患
+# https://xz.aliyun.com/t/2233
+# http://www.sohu.com/a/284213896_120064766
+endpoints:
+  env:
+    enabled: false

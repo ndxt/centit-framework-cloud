@@ -58,3 +58,10 @@ session:
   redis:
     host: 192.168.134.9
     port: 6379
+
+# SpringBoot应用监控Actuator使用的安全隐患
+# https://xz.aliyun.com/t/2233
+# http://www.sohu.com/a/284213896_120064766
+endpoints:
+  env:
+    enabled: false
