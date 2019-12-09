@@ -4,7 +4,9 @@ import com.centit.framework.components.impl.NotificationCenterImpl;
 import com.centit.framework.components.impl.TextOperationLogWriterImpl;
 import com.centit.framework.model.adapter.NotificationCenter;
 import com.centit.framework.model.adapter.OperationLogWriter;
+import com.centit.framework.model.adapter.PlatformEnvironment;
 import com.centit.framework.security.model.CentitPasswordEncoderImpl;
+import com.centit.framework.system.service.impl.DBPlatformEnvironment;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +33,12 @@ public class SystemBeanConfiguation {
     @Bean
     public CsrfTokenRepository csrfTokenRepository() {
         return new HttpSessionCsrfTokenRepository();
+    }
+
+    @Bean
+    public PlatformEnvironment platformEnvironment() {
+        DBPlatformEnvironment platformEnvironment = new DBPlatformEnvironment();
+        return platformEnvironment;
     }
 
     @Bean
