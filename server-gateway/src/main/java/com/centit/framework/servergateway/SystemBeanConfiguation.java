@@ -6,6 +6,8 @@ import com.centit.framework.model.adapter.NotificationCenter;
 import com.centit.framework.model.adapter.OperationLogWriter;
 import com.centit.framework.model.adapter.PlatformEnvironment;
 import com.centit.framework.security.model.CentitPasswordEncoderImpl;
+import com.centit.framework.security.model.CentitUserDetailsService;
+import com.centit.framework.system.security.DaoUserDetailsService;
 import com.centit.framework.system.service.impl.DBPlatformEnvironment;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +41,12 @@ public class SystemBeanConfiguation {
     public PlatformEnvironment platformEnvironment() {
         DBPlatformEnvironment platformEnvironment = new DBPlatformEnvironment();
         return platformEnvironment;
+    }
+
+    @Bean
+    public CentitUserDetailsService centitUserDetailsService() {
+        DaoUserDetailsService userDetailsService = new DaoUserDetailsService();
+        return userDetailsService;
     }
 
     @Bean

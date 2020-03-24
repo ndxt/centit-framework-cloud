@@ -39,6 +39,7 @@
         <centit.ip.version>1.2-SNAPSHOT</centit.ip.version>
         <centit.ui.version>3.1.1809</centit.ui.version>
 
+        <cas.client.version>3.5.1</cas.client.version>
         <spring.security.version>4.2.4.RELEASE</spring.security.version>
         <spring.ldap.version>2.2.0.RELEASE</spring.ldap.version>
         <cas.version>5.2.0</cas.version>

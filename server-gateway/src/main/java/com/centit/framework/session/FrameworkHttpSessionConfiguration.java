@@ -30,6 +30,10 @@ public class FrameworkHttpSessionConfiguration {
 
     @Bean
     public LettuceConnectionFactory connectionFactory() {
-        return new LettuceConnectionFactory(sessionProperties.getRedis().getHost(),sessionProperties.getRedis().getPort());
+        LettuceConnectionFactory connectionFactory = new LettuceConnectionFactory(
+            sessionProperties.getRedis().getHost(),
+            sessionProperties.getRedis().getPort());
+        connectionFactory.setDatabase(9);
+        return connectionFactory;
     }
 }
