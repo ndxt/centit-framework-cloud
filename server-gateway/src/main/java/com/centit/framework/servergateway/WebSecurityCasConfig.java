@@ -57,7 +57,7 @@ public class WebSecurityCasConfig extends WebSecurityBaseConfig {
     protected AuthenticationEntryPoint getAuthenticationEntryPoint() {
         ServiceProperties serviceProperties = createCasServiceProperties();
         CasAuthenticationEntryPoint casEntryPoint = new CasAuthenticationEntryPoint();
-        casEntryPoint.setLoginUrl(securityProperties.getLogin().getCas().getLocalHome()+"/login/cas");
+        casEntryPoint.setLoginUrl(securityProperties.getLogin().getCas().getCasHome());
         casEntryPoint.setServiceProperties(serviceProperties);
         return casEntryPoint;
     }
@@ -93,7 +93,7 @@ public class WebSecurityCasConfig extends WebSecurityBaseConfig {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
+        //super.configure(http);
         if(securityProperties.getHttp().isCsrfEnable()) {
             http.csrf().csrfTokenRepository(csrfTokenRepository);
         } else {

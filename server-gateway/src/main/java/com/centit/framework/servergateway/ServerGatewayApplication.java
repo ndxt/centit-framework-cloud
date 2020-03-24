@@ -19,7 +19,7 @@ import java.util.List;
 @EnableZuulProxy
 @EnableEurekaClient
 @SpringBootApplication
-@ComponentScan(basePackages="com.centit.framework"/*,
+@ComponentScan(basePackages="com.centit"/*,
         excludeFilters = @ComponentScan.Filter(value = org.springframework.stereotype.Controller.class)*/)
 public class ServerGatewayApplication extends WebMvcConfigurerAdapter {
 
