@@ -55,7 +55,7 @@ session:
   redis:
     host: 192.168.134.9
     port: 6379
-
+    db-index: 0
 filter:
   rest:
     context:

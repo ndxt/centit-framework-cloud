@@ -1,12 +1,16 @@
 package com.centit.framework.config;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+@Data
 @ConfigurationProperties(SessionProperties.PREFIX)
 public class SessionProperties {
     public static final String PREFIX = "session";
 
     private Redis redis;
+
+    private Cookie cookie;
 
     public Cookie getCookie() {
         if(cookie==null){
@@ -15,43 +19,19 @@ public class SessionProperties {
         return cookie;
     }
 
-    public void setCookie(Cookie cookie) {
-        this.cookie = cookie;
-    }
-
-    private Cookie cookie;
-
+    @Data
     public static class Redis{
+        public Redis(){
+            dbIndex = 0;
+        }
+
         private String host;
         private int port;
+        private int dbIndex;
         private String password;
-
-        public String getHost() {
-            return host;
-        }
-
-        public int getPort() {
-            return port;
-        }
-
-        public void setHost(String host) {
-            this.host = host;
-        }
-
-        public void setPort(int port) {
-            this.port = port;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
     }
 
-
+    @Data
     public static class Cookie{
         private String path;
         private boolean cookieFirst;
@@ -60,28 +40,6 @@ public class SessionProperties {
             path = "/";
             cookieFirst = false;
         }
-        public String getPath() {
-            return path;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
-        }
-
-        public boolean isCookieFirst() {
-            return cookieFirst;
-        }
-
-        public void setCookieFirst(boolean cookieFirst) {
-            this.cookieFirst = cookieFirst;
-        }
     }
 
-    public Redis getRedis() {
-        return redis;
-    }
-
-    public void setRedis(Redis redis) {
-        this.redis = redis;
-    }
 }

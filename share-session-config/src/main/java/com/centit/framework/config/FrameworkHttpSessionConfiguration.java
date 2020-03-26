@@ -33,6 +33,8 @@ public class FrameworkHttpSessionConfiguration {
             new RedisStandaloneConfiguration(sessionProperties.getRedis().getHost(),
                 sessionProperties.getRedis().getPort());
 
+        configuration.setDatabase(sessionProperties.getRedis().getDbIndex());
+
         String password = sessionProperties.getRedis().getPassword();
         if(StringUtils.isNotBlank(password)){
             configuration.setPassword(RedisPassword.of(password));
