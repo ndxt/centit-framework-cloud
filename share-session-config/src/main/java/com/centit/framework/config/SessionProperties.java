@@ -22,12 +22,12 @@ public class SessionProperties {
     @Data
     public static class Redis{
         public Redis(){
-            dbIndex = 0;
+            database = 0;
         }
 
         private String host;
         private int port;
-        private int dbIndex;
+        private int database;
         private String password;
     }
 
