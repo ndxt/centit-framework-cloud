@@ -16,18 +16,18 @@ import java.io.IOException;
 public class TokenAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
     private boolean writeLog = false;
-    
+
     public void setWriteLog(boolean writeLog) {
         this.writeLog = writeLog;
-    }  
+    }
 
     public TokenAuthenticationFailureHandler() {
     }
- 
+
     public TokenAuthenticationFailureHandler(String defaultFailureUrl) {
         super(defaultFailureUrl);
     }
-    
+
     @Override
     public void onAuthenticationFailure(HttpServletRequest request,
                                         HttpServletResponse response, AuthenticationException exception)
@@ -36,7 +36,7 @@ public class TokenAuthenticationFailureHandler extends SimpleUrlAuthenticationFa
         if(writeLog){
             String loginName = request.getParameter("username");
             String loginHost = request.getRemoteHost()+":"+request.getRemotePort();
-            OperationLogCenter.log(loginName,"login", "loginError",
+            OperationLogCenter.log(loginName,"login", loginName,"loginError",
                     "用户 ："+loginName+"于"+DatetimeOpt.convertDatetimeToString(DatetimeOpt.currentUtilDate())
                     + "从主机"+loginHost+"尝试登录,失败原因:"+exception.getMessage()+"。");
         }

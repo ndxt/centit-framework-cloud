@@ -67,7 +67,8 @@ public class TokenAuthenticationSuccessHandler extends SavedRequestAwareAuthenti
             if(!loginIp.startsWith(remoteHost)){
                 loginIp = remoteHost + ":" + loginIp;
             }
-            OperationLogCenter.log(ud.getUserCode(),"mainframe", "login",
+            OperationLogCenter.log(
+                ud.getUserCode(), "mainframe",  ud.getUserCode(),"login",
                 "用户 ："+ud.getUserInfo().getString("userName")+"于"+DatetimeOpt.convertDatetimeToString(DatetimeOpt.currentUtilDate())
                     + "从主机"+loginIp+"登录。");
         }

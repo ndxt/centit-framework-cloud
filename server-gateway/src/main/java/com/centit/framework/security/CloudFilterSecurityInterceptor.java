@@ -1,9 +1,6 @@
 package com.centit.framework.security;
 
-import com.centit.framework.appclient.HttpReceiveJSON;
 import com.centit.framework.security.model.CentitUserDetails;
-import com.centit.framework.security.model.JsonCentitUserDetails;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
 import org.springframework.security.access.intercept.InterceptorStatusToken;
@@ -11,7 +8,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.*;
 import java.io.IOException;

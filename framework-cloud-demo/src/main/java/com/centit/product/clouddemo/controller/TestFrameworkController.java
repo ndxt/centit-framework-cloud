@@ -5,7 +5,6 @@ import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.model.adapter.PlatformEnvironment;
 import com.centit.framework.model.basedata.IUserInfo;
-import com.centit.framework.security.model.CentitUserDetails;
 import com.centit.framework.security.model.JsonCentitUserDetails;
 import com.centit.framework.utils.RestRequestContext;
 import com.centit.framework.utils.RestRequestContextHolder;
