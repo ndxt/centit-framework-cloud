@@ -1,7 +1,6 @@
 package com.centit.framework.security;
 
-import com.alibaba.fastjson.annotation.JSONField;
-import com.centit.framework.ip.po.OsInfo;
+import com.centit.framework.system.po.OsInfo;
 import com.centit.support.algorithm.CollectionsOpt;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;

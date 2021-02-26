@@ -1,7 +1,7 @@
 package com.centit.framework.security;
 
-import com.centit.framework.ip.dao.OsInfoDao;
-import com.centit.framework.ip.po.OsInfo;
+import com.centit.framework.system.dao.OsInfoDao;
+import com.centit.framework.system.po.OsInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
@@ -13,7 +13,6 @@ public class CentitClientDetailsService implements ClientDetailsService {
 
     @Autowired
     public OsInfoDao osInfoDao;
-
 
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {

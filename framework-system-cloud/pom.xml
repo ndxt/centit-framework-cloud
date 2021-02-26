@@ -68,7 +68,6 @@
       <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
     </dependency>
 
-
     <dependency>
       <groupId>com.centit.framework</groupId>
       <artifactId>framework-system-web</artifactId>
