@@ -64,6 +64,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
         return receiveJSON.getDataAsArray(OptMethod.class);
     }
 
+    @Override
+    public List<? extends IOptDataScope> listAllOptDataScope() {
+        return null;
+    }
+
     public List<OptMethod>  dummyListAllOptMethod(){
         return null;
     }
@@ -476,6 +481,16 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     @Override
     public void insertOrUpdateMenu(List<? extends IOptInfo> optInfos, List<? extends IOptMethod> optMethods) {
 
+    }
+
+    /**
+     * 获取所有注册的业务系统
+     *
+     * @return 所有注册的业务系统
+     */
+    @Override
+    public List<? extends IOsInfo> listOsInfos() {
+        return null;
     }
 
     @Override
