@@ -27,13 +27,10 @@
     <packaging>pom</packaging>
 
     <properties>
-
         <centit.framework.cloud.version>2.0-SNAPSHOT</centit.framework.cloud.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-
-        <!--<spring-cloud-services.version>2020.0.1</spring-cloud-services.version>-->
         <spring-cloud.version>Hoxton.SR10</spring-cloud.version>
 
         <centit.framework.version>5.0-SNAPSHOT</centit.framework.version>
@@ -78,13 +75,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!--<dependency>
-                <groupId>io.pivotal.spring.cloud</groupId>
-                <artifactId>spring-cloud-services-dependencies</artifactId>
-                <version>${spring-cloud-services.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>-->
         </dependencies>
     </dependencyManagement>
 
@@ -127,6 +117,19 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
