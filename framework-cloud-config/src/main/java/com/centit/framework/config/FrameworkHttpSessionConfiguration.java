@@ -1,6 +1,7 @@
 package com.centit.framework.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,12 @@ public class FrameworkHttpSessionConfiguration {
     @Autowired
     private SessionProperties sessionProperties;
 
+    @Value("${session.redis.host}")
+    private String host;
+
+    @Value("${session.redis.port}")
+    private Integer port;
+
     @Bean
     public SmartHttpSessionResolver httpSessionIdResolver(){
         SmartHttpSessionResolver sessionStrategy =
@@ -28,8 +35,7 @@ public class FrameworkHttpSessionConfiguration {
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         JedisConnectionFactory connection = new JedisConnectionFactory(
-            new RedisStandaloneConfiguration(sessionProperties.getRedis().getHost(),
-                sessionProperties.getRedis().getPort()));
+            new RedisStandaloneConfiguration(host, port));
         return connection;
     }
 }

@@ -1,3 +1,4 @@
+/*
 package com.centit.framework.servergateway;
 
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
@@ -16,7 +17,7 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.web.client.RestTemplate;
 
 
-@Configuration
+//@Configuration
 public class SystemBeanConfiguation {
 
     @Bean
@@ -59,3 +60,4 @@ public class SystemBeanConfiguation {
 
 }
 
+*/

@@ -1,6 +1,8 @@
 spring:
   application:
-    name: AUTHORIZE-SERVICE
+    # 要根据这个微服务名称从远程库中查找与其对应的配置文件
+    name: CLOUD-DEMO
+
   cloud:
     nacos:
       config:

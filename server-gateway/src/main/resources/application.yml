@@ -1,20 +1,39 @@
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:10080/eureka/
-
 server:
   port: 10088
 
 spring:
   application:
     name: GATEWAY-SERVICE
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8847,localhost:8848,localhost:8849   # nacos discovery地址
+        ip: 192.168.137.49
+        #namespace: d0e7c836-f1a3-4586-936b-9b7da8ce5471
+    gateway:
+      enabled: true                 #开启网关  false 关闭网关  开启以服务中心id去注册中心上获取转发地址
+      routes:                        #路由数组[路由 就是指定当请求满足什么条件的时候转到哪个微服务]
+      - id: path_route_20210317a
+        uri: https://www.baidu.com
+        predicates:
+        - Query=url,baidu
+
+      - id: FRAMEWORK-SERVICE         # 当前路由的标识, 要求唯一
+        uri: lb://FRAMEWORK-SERVICE   # lb指的是从nacos中按照名称获取微服务,并遵循负载均衡策略
+        predicates:                  # 断言(就是路由转发要满足的条件)
+        - Path=/test/get              # 当请求路径满足Path指定的规则时,才进行路由转发
+        #filters:                     # 过滤器,请求在传递过程中可以通过过滤器对其进行一定的修改
+        #- StripPrefix=1              # 转发之前去掉1层路径
+        #- RewritePath=/api/(?<segment>/?.*), /$\{segment}
+        #- Cookie=chocolate, ch.p     # cookie named chocolate whose value matches the ch.p
+        #- Header=X-Request-Id, \d+    # has a header named X-Request-Id
+
   datasource:
     type: org.apache.commons.dbcp2.BasicDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.128.32:3306/frameworkdb?useUnicode=true&characterEncoding=utf-8
-    username: framework
-    password: framework
+    url: jdbc:mysql://192.168.134.6:3308/framework?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: root
     dbcp2:
       max-wait-millis: 10000
       max-idle: 15
@@ -22,17 +41,6 @@ spring:
       validation-query: SELECT 1
       connection-properties: characterEncoding=utf8
 
-zuul:
-  routes:
-    api-system:
-      path: /system/**
-      serviceId: FRAMEWORK-SERVICE
-    api-auth:
-      path: /auth/**
-      serviceId: AUTHORIZE-SERVICE
-    api-workflow:
-      path: /workflow/**
-      serviceId: WORKFLOW-SERVICE
 http:
   csrf:
     enable: false
@@ -56,5 +64,5 @@ framework:
 
 session:
   redis:
-    host: 192.168.134.9
+    host: 127.0.0.1
     port: 6379

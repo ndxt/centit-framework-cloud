@@ -1,0 +1,56 @@
+server:
+  port: 10085
+
+spring:
+  #application:
+    #name: CLOUD-DEMO  # 微服务名称
+  datasource:
+    type: org.apache.commons.dbcp2.BasicDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.134.6:3308/framework?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: root
+    dbcp2:
+      max-wait-millis: 10000
+      max-idle: 15
+      initial-size: 10
+      validation-query: SELECT 1
+      connection-properties: characterEncoding=utf8
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8847,localhost:8848,localhost:8849   # nacos discovery地址
+    #gateway:
+      #enabled: true #开启网关    false 关闭网关
+      #routes:                       # 路由数组[路由 就是指定当请求满足什么条件的时候转到哪个微服务]
+      #- id: spring-cloud-gateway_route          # 当前路由的标识, 要求唯一
+      #  uri: lb://spring-cloud-gateway  # lb指的是从nacos中按照名称获取微服务,并遵循负载均衡策略
+      # predicates:                # 断言(就是路由转发要满足的条件)
+      #  - Path=/zhouchao/**       # 当请求路径满足Path指定的规则时,才进行路由转发
+      #filters:                   # 过滤器,请求在传递过程中可以通过过滤器对其进行一定的修改
+      # - StripPrefix=1           # 转发之前去掉1层路径
+      #- id:
+      #  uri:
+      #  predicates:
+        #- Path=/data/**
+      #  filters:
+        #- StripPrefix=1
+
+#jdbc:
+  #url:
+
+#\u7CFB\u7EDF\u5C5E\u6027
+app:
+  home: /D/Projects/RunData/ip_home
+
+serives:
+  framework:
+    url: http://FRAMEWORK-SERVICE
+  authorize:
+    url: http://AUTHORIZE-SERVICE
+
+session:
+  redis:
+    host: 127.0.0.1
+    port: 6379

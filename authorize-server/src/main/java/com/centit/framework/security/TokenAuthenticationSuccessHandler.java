@@ -69,7 +69,7 @@ public class TokenAuthenticationSuccessHandler extends SavedRequestAwareAuthenti
             }
             OperationLogCenter.log(ud.getUserCode(),"mainframe", "login",
                 "用户 ："+ud.getUserInfo().getString("userName")+"于"+DatetimeOpt.convertDatetimeToString(DatetimeOpt.currentUtilDate())
-                    + "从主机"+loginIp+"登录。");
+                    + "从主机"+loginIp+"登录。","");
         }
 
         ResponseMapData resData = new ResponseMapData();

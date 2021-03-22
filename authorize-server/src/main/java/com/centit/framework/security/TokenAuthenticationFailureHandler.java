@@ -38,7 +38,7 @@ public class TokenAuthenticationFailureHandler extends SimpleUrlAuthenticationFa
             String loginHost = request.getRemoteHost()+":"+request.getRemotePort();
             OperationLogCenter.log(loginName,"login", "loginError",
                     "用户 ："+loginName+"于"+DatetimeOpt.convertDatetimeToString(DatetimeOpt.currentUtilDate())
-                    + "从主机"+loginHost+"尝试登录,失败原因:"+exception.getMessage()+"。");
+                    + "从主机"+loginHost+"尝试登录,失败原因:"+exception.getMessage()+"。","");
         }
         int tryTimes = CheckFailLogs.getHasTriedTimes(request);
 

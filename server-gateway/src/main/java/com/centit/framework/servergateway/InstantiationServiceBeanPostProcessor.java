@@ -1,3 +1,4 @@
+/*
 package com.centit.framework.servergateway;
 
 import com.centit.framework.components.OperationLogCenter;
@@ -8,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+*/
 /**
  * Created by codefan on 17-7-6.
- */
+ *//*
+
 public class InstantiationServiceBeanPostProcessor implements ApplicationListener<ContextRefreshedEvent>{
 
     @Autowired
@@ -32,3 +35,4 @@ public class InstantiationServiceBeanPostProcessor implements ApplicationListene
     }
 
 }
+*/

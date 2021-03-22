@@ -7,11 +7,11 @@ import com.centit.framework.model.basedata.*;
 import com.centit.framework.security.model.CentitUserDetails;
 import com.centit.framework.security.model.JsonCentitUserDetails;
 import com.centit.framework.staticsystem.po.*;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -43,10 +43,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     }
 
     @Override
-    @HystrixCommand(fallbackMethod = "dummyListAllRolePower")
-    public List<RolePower>  listAllRolePower(){
+    @LoadBalanced
+    public List<RolePower>  listAllRolePower(String topUnit){
         HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
-                restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/allrolepowers/"+topOptId,
+                restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/allrolepowers/"+topUnit,
                         String.class));
         return receiveJSON.getDataAsArray(RolePower.class);
     }
@@ -56,16 +56,16 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
     }
 
     @Override
-    @HystrixCommand(fallbackMethod = "dummyListAllOptMethod")
-    public List<OptMethod> listAllOptMethod(){
+    @LoadBalanced
+    public List<OptMethod> listAllOptMethod(String topUnit){
         HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
-                restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/alloptmethods/"+topOptId,
+                restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/alloptmethods/"+topUnit,
                         String.class));
         return receiveJSON.getDataAsArray(OptMethod.class);
     }
 
     @Override
-    public List<? extends IOptDataScope> listAllOptDataScope() {
+    public List<? extends IOptDataScope> listAllOptDataScope(String topUnit) {
         return null;
     }
 
@@ -79,10 +79,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @param asAdmin  是否是作为管理员
      * @return List 用户所有菜单功能
      */
-    @Override
+    /*@Override
     public List<OptInfo> listUserMenuOptInfos(String userCode, boolean asAdmin) {
         return listUserMenuOptInfosUnderSuperOptId(userCode,topOptId,asAdmin);
-    }
+    }*/
 
     /**
      * 获取用户所有菜单功能
@@ -93,7 +93,7 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return List 用户所有菜单功能
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyListUserMenuOptInfosUnderSuperOptId")
+    @LoadBalanced
     public List<OptInfo> listUserMenuOptInfosUnderSuperOptId(String userCode, String superOptId, boolean asAdmin) {
         HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/usermenu/"+superOptId+"/"+userCode+"?asAdmin="+asAdmin,
@@ -113,10 +113,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return List 用户所有菜单功能
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyListUserRoles")
-    public List<UserRole> listUserRoles(String userCode){
+    @LoadBalanced
+    public List<UserRole> listUserRoles(String topUnit, String userCode){
         HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
-                restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/userroles/"+userCode,
+                restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/userroles/"+topUnit+"/"+userCode,
                         String.class));
         return receiveJSON.getDataAsArray(UserRole.class);
     }
@@ -132,10 +132,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return List 用户所有菜单功能
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyListRoleUsers")
-    public List<UserRole> listRoleUsers(String roleCode) {
+    @LoadBalanced
+    public List<UserRole> listRoleUsers(String topUnit, String roleCode) {
         HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
-                restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/roleusers/"+roleCode,
+                restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/roleusers/"+topUnit+"/"+roleCode,
                         String.class));
         return receiveJSON.getDataAsArray(UserRole.class);
     }
@@ -151,7 +151,7 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return List 用户所有菜单功能
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyListUnitRoles")
+    @LoadBalanced
     public List<UnitRole> listUnitRoles(String unitCode) {
         HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/unitroles/"+unitCode,
@@ -170,7 +170,7 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return List 用户所有菜单功能
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyListRoleUnits")
+    @LoadBalanced
     public List<UnitRole> listRoleUnits(String roleCode) {
         HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(FRAMEWORK_SERVER_URL+"/roleunits/"+roleCode,
@@ -211,11 +211,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return List 所有用户
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyListAllUsers")
-    public List<UserInfo> listAllUsers() {
+    @LoadBalanced
+    public List<UserInfo> listAllUsers(String topUnit) {
         String jsonString =
                 restTemplate.getForObject(
-                        FRAMEWORK_SERVER_URL+"/allusers/"+topOptId,
+                        FRAMEWORK_SERVER_URL+"/allusers/"+topUnit,
                         String.class);
         HttpReceiveJSON httpReceiveJSON = HttpReceiveJSON.valueOfJson(jsonString);
 
@@ -233,11 +233,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return List 所有机构
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyListAllUnits")
-    public List<UnitInfo> listAllUnits() {
+    @LoadBalanced
+    public List<UnitInfo> listAllUnits(String topUnit) {
         HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(
-                        FRAMEWORK_SERVER_URL+"/allunits/"+topOptId,
+                        FRAMEWORK_SERVER_URL+"/allunits/"+topUnit,
                         String.class));
         return receiveJSON.getDataAsArray(UnitInfo.class);
     }
@@ -252,13 +252,18 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return List 所有用户和机构关联关系
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyListAllUserUnits")
-    public List<UserUnit> listAllUserUnits() {
+    @LoadBalanced
+    public List<UserUnit> listAllUserUnits(String topUnit) {
         HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(
-                        FRAMEWORK_SERVER_URL+"/alluserunits/"+topOptId,
+                        FRAMEWORK_SERVER_URL+"/alluserunits/"+topUnit,
                         String.class));
         return receiveJSON.getDataAsArray(UserUnit.class);
+    }
+
+    @Override
+    public List<? extends IUnitInfo> listUserTopUnits(String userCode) {
+        return null;
     }
 
     public List<UserUnit> dummyListAllUserUnits() {
@@ -272,11 +277,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return List 用户所有的机构信息
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyListUserUnits")
-    public List<UserUnit> listUserUnits(String userCode) {
+    @LoadBalanced
+    public List<UserUnit> listUserUnits(String topUnit, String userCode) {
         HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(
-                        FRAMEWORK_SERVER_URL+"/userunits/"+topOptId+"/"+userCode,
+                        FRAMEWORK_SERVER_URL+"/userunits/"+topUnit+"/"+userCode,
                         String.class));
         return receiveJSON.getDataAsArray(UserUnit.class);
     }
@@ -292,7 +297,7 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return List 机构所有用户信息
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyListUnitUsers")
+    @LoadBalanced
     public List<UserUnit> listUnitUsers(String unitCode) {
         HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(
@@ -312,11 +317,11 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return List 所有数据字典类别信息
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyListAllDataCatalogs")
-    public List<DataCatalog> listAllDataCatalogs() {
+    @LoadBalanced
+    public List<DataCatalog> listAllDataCatalogs(String topUnit) {
         HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(
-                        FRAMEWORK_SERVER_URL+"/catalogs/"+topOptId,
+                        FRAMEWORK_SERVER_URL+"/catalogs/"+topUnit,
                         String.class));
         return receiveJSON.getDataAsArray(DataCatalog.class);
 
@@ -333,7 +338,7 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return List 所有数据字典类别信息
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyListDataDictionaries")
+    @LoadBalanced
     public List<DataDictionary> listDataDictionaries(String catalogCode) {
         HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(
@@ -353,7 +358,7 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return 用户基本信息，用户机构信息，用户权限信息等等
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyLoadUserDetailsByLoginName")
+    @LoadBalanced
     public CentitUserDetails loadUserDetailsByLoginName(String loginName) {
         return loadUserDetails(loginName,"loginName");
     }
@@ -369,7 +374,7 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return 用户基本信息，用户机构信息，用户权限信息等等
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyLoadUserDetailsByUserCode")
+    @LoadBalanced
     public CentitUserDetails loadUserDetailsByUserCode(String userCode) {
         return loadUserDetails(userCode,"userCode");
     }
@@ -385,7 +390,7 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return 用户基本信息，用户机构信息，用户权限信息等等
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyLoadUserDetailsByRegEmail")
+    @LoadBalanced
     public CentitUserDetails loadUserDetailsByRegEmail(String regEmail) {
         return loadUserDetails(regEmail,"regEmail");
     }
@@ -401,7 +406,7 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return 用户基本信息，用户机构信息，用户权限信息等等
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyLoadUserDetailsByRegCellPhone")
+    @LoadBalanced
     public CentitUserDetails loadUserDetailsByRegCellPhone(String regCellPhone) {
         return loadUserDetails(regCellPhone,"regCellPhone");
     }
@@ -446,7 +451,7 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return 用户设置参数
      */
     @Override
-    @HystrixCommand(fallbackMethod = "dummyGetUserSetting")
+    @LoadBalanced
     public UserSetting getUserSetting(String userCode, String paramCode) {
         HttpReceiveJSON receiveJSON = HttpReceiveJSON.valueOfJson(
                 restTemplate.getForObject(
@@ -478,10 +483,10 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @param optInfos   菜单对象集合
      * @param optMethods 操作对象集合
      */
-    @Override
+    /*@Override
     public void insertOrUpdateMenu(List<? extends IOptInfo> optInfos, List<? extends IOptMethod> optMethods) {
 
-    }
+    }*/
 
     /**
      * 获取所有注册的业务系统
@@ -489,17 +494,17 @@ public class CloudPlatformEnvironment implements PlatformEnvironment {
      * @return 所有注册的业务系统
      */
     @Override
-    public List<? extends IOsInfo> listOsInfos() {
+    public List<? extends IOsInfo> listOsInfos(String topUnit) {
         return null;
     }
 
     @Override
-    public List<? extends IRoleInfo> listAllRoleInfo() {
+    public List<? extends IRoleInfo> listAllRoleInfo(String topUnit) {
         return null;
     }
 
     @Override
-    public List<? extends IOptInfo> listAllOptInfo() {
+    public List<? extends IOptInfo> listAllOptInfo(String topUnit) {
         return null;
     }
 

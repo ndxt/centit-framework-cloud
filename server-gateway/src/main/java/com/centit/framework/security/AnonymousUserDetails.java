@@ -1,3 +1,4 @@
+/*
 package com.centit.framework.security;
 
 
@@ -15,11 +16,14 @@ import java.util.List;
 public abstract class AnonymousUserDetails {
     public static CentitUserDetails createAnonymousUser(){
         JsonCentitUserDetails userDetails = new JsonCentitUserDetails();
-        UserInfo userInfo = new UserInfo(
+        UserInfo userInfo = new UserInfo();
+        */
+/*UserInfo userInfo = new UserInfo(
                 "anonymousUser",
                 "T",
                 "anonymousUser",
-                "anonymousUser");
+                "anonymousUser");*//*
+
         userDetails.setUserInfo((JSONObject) JSON.toJSON(userInfo));
         List<RoleInfo> roles = new ArrayList<>(2);
         RoleInfo roleInfo = new RoleInfo("anonymous", "匿名用户角色","G",
@@ -29,3 +33,4 @@ public abstract class AnonymousUserDetails {
         return userDetails;
     }
 }
+*/

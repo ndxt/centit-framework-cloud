@@ -29,7 +29,7 @@ public class CurrentSessionController extends BaseController {
     @WrapUpResponseBody
     public CentitUserDetails getLoginUserInfo(HttpServletRequest request) {
         //String token = request.getHeader("x-auth-token");
-        return WebOptUtils.getLoginUser(request);
+        return (CentitUserDetails) WebOptUtils.getLoginUser(request);
         //return sessionRepository.findById(token);
     }
 }

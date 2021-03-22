@@ -1,6 +1,7 @@
+/*
 package com.centit.framework.servergateway;
 
-import com.centit.framework.security.CloudFilterSecurityInterceptor;
+//import com.centit.framework.security.CloudFilterSecurityInterceptor;
 import com.centit.framework.security.DaoAccessDecisionManager;
 import com.centit.framework.security.DaoInvocationSecurityMetadataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected CsrfTokenRepository csrfTokenRepository;
 
 
-    protected CloudFilterSecurityInterceptor createCentitPowerFilter(
+protected CloudFilterSecurityInterceptor createCentitPowerFilter(
             DaoAccessDecisionManager centitAccessDecisionManagerBean,
             DaoInvocationSecurityMetadataSource centitSecurityMetadataSource) {
 
@@ -34,6 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         centitPowerFilter.setSecurityMetadataSource(centitSecurityMetadataSource);
         return centitPowerFilter;
     }
+
 
     @Value("${access.resource.must.be.audited:false}")
     boolean accessResourceMustBeAudited;
@@ -63,13 +65,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //AuthenticationProvider authenticationProvider = createAuthenticationProvider();
         //AuthenticationManager authenticationManager = createAuthenticationManager(authenticationProvider);
 
-        CloudFilterSecurityInterceptor centitPowerFilter = createCentitPowerFilter(
+CloudFilterSecurityInterceptor centitPowerFilter = createCentitPowerFilter(
                 createCentitAccessDecisionManager(),
                 createCentitSecurityMetadataSource());
 
 
-        http.addFilterBefore(centitPowerFilter, FilterSecurityInterceptor.class);
+
+        //http.addFilterBefore(centitPowerFilter, FilterSecurityInterceptor.class);
     }
 
 
 }
+*/

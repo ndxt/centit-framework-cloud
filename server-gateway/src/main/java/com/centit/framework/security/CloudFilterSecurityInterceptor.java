@@ -1,3 +1,4 @@
+/*
 package com.centit.framework.security;
 
 import com.centit.framework.appclient.HttpReceiveJSON;
@@ -31,7 +32,8 @@ public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
         this.restTemplate = restTemplate;
     }
 
-    /**
+    */
+/**
      * Method that is actually called by the filter chain. Simply delegates to
      * the {@link #invoke(FilterInvocation)} method.
      *
@@ -40,7 +42,8 @@ public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
      * @param chain    the filter chain
      * @throws IOException      if the filter chain fails
      * @throws ServletException if the filter chain fails
-     */
+     *//*
+
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
         FilterInvocation fi = new FilterInvocation(request, response, chain);
@@ -128,3 +131,4 @@ public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
 
 }
 
+*/

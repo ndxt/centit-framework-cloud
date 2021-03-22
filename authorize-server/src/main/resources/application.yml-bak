@@ -1,20 +1,19 @@
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:10080/eureka/
-
 server:
   port: 10087
 
 spring:
-  application:
-    name: AUTHORIZE-SERVICE
+  #application:
+    #name: AUTHORIZE-SERVICE
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8847,localhost:8848,localhost:8849   # nacos discovery地址
   datasource:
     type: org.apache.commons.dbcp2.BasicDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.128.32:3306/frameworkdb?useUnicode=true&characterEncoding=utf-8
-    username: framework
-    password: framework
+    url: jdbc:mysql://192.168.134.6:3308/framework?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: root
     dbcp2:
       max-wait-millis: 10000
       max-idle: 15

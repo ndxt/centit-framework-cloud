@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,9 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import java.util.List;
 
 @SpringBootApplication
-@EnableEurekaClient
 @EnableDiscoveryClient
-@EnableHystrix
 @ComponentScan(basePackages="com.centit")
 public class FrameworkCloudDemoApplication extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
@@ -43,6 +39,7 @@ public class FrameworkCloudDemoApplication extends WebMvcConfigurerAdapter imple
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         ApplicationBaseConfig.setApplicationContext(applicationContext, fastJsonHttpMessageConverter);
     }
+
     public static void main(String[] args) {
         SpringApplication.run(FrameworkCloudDemoApplication.class, args);
     }
