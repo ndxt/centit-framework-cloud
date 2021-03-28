@@ -1,5 +1,7 @@
 server:
   port: 10081
+  servlet: # 添加统一服务前缀
+      context-path: /framework
 
 spring:
   #application:
@@ -15,6 +17,7 @@ spring:
     type: org.apache.commons.dbcp2.BasicDataSource
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://192.168.134.6:3308/framework?useUnicode=true&characterEncoding=utf-8
+    #url: jdbc:mysql://192.168.131.43:3306/zb_sysmgr?useUnicode=true&characterEncoding=utf-8
     username: root
     password: root
     dbcp2:

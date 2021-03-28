@@ -8,6 +8,7 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8847,localhost:8848,localhost:8849   # nacos discovery地址
+        #server-addr: 192.168.131.61:8847,192.168.131.61:8848,192.168.131.61:8849   #开发服务器地址
         ip: 192.168.137.49
         #namespace: d0e7c836-f1a3-4586-936b-9b7da8ce5471
     gateway:
