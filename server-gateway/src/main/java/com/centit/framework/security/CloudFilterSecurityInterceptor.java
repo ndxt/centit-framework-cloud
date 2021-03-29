@@ -1,4 +1,3 @@
-/*
 package com.centit.framework.security;
 
 import com.centit.framework.appclient.HttpReceiveJSON;
@@ -17,8 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.*;
 import java.io.IOException;
 
-public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
-        implements Filter {
+public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor{
 
     private static String AUTHORIZE_SERVICE_URL="http://AUTHORIZE-SERVICE";
     private static CentitUserDetails anonymousUser = AnonymousUserDetails.createAnonymousUser();
@@ -32,7 +30,6 @@ public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
         this.restTemplate = restTemplate;
     }
 
-    */
 /**
      * Method that is actually called by the filter chain. Simply delegates to
      * the {@link #invoke(FilterInvocation)} method.
@@ -42,7 +39,7 @@ public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
      * @param chain    the filter chain
      * @throws IOException      if the filter chain fails
      * @throws ServletException if the filter chain fails
-     *//*
+     */
 
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
@@ -131,4 +128,3 @@ public class CloudFilterSecurityInterceptor extends AbstractSecurityInterceptor
 
 }
 
-*/

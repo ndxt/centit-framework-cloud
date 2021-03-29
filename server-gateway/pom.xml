@@ -27,62 +27,43 @@
       <optional>true</optional>
     </dependency>
 
-    <!--<dependency>
-      <groupId>com.centit.framework</groupId>
-      <artifactId>framework-cloud-config</artifactId>
-      <version>${project.version}</version>
-        <exclusions>
-            <exclusion>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webmvc</artifactId>
-            </exclusion>
-        </exclusions>
-    </dependency>-->
-
     <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-gateway</artifactId>
     </dependency>
+      <dependency>
+          <groupId>org.jasig.cas.client</groupId>
+          <artifactId>cas-client-core</artifactId>
+          <version>3.5.1</version>
+      </dependency>
+      <dependency>
+          <groupId>org.springframework.security</groupId>
+          <artifactId>spring-security-cas</artifactId>
+          <version>${spring.security.version}</version>
+      </dependency>
 
-    <!--<dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-security</artifactId>
-    </dependency>-->
+      <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-security</artifactId>
+      </dependency>
 
-    <!--<dependency>
-      <groupId>org.springframework.security.oauth</groupId>
-      <artifactId>spring-security-oauth2</artifactId>
-        <version>${spring-security-oauth2.version}</version>
-        <exclusions>
-            <exclusion>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webmvc</artifactId>
-            </exclusion>
-        </exclusions>
-    </dependency>-->
+      <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-jdbc</artifactId>
+      </dependency>
 
-    <!--<dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-jdbc</artifactId>
-        <exclusions>
-            <exclusion>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-logging</artifactId>
-            </exclusion>
-        </exclusions>
-    </dependency>-->
+      <dependency>
+          <groupId>com.centit.framework</groupId>
+          <artifactId>framework-session-core</artifactId>
+          <version>${centit.framework.version}</version>
+      </dependency>
 
-        <!--<dependency>
-            <groupId>com.centit.framework</groupId>
-            <artifactId>framework-system-module</artifactId>
-            <version>${centit.framework.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-slf4j-impl</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>-->
+      <dependency>
+          <groupId>com.centit.framework</groupId>
+          <artifactId>framework-system-module</artifactId>
+          <version>${centit.framework.version}</version>
+      </dependency>
+
 
         <dependency>
             <groupId>com.centit.framework</groupId>
@@ -96,7 +77,16 @@
             </exclusions>
         </dependency>
 
-    <dependency>
+      <dependency>
+          <groupId>org.projectlombok</groupId>
+          <artifactId>lombok</artifactId>
+          <version>1.18.2</version>
+          <scope>provided</scope>
+      </dependency>
+
+
+
+      <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
