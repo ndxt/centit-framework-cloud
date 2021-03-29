@@ -9,13 +9,14 @@ import com.centit.framework.model.adapter.OperationLogWriter;
 import com.centit.framework.security.model.StandardPasswordEncoderImpl;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.web.client.RestTemplate;
 
 
-//@Configuration
+@Configuration
 public class SystemBeanConfiguation {
 
     @Bean

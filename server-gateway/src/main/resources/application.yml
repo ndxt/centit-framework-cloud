@@ -22,7 +22,7 @@ spring:
       - id: FRAMEWORK-SERVICE         # 当前路由的标识, 要求唯一
         uri: lb://FRAMEWORK-SERVICE   # lb指的是从nacos中按照名称获取微服务,并遵循负载均衡策略
         predicates:                  # 断言(就是路由转发要满足的条件)
-        - Path=/test/get              # 当请求路径满足Path指定的规则时,才进行路由转发
+        - Path=/framework/test/get              # 当请求路径满足Path指定的规则时,才进行路由转发
         #filters:                     # 过滤器,请求在传递过程中可以通过过滤器对其进行一定的修改
         #- StripPrefix=1              # 转发之前去掉1层路径
         #- RewritePath=/api/(?<segment>/?.*), /$\{segment}
