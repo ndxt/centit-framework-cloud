@@ -7,8 +7,8 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8847,localhost:8848,localhost:8849   # nacos discovery地址
-        #server-addr: 192.168.131.61:8847,192.168.131.61:8848,192.168.131.61:8849   #开发服务器地址
+        #server-addr: localhost:8847,localhost:8848,localhost:8849   # nacos discovery地址
+        server-addr: 192.168.131.61:8847,192.168.131.61:8848,192.168.131.61:8849   #开发服务器地址
         ip: 192.168.137.49
         #namespace: d0e7c836-f1a3-4586-936b-9b7da8ce5471
     gateway:
@@ -67,3 +67,14 @@ session:
   redis:
     host: 127.0.0.1
     port: 6379
+
+security:
+  login:
+    cas:
+      enabled: true
+      localHome: http://localhost:10088
+      casHome: http://localhost:8080/cas
+  http:
+    csrf-enable: false
+    filter-continue-authentication: false
+    x-frame-options-mode: deny

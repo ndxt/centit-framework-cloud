@@ -7,15 +7,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
 //import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
 
 @EnableDiscoveryClient
 @SpringBootApplication
 @ComponentScan(basePackages="com.centit.framework",
         excludeFilters = @ComponentScan.Filter(value = org.springframework.stereotype.Controller.class))
-public class ServerGatewayApplication extends WebMvcConfigurerAdapter {
+public class ServerGatewayApplication {//extends WebMvcConfigurerAdapter {
 
     //@Autowired
     //private FastJsonHttpMessageConverter fastJsonHttpMessageConverter;
@@ -26,9 +25,6 @@ public class ServerGatewayApplication extends WebMvcConfigurerAdapter {
         converters.add(fastJsonHttpMessageConverter);
         converters.add(new StringHttpMessageConverter());
     }*/
-
-    @Value("${test.uri:http://httpbin.org:80}")
-    String uri;
 
     public static void main(String[] args) {
         //com.centit.framework.system.config.SystemBeanConfig
