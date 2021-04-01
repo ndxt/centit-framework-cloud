@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<meta http-equiv="Access-Control-Allow-Origin" content="*" />
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+        <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+		<script>
+			$(function(){
+				$("#loginBtn").click(function () {
+					// alert(JSON.stringify($("#loginForm").serialize()));
+					$.ajax({
+				        type: "POST",
+						//修改此处：修改请求的ip地址
+				        url: "http://localhost:10088/system/mainframe/login",
+				        data: $("#loginForm").serialize(),
+						xhrFields: {withCredentials: true},
+						crossDomain: true,
+				        dataType: "JSON",
+				        success: function (data) {
+				            alert(JSON.stringify(data));
+				        }
+				    });
+				});
+				
+				$("#btnLogout").click(function () {
+					// alert(JSON.stringify($("#loginForm").serialize()));
+					$.ajax({
+				        type: "POST",
+                        //修改此处：修改请求的ip地址
+				        url: "http://localhost:10088/system/mainframe/logout",
+						xhrFields: {withCredentials: true},
+						crossDomain: true,
+				        dataType: "JSON",
+				        success: function (data) {
+				            alert(JSON.stringify(data));
+				        }
+				    });
+				});
+				
+				$("#btnAdmin").click(function(){
+					$.ajax({
+					    type: "POST",
+                        //修改此处：修改请求的ip地址
+					    url: "http://localhost:10088/demo/adminCall",
+						xhrFields: {withCredentials: true},
+						crossDomain: true,
+					    dataType: "JSON",
+					    success: function (data) {
+					        alert(JSON.stringify(data));
+					    }
+					});
+				});
+				
+				$("#btn1").click(function(){
+					$.ajax({
+					    type: "POST",
+                        //修改此处：修改请求的ip地址
+					    url: "http://localhost:10088/framework/demo/user1Call",
+						xhrFields: {withCredentials: true},
+						crossDomain: true,
+					    dataType: "JSON",
+					    success: function (data) {
+					        alert(JSON.stringify(data));
+					    }
+					});
+				});
+				
+				$("#btn2").click(function(){
+					$.ajax({
+					    type: "POST",
+                        //修改此处：修改请求的ip地址
+					    url: "http://localhost:10088/framework/demo/user2Call",
+						xhrFields: {withCredentials: true},
+						crossDomain: true,
+					    dataType: "JSON",
+					    success: function (data) {
+					        alert(JSON.stringify(data));
+					    }
+					});
+				});
+				
+				$("#btn3").click(function(){
+					$.ajax({
+					    type: "POST",
+                        //修改此处：修改请求的ip地址
+					    url: "http://localhost:10088/framework/demo/user3Call",
+						xhrFields: {withCredentials: true},
+						crossDomain: true,
+					    dataType: "JSON",
+					    success: function (data) {
+					        alert(JSON.stringify(data));
+					    }
+					});
+				});
+				
+				$("#btnWhoAmI").click(function(){
+					$.ajax({
+					    type: "POST",
+                        //修改此处：修改请求的ip地址
+					    url: "http://localhost:10088/demo/whoAmI",
+						xhrFields: {withCredentials: true},
+						crossDomain: true,
+					    dataType: "JSON",
+					    success: function (data) {
+					        alert(JSON.stringify(data));
+					    }
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<form id="loginForm">
+			账号：<input type="text" name="username" /><br>
+			密码：<input type="password" name="password" /><br>
+			<input id="loginBtn" type="button" value="登录" />
+		</form>
+		<a id="btnLogout" href="javascript:void(0)">登出</a><br>
+		<a id="btnAdmin" href="javascript:void(0)">访问gateway</a><br>
+		<a id="btn1" href="javascript:void(0)">网关调用framework</a><br>
+<!--		<a id="btn2" href="javascript:void(0)">user2Call</a><br>
+		<a id="btn3" href="javascript:void(0)">user3Call</a><br>-->
+		<a id="btnWhoAmI" href="javascript:void(0)">存放在SpringSecurityContext中的用户信息</a><br>
+	</body>
+</html>

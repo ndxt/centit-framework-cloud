@@ -11,6 +11,7 @@
         <module>authorize-server</module>
         <module>framework-cloud-config</module>
         <module>nacos-common</module>
+        <module>web-demo</module>
     </modules>
 
     <parent>

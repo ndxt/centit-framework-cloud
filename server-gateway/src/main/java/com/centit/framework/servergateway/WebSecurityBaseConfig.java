@@ -24,7 +24,7 @@ public abstract class WebSecurityBaseConfig {//extends WebSecurityConfigurerAdap
 //    @Autowired
 //    protected CentitSessionRegistry centitSessionRegistry;
 
-    @Autowired(required = false)
+    @Autowired
     protected CentitUserDetailsService centitUserDetailsService;
 
     protected AjaxAuthenticationFailureHandler createFailureHandler() {

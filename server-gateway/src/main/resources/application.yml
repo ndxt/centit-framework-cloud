@@ -9,7 +9,7 @@ spring:
       discovery:
         #server-addr: localhost:8847,localhost:8848,localhost:8849   # nacos discovery地址
         server-addr: 192.168.131.61:8847,192.168.131.61:8848,192.168.131.61:8849   #开发服务器地址
-        ip: 192.168.137.49
+        #ip: 192.168.137.49
         #namespace: d0e7c836-f1a3-4586-936b-9b7da8ce5471
     gateway:
       enabled: true                 #开启网关  false 关闭网关  开启以服务中心id去注册中心上获取转发地址
@@ -22,7 +22,7 @@ spring:
       - id: FRAMEWORK-SERVICE         # 当前路由的标识, 要求唯一
         uri: lb://FRAMEWORK-SERVICE   # lb指的是从nacos中按照名称获取微服务,并遵循负载均衡策略
         predicates:                  # 断言(就是路由转发要满足的条件)
-        - Path=/framework/test/get              # 当请求路径满足Path指定的规则时,才进行路由转发
+        - Path=/framework/**              # 当请求路径满足Path指定的规则时,才进行路由转发
         #filters:                     # 过滤器,请求在传递过程中可以通过过滤器对其进行一定的修改
         #- StripPrefix=1              # 转发之前去掉1层路径
         #- RewritePath=/api/(?<segment>/?.*), /$\{segment}
@@ -65,7 +65,7 @@ framework:
 
 session:
   redis:
-    host: 127.0.0.1
+    host: 192.168.134.9
     port: 6379
 
 security:

@@ -66,6 +66,7 @@ public class WebSecurityCasConfig extends WebSecurityBaseConfig {
     //security的鉴权排除列表
     private static final String[] excludedAuthPages = {
         "/system/mainframe/login",
+        "/system/mainframe/logout",
         "/system/exception",
         "/oauth/check_token",
         "/mainframe/test"
@@ -77,11 +78,11 @@ public class WebSecurityCasConfig extends WebSecurityBaseConfig {
         RedirectServerAuthenticationEntryPoint loginPoint =
             new RedirectServerAuthenticationEntryPoint(securityProperties.getLogin().getCas().getCasHome());
         //支持跨域
-        if (securityProperties.getHttp().isCsrfEnable()) {
+        /*if (securityProperties.getHttp().isCsrfEnable()) {
             http.csrf().csrfTokenRepository(serverCsrfTokenRepository);
         } else {
             http.csrf().disable();
-        }
+        }*/
         http.authorizeExchange()
             .pathMatchers(excludedAuthPages).permitAll()
             .pathMatchers(HttpMethod.OPTIONS).permitAll()
@@ -95,7 +96,9 @@ public class WebSecurityCasConfig extends WebSecurityBaseConfig {
             .and().exceptionHandling().accessDeniedHandler(accessDeniedHandlerWebFlux) // 处理未授权
             //.authenticationEntryPoint(loginPoint);//处理未认证
             .authenticationEntryPoint(serverAuthenticationEntryPointWebFlux)//处理未认证
-            .and().logout().logoutSuccessHandler(logoutSuccessHandlerWebFlux);//成功登出时调用的自定义处理类
+            .and().csrf().disable()//必须支持跨域
+            .logout().logoutUrl("/system/mainframe/logout")
+            .logoutSuccessHandler(logoutSuccessHandlerWebFlux);//成功登出时调用的自定义处理类
 
         return http.build();
     }

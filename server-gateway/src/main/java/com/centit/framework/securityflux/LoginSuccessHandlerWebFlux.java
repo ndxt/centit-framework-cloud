@@ -1,8 +1,7 @@
 package com.centit.framework.securityflux;
 
 import com.alibaba.fastjson.JSONObject;
-import com.centit.framework.bean.UserInfoWithSecurity;
-import com.centit.framework.system.po.UserInfo;
+import com.centit.framework.security.model.JsonCentitUserDetails;
 import com.centit.framework.util.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -37,8 +36,7 @@ public class LoginSuccessHandlerWebFlux implements ServerAuthenticationSuccessHa
         ServerWebExchange exchange = webFilterExchange.getExchange();
         ServerHttpResponse response = exchange.getResponse();
 
-        UserInfoWithSecurity uws = (UserInfoWithSecurity) authentication.getPrincipal();
-        UserInfo user = uws.getUserInfo();
+        JsonCentitUserDetails user = (JsonCentitUserDetails) authentication.getPrincipal();
 
         exchange.getSession().flatMap(
                 webSession -> {

@@ -1,4 +1,4 @@
-package com.centit.framework.config;
+package com.centit.framework.config.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -27,8 +27,15 @@ public class RBACServiceWebFlux implements ReactiveAuthorizationManager<Authoriz
                 .flatMapIterable( a -> a.getAuthorities())
                 .map( g-> g.getAuthority())
                 .any(c->{
-                    if (antPathMatcher.match("/" + c, uri)) {
+                    /*if (antPathMatcher.match("/" + c, uri)) {
                         return true;
+                    }
+                    return false;*/
+                    String[] roles = c.split(",");
+                    for(String role:roles) {
+                        if("R_public".contains(role)) {
+                           return true;
+                        }
                     }
                     return false;
 //                    object.getExchange().
