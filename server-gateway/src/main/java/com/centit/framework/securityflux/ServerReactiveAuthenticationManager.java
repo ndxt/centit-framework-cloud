@@ -1,21 +1,16 @@
 package com.centit.framework.securityflux;
 
+import com.centit.framework.model.adapter.PlatformEnvironment;
 import com.centit.framework.security.model.CentitUserDetailsService;
 import com.centit.framework.security.model.JsonCentitUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import reactor.core.publisher.Mono;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * 自定义的登录验证器<br>
@@ -32,6 +27,9 @@ public class ServerReactiveAuthenticationManager implements ReactiveAuthenticati
     @Autowired
     private CentitUserDetailsService userDetailsService;
 
+    @Autowired
+    private PlatformEnvironment platformEnvironment;
+
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
         //获取输入的用户名
@@ -42,8 +40,8 @@ public class ServerReactiveAuthenticationManager implements ReactiveAuthenticati
 
         JsonCentitUserDetails user = null;
         try {
-            user = (JsonCentitUserDetails)userDetailsService.loadUserByUsername(username);
-        }catch (UsernameNotFoundException ufe){
+            user = (JsonCentitUserDetails) userDetailsService.loadUserByUsername(username);
+        } catch (UsernameNotFoundException ufe) {
             return Mono.error(ufe);
         }
 
@@ -73,7 +71,7 @@ public class ServerReactiveAuthenticationManager implements ReactiveAuthenticati
         //但session中可以获取到认证信息
         SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_GLOBAL);
         SecurityContextHolder.getContext().setAuthentication(authentication1);
-
+        //ReactiveSecurityContextHolder
         return Mono.just(authentication1);
     }
 }

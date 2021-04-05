@@ -22,6 +22,7 @@ import reactor.core.publisher.Mono;
 @Component("corsFilter")
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ServerCorsWebFilter implements WebFilter {
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
@@ -32,8 +33,8 @@ public class ServerCorsWebFilter implements WebFilter {
             HttpHeaders headers = response.getHeaders();
             headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, requestHeaders.getOrigin());
             headers.addAll(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, requestHeaders
-                    .getAccessControlRequestHeaders());
-            if(requestMethod != null){
+                .getAccessControlRequestHeaders());
+            if (requestMethod != null) {
                 headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, requestMethod.name());
             }
             headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");

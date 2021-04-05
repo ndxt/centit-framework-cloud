@@ -7,6 +7,7 @@ import com.centit.framework.core.controller.MvcConfigUtil;
 import com.centit.framework.model.adapter.NotificationCenter;
 import com.centit.framework.model.adapter.OperationLogWriter;
 import com.centit.framework.model.adapter.PlatformEnvironment;
+import com.centit.framework.security.DaoInvocationSecurityMetadataSource;
 import com.centit.framework.security.model.CentitUserDetailsService;
 import com.centit.framework.security.model.StandardPasswordEncoderImpl;
 import com.centit.framework.system.security.DaoUserDetailsService;
@@ -63,6 +64,7 @@ public class SystemBeanConfiguation {
     @Bean
     public PlatformEnvironment platformEnvironment() {
         DBPlatformEnvironment platformEnvironment = new DBPlatformEnvironment();
+        platformEnvironment.setSupportTenant(true);
         return platformEnvironment;
     }
 
@@ -70,6 +72,11 @@ public class SystemBeanConfiguation {
     public CentitUserDetailsService centitUserDetailsService() {
         DaoUserDetailsService userDetailsService = new DaoUserDetailsService();
         return userDetailsService;
+    }
+
+    @Bean
+    public DaoInvocationSecurityMetadataSource createCentitSecurityMetadataSource() {
+        return new DaoInvocationSecurityMetadataSource();
     }
 }
 
