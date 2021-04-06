@@ -1,14 +1,19 @@
 package com.centit.framework.config.demo;
 
+import com.centit.framework.common.WebOptUtils;
+import com.centit.framework.security.model.CentitSecurityMetadata;
+import com.centit.framework.security.model.TopUnitSecurityMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.security.access.ConfigAttribute;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.List;
 
@@ -30,7 +35,14 @@ public class NacosConfigTest {
     private String port;
 
     @GetMapping("/get")
-    public String getStr() {
+    public String getStr(HttpServletRequest request) {
+        //测试metadata.matchUrlToRole
+        String topUnit = WebOptUtils.getCurrentTopUnit(request);
+        TopUnitSecurityMetadata metadata = CentitSecurityMetadata.securityMetadata.getCachedValue(topUnit);
+        List<ConfigAttribute> needRoles2 = metadata.matchUrlToRole("system/mainframe/logincas", request);
+        System.out.println(needRoles2);
+        List<ConfigAttribute> needRoles = metadata.matchUrlToRole(request.getRequestURI(), request);
+        System.out.println(needRoles);
         return name + ":" + port;
     }
 

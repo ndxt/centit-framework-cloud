@@ -12,6 +12,8 @@ import com.centit.framework.security.model.CentitUserDetailsService;
 import com.centit.framework.security.model.StandardPasswordEncoderImpl;
 import com.centit.framework.system.security.DaoUserDetailsService;
 import com.centit.framework.system.service.impl.DBPlatformEnvironment;
+import com.centit.support.algorithm.BooleanBaseOpt;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +25,9 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class SystemBeanConfiguation {
+
+    @Value("${app.support.tenant:false}")
+    protected String supportTenant;
 
     @Bean
     public FastJsonHttpMessageConverter fastJsonHttpMessageConverter(){
@@ -63,8 +68,9 @@ public class SystemBeanConfiguation {
 
     @Bean
     public PlatformEnvironment platformEnvironment() {
+        boolean tenant = BooleanBaseOpt.castObjectToBoolean(supportTenant, false);
         DBPlatformEnvironment platformEnvironment = new DBPlatformEnvironment();
-        platformEnvironment.setSupportTenant(true);
+        platformEnvironment.setSupportTenant(tenant);
         return platformEnvironment;
     }
 
@@ -77,6 +83,11 @@ public class SystemBeanConfiguation {
     @Bean
     public DaoInvocationSecurityMetadataSource createCentitSecurityMetadataSource() {
         return new DaoInvocationSecurityMetadataSource();
+    }
+
+    @Bean
+    public InstantiationServiceBeanPostProcessor instantiationServiceBeanPostProcessor() {
+        return new InstantiationServiceBeanPostProcessor();
     }
 }
 

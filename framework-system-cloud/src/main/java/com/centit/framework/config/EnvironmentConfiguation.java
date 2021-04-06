@@ -10,6 +10,8 @@ import com.centit.framework.security.model.CentitUserDetailsService;
 import com.centit.framework.security.model.StandardPasswordEncoderImpl;
 import com.centit.framework.system.security.DaoUserDetailsService;
 import com.centit.framework.system.service.impl.DBPlatformEnvironment;
+import com.centit.support.algorithm.BooleanBaseOpt;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -19,6 +21,9 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 @Configuration("environmentConfiguation")
 public class EnvironmentConfiguation {
+
+    @Value("${app.support.tenant:false}")
+    protected String supportTenant;
 
     @Bean
     public FastJsonHttpMessageConverter fastJsonHttpMessageConverter(){
@@ -32,7 +37,9 @@ public class EnvironmentConfiguation {
 
     @Bean
     public PlatformEnvironment platformEnvironment() {
+        boolean tenant = BooleanBaseOpt.castObjectToBoolean(supportTenant, false);
         DBPlatformEnvironment platformEnvironment = new DBPlatformEnvironment();
+        platformEnvironment.setSupportTenant(tenant);
         return platformEnvironment;
     }
 
