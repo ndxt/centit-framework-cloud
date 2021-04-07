@@ -47,4 +47,5 @@ https://docs.spring.io/spring-cloud-gateway/docs/2.2.5.RELEASE/reference/html/#g
 
 ####Gateway网关集成security
 web-demo页面登录测试
-
+http://localhost:8080/demo/page
+鉴权：http://localhost:10088/system/mainframe/logincas
