@@ -5,13 +5,18 @@ spring:
   application:
     name: GATEWAY-SERVICE
   redis:
-    host: 192.168.137.49
+    host: 192.168.137.49u
     port: 6379
   security:
     oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: 'http://localhost:9401/auth/rsa/publicKey' # 配置RSA的公钥访问地址
+      client:
+        client-id: 10001
+        client-secret: secret
+        grant-type: authorization_code
+        authorization-uri: http://auth-server:8080/cas/oauth2.0/authorize
+        access-token-uri: http://auth-server8080/cas/oauth2.0/accessToken
+        user-info-uri: http://auth-server8080/cas/oauth2.0/profile
+        redirect-uri: http://localhost:8080/authorized
   cloud:
     nacos:
       discovery:
@@ -79,6 +84,7 @@ secure:
     - "cas/oauth2.0/authorize"
     - "cas/oauth2.0/accessToken"
     - "cas/oauth2.0/profile"
+
 
 http:
   csrf:

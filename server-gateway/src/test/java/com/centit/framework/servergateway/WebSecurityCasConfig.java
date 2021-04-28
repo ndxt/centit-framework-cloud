@@ -1,8 +1,6 @@
 package com.centit.framework.servergateway;
 
 import com.centit.framework.securityflux.*;
-import org.jasig.cas.client.session.SingleSignOutFilter;
-import org.jasig.cas.client.validation.Cas20ServiceTicketValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -10,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.cas.ServiceProperties;
-import org.springframework.security.cas.authentication.CasAuthenticationProvider;
 import org.springframework.security.cas.web.CasAuthenticationEntryPoint;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -19,7 +16,6 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.RedirectServerAuthenticationEntryPoint;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +98,7 @@ public class WebSecurityCasConfig extends WebSecurityBaseConfig {
         return casServiceProperties;
     }
 
-    protected AuthenticationProvider getAuthenticationProvider() {
+    /*protected AuthenticationProvider getAuthenticationProvider() {
         CasAuthenticationProvider casAuthenticationProvider = new CasAuthenticationProvider();
         casAuthenticationProvider.setUserDetailsService(centitUserDetailsService);
         casAuthenticationProvider.setServiceProperties(createCasServiceProperties());
@@ -110,7 +106,7 @@ public class WebSecurityCasConfig extends WebSecurityBaseConfig {
             securityProperties.getLogin().getCas().getCasHome()));
         casAuthenticationProvider.setKey("centit-demo");
         return casAuthenticationProvider;
-    }
+    }*/
 
     protected AuthenticationEntryPoint getAuthenticationEntryPoint() {
         ServiceProperties serviceProperties = createCasServiceProperties();
@@ -121,19 +117,19 @@ public class WebSecurityCasConfig extends WebSecurityBaseConfig {
     }
 
     protected AuthenticationManager createAuthenticationManager() {
-        AuthenticationProvider authenticationProvider = getAuthenticationProvider();
-        Assert.notNull(authenticationProvider, "authenticationProvider不能为空");
+        //AuthenticationProvider authenticationProvider = getAuthenticationProvider();
+        //Assert.notNull(authenticationProvider, "authenticationProvider不能为空");
         List<AuthenticationProvider> providerList = new ArrayList<>();
-        providerList.add(authenticationProvider);
+        //providerList.add(authenticationProvider);
         return new ProviderManager(providerList);
     }
 
-    private SingleSignOutFilter singleSignOutFilter() {
+    /*private SingleSignOutFilter singleSignOutFilter() {
         SingleSignOutFilter singleLogoutFilter = new SingleSignOutFilter();
         //singleLogoutFilter.setCasServerUrlPrefix(
         //    securityProperties.getLogin().getCas().getCasHome());
         return singleLogoutFilter;
-    }
+    }*/
 
     protected AbstractAuthenticationProcessingFilter getAuthenticationFilter() {
         CasAuthenticationFilter casFilter = new CasAuthenticationFilter();

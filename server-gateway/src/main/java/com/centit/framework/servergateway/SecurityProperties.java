@@ -2,8 +2,10 @@ package com.centit.framework.servergateway;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 @Data
+@Component
 @ConfigurationProperties(SecurityProperties.PREFIX)
 public class SecurityProperties {
     public static final String PREFIX = "security";
