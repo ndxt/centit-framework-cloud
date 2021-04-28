@@ -4,7 +4,7 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: localhost:8847,localhost:8848,localhost:8849
+        server-addr: 192.168.137.49:8847,192.168.137.49:8848,192.168.137.49:8849
         # 指定远程库中的配置文件类型，默认为properties
         file-extension: yml
 

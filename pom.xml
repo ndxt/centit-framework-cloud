@@ -12,6 +12,7 @@
         <module>framework-cloud-config</module>
         <module>nacos-common</module>
         <module>web-demo</module>
+        <module>oauth2-server</module>
     </modules>
 
     <parent>

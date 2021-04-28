@@ -44,8 +44,12 @@ gateway网关路由有两种配置方式:
 
 ####predicates使用介绍  官方常用11种
 https://docs.spring.io/spring-cloud-gateway/docs/2.2.5.RELEASE/reference/html/#gateway-request-predicates-factories
+https://www.cnblogs.com/crazymakercircle/p/11704077.html
 
 ####Gateway网关集成security
 web-demo页面登录测试
 http://localhost:8080/demo/page
 鉴权：http://localhost:10088/system/mainframe/logincas
+
+gateway集成CAS
+https://github.com/liushprofessor/cas_demo

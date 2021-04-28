@@ -7,7 +7,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8847,localhost:8848,localhost:8849   # nacos discovery地址
+        server-addr: 192.168.137.49:8847,192.168.137.49:8848,192.168.137.49:8849   # nacos discovery地址
   datasource:
     type: org.apache.commons.dbcp2.BasicDataSource
     driver-class-name: com.mysql.jdbc.Driver

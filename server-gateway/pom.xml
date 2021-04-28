@@ -40,13 +40,40 @@
       <dependency>
           <groupId>org.jasig.cas.client</groupId>
           <artifactId>cas-client-core</artifactId>
-          <version>3.5.1</version>
+          <version>3.6.2</version>
       </dependency>
+
       <!--<dependency>
           <groupId>org.springframework.security</groupId>
           <artifactId>spring-security-cas</artifactId>
           <version>${spring.security.version}</version>
       </dependency>-->
+      <dependency>
+          <groupId>org.springframework.security</groupId>
+          <artifactId>spring-security-oauth2-resource-server</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.springframework.security</groupId>
+          <artifactId>spring-security-oauth2-client</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.springframework.security</groupId>
+          <artifactId>spring-security-oauth2-jose</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>com.nimbusds</groupId>
+          <artifactId>nimbus-jose-jwt</artifactId>
+          <version>8.16</version>
+      </dependency>
+
+      <dependency>
+          <groupId>cn.hutool</groupId>
+          <artifactId>hutool-all</artifactId>
+          <version>5.3.5</version>
+      </dependency>
 
       <dependency>
           <groupId>org.springframework.boot</groupId>
@@ -61,6 +88,12 @@
       <dependency>
           <groupId>com.centit.framework</groupId>
           <artifactId>framework-session-core</artifactId>
+          <exclusions>
+              <exclusion>
+                  <groupId>org.jasig.cas.client</groupId>
+                  <artifactId>cas-client-core</artifactId>
+              </exclusion>
+          </exclusions>
           <version>${centit.framework.version}</version>
       </dependency>
 

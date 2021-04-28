@@ -60,9 +60,10 @@ public class ServerReactiveAuthenticationManager implements ReactiveAuthenticati
         }
 
         //验证密码
-        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+        //CAS认证通过后，此处无需验证
+        /*if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
             return Mono.error(new BadCredentialsException("输入密码错误!"));
-        }
+        }*/
 
         Authentication authentication1 = new UsernamePasswordAuthenticationToken(user, rawPassword, user.getAuthorities());
 

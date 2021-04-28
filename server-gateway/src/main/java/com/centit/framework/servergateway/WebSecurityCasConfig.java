@@ -32,11 +32,11 @@ import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configuration
-@EnableWebFluxSecurity
+//@Configuration
+//@EnableWebFluxSecurity
 //ConditionalOnClass(name="org.jasig.cas.client.session.SingleSignOutFilter")
-@ConditionalOnProperty(prefix = "security.login.cas", name = "enabled")
-@EnableConfigurationProperties(SecurityProperties.class)
+//@ConditionalOnProperty(prefix = "security.login.cas", name = "enabled")
+//@EnableConfigurationProperties(SecurityProperties.class)
 public class WebSecurityCasConfig extends WebSecurityBaseConfig {
 
     //自定义的鉴权服务，通过鉴权的才能继续访问某个请求
@@ -99,7 +99,7 @@ public class WebSecurityCasConfig extends WebSecurityBaseConfig {
             .and().csrf().disable()//必须支持跨域
             .logout().logoutUrl("/system/mainframe/logout")
             .logoutSuccessHandler(logoutSuccessHandlerWebFlux);//成功登出时调用的自定义处理类
-
+        //http.addFilterBefore(SingleSignOutFilter(), CasAuthenticationFilter.class);
         return http.build();
     }
 
@@ -138,8 +138,8 @@ public class WebSecurityCasConfig extends WebSecurityBaseConfig {
 
     private SingleSignOutFilter singleSignOutFilter() {
         SingleSignOutFilter singleLogoutFilter = new SingleSignOutFilter();
-        singleLogoutFilter.setCasServerUrlPrefix(
-            securityProperties.getLogin().getCas().getCasHome());
+        //singleLogoutFilter.setCasServerUrlPrefix(
+        //    securityProperties.getLogin().getCas().getCasHome());
         return singleLogoutFilter;
     }
 

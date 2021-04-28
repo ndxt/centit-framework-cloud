@@ -9,7 +9,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8847,localhost:8848,localhost:8849   # nacos discovery地址
+        server-addr: 192.168.137.49:8847,192.168.137.49:8848,192.168.137.49:8849   # nacos discovery地址
         ip: 192.168.137.49
         #namespace: e100081f-de9c-4b52-8051-11346913b8af
 
@@ -68,14 +68,14 @@ deploy:
 framework:
   userinfo:
     id:
-      generator: \{"length":1\}
+      generator: default
 #default value {"prefix":"D","length":6,"pad":"0"}
   unitinfo:
     id:
-      generator: \{"length":1\}
+      generator: default
   roleinfo:
     id:
-      generator: \{"length":1\}
+      generator: default
 #多国语言设置
 sys:
   multi_lang: true

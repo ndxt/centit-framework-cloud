@@ -20,7 +20,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8847,localhost:8848,localhost:8849   # nacos discovery地址
+        server-addr: 192.168.137.49:8847,192.168.137.49:8848,192.168.137.49:8849   # nacos discovery地址
     #gateway:
       #enabled: true #开启网关    false 关闭网关
       #routes:                       # 路由数组[路由 就是指定当请求满足什么条件的时候转到哪个微服务]
