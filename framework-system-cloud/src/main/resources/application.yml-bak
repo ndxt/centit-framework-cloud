@@ -9,8 +9,8 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.137.49:8847,192.168.137.49:8848,192.168.137.49:8849   # nacos discovery地址
-        ip: 192.168.137.49
+        server-addr: 192.168.131.61:8847,192.168.131.61:8848,192.168.131.61:8849   # nacos discovery地址
+        #ip: 192.168.137.49
         #namespace: e100081f-de9c-4b52-8051-11346913b8af
 
   datasource:

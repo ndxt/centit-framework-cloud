@@ -1,7 +1,5 @@
 server:
   port: 9401
-  servlet: # 添加统一服务前缀
-    context-path: /auth
 spring:
   profiles:
     active: dev
@@ -10,13 +8,14 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.137.49:8847,192.168.137.49:8848,192.168.137.49:8849
+        #server-addr: 192.168.137.49:8847,192.168.137.49:8848,192.168.137.49:8849
+        server-addr: 192.168.131.61:8847,192.168.131.61:8848,192.168.131.61:8849
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
   redis:
     database: 0
     port: 6379
-    host: localhost
+    host: 192.168.134.9
     password:
   datasource:
     type: org.apache.commons.dbcp2.BasicDataSource
