@@ -37,42 +37,11 @@
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-gateway</artifactId>
     </dependency>
-      <dependency>
-          <groupId>org.jasig.cas.client</groupId>
-          <artifactId>cas-client-core</artifactId>
-          <version>3.6.2</version>
-      </dependency>
-
-      <!--<dependency>
-          <groupId>org.springframework.security</groupId>
-          <artifactId>spring-security-cas</artifactId>
-          <version>${spring.security.version}</version>
-      </dependency>-->
-      <dependency>
-          <groupId>org.springframework.security</groupId>
-          <artifactId>spring-security-oauth2-resource-server</artifactId>
-      </dependency>
 
       <dependency>
-          <groupId>org.springframework.security</groupId>
-          <artifactId>spring-security-oauth2-client</artifactId>
-      </dependency>
-
-      <dependency>
-          <groupId>org.springframework.security</groupId>
-          <artifactId>spring-security-oauth2-jose</artifactId>
-      </dependency>
-
-      <dependency>
-          <groupId>com.nimbusds</groupId>
-          <artifactId>nimbus-jose-jwt</artifactId>
-          <version>8.16</version>
-      </dependency>
-
-      <dependency>
-          <groupId>cn.hutool</groupId>
-          <artifactId>hutool-all</artifactId>
-          <version>5.3.5</version>
+          <groupId>org.springframework.security.oauth.boot</groupId>
+          <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+          <!--<version>2.3.10.RELEASE</version>-->
       </dependency>
 
       <dependency>
@@ -88,13 +57,13 @@
       <dependency>
           <groupId>com.centit.framework</groupId>
           <artifactId>framework-session-core</artifactId>
+          <version>${centit.framework.version}</version>
           <exclusions>
               <exclusion>
                   <groupId>org.jasig.cas.client</groupId>
                   <artifactId>cas-client-core</artifactId>
               </exclusion>
           </exclusions>
-          <version>${centit.framework.version}</version>
       </dependency>
 
       <dependency>

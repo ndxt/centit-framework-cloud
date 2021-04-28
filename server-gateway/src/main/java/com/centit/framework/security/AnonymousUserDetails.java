@@ -9,7 +9,6 @@ import com.centit.framework.security.model.JsonCentitUserDetails;
 import com.centit.framework.system.po.RoleInfo;
 import com.centit.framework.system.po.UserInfo;
 
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -5,8 +5,6 @@ import com.centit.framework.security.model.CentitUserDetailsService;
 import com.centit.support.algorithm.StringBaseOpt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.server.csrf.ServerCsrfTokenRepository;
 
 public abstract class WebSecurityBaseConfig {//extends WebSecurityConfigurerAdapter {
