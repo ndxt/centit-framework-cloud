@@ -5,7 +5,7 @@ spring:
   application:
     name: GATEWAY-SERVICE
   redis:
-    host: 192.168.137.49u
+    host: 192.168.134.9
     port: 6379
   security:
     oauth2:
@@ -16,12 +16,15 @@ spring:
         authorization-uri: http://auth-server:8080/cas/oauth2.0/authorize
         access-token-uri: http://auth-server8080/cas/oauth2.0/accessToken
         user-info-uri: http://auth-server8080/cas/oauth2.0/profile
-        redirect-uri: http://localhost:8080/gateway/frame/callback
+        redirect-uri: http://localhost:8080/authorized
+      resourceserver:
+        jwt:
+          jwk-set-uri: 'http://localhost:9401/rsa/publicKey' # 配置RSA的公钥访问地址
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.137.49:8847,192.168.137.49:8848,192.168.137.49:8849   # nacos discovery地址
-        #server-addr: 192.168.131.61:8847,192.168.131.61:8848,192.168.131.61:8849   #开发服务器地址
+        #server-addr: 192.168.137.49:8847,192.168.137.49:8848,192.168.137.49:8849   # nacos discovery地址
+        server-addr: 192.168.131.61:8847,192.168.131.61:8848,192.168.131.61:8849   #开发服务器地址
         #ip: 192.168.137.49
         #namespace: d0e7c836-f1a3-4586-936b-9b7da8ce5471
     gateway:
@@ -43,6 +46,15 @@ spring:
         uri: lb://oauth2-auth
         predicates:
         - Path=/auth/**
+        filters:
+        - StripPrefix=1
+
+      - id: oauth2-auth-token
+        uri: lb://oauth2-auth
+        predicates:
+        - Path=/oauth/token
+        filters:
+        - PreserveHostHeader
 
       - id: CAS-SERVICE-ROUTE
         uri: lb://CAS-SERVICE
@@ -77,8 +89,8 @@ secure:
   ignore:
     urls: # 配置白名单路径
     - "/actuator/**"
-    - "/auth/oauth/token"
-    - "/auth/oauth/authorize"
+    - "/oauth/token"
+    - "/oauth/authorize"
     - "/login"
 #    - "/framework/test/get"
     - "cas/oauth2.0/authorize"

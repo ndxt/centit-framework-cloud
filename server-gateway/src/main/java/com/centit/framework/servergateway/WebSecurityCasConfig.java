@@ -102,8 +102,8 @@ public class WebSecurityCasConfig extends WebSecurityBaseConfig {
         CasAuthenticationProvider casAuthenticationProvider = new CasAuthenticationProvider();
         casAuthenticationProvider.setUserDetailsService(centitUserDetailsService);
         casAuthenticationProvider.setServiceProperties(createCasServiceProperties());
-        casAuthenticationProvider.setTicketValidator(new Cas20ServiceTicketValidator(
-            securityProperties.getLogin().getCas().getCasHome()));
+        //casAuthenticationProvider.setTicketValidator(new Cas20ServiceTicketValidator(
+        //    securityProperties.getLogin().getCas().getCasHome()));
         casAuthenticationProvider.setKey("centit-demo");
         return casAuthenticationProvider;
     }*/

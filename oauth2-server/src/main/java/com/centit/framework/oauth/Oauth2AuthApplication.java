@@ -10,8 +10,8 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @EnableDiscoveryClient
 @SpringBootApplication
-@ComponentScan(basePackages="com.centit.framework",
-    excludeFilters = @ComponentScan.Filter(value = org.springframework.stereotype.Controller.class))
+/*@ComponentScan(basePackages="com.centit.framework",
+    excludeFilters = @ComponentScan.Filter(value = org.springframework.stereotype.Controller.class))*/
 public class Oauth2AuthApplication {
 
   public static void main(String[] args) {
