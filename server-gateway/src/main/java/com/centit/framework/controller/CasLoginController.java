@@ -36,7 +36,6 @@ public class CasLoginController extends BaseController {
 
     @ApiOperation(value = "当前登录用户", notes = "获取当前登录用户详情")
     @RequestMapping(value = "/login",method = RequestMethod.GET)
-    @WrapUpResponseBody
     public String loginOAuth20(ServerWebExchange exchange) {
 
         return "redirect:" +

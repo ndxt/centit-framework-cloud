@@ -10,13 +10,13 @@ spring:
   security:
     oauth2:
       client:
-        client-id: 10001
-        client-secret: secret
+        client-id: 100001
+        client-secret: 100001abcdefg
         grant-type: authorization_code
-        authorization-uri: http://auth-server:8080/cas/oauth2.0/authorize
-        access-token-uri: http://auth-server8080/cas/oauth2.0/accessToken
-        user-info-uri: http://auth-server8080/cas/oauth2.0/profile
-        redirect-uri: http://localhost:8080/authorized
+        authorization-uri: http://codefanpc:8088/cas/oauth2.0/authorize
+        access-token-uri: http://codefanpc:8088/cas/oauth2.0/accessToken
+        user-info-uri: http://codefanpc:8088/cas/oauth2.0/profile
+        redirect-uri: http://localhost:10088/frame/callback
       resourceserver:
         jwt:
           jwk-set-uri: 'http://localhost:9401/rsa/publicKey' # 配置RSA的公钥访问地址

@@ -2,7 +2,10 @@ package com.centit.framework.servergateway;
 
 import com.centit.framework.securityflux.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -10,6 +13,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.web.CasAuthenticationEntryPoint;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -20,11 +24,11 @@ import org.springframework.session.security.web.authentication.SpringSessionReme
 import java.util.ArrayList;
 import java.util.List;
 
-//@Configuration
-//@EnableWebFluxSecurity
+@Configuration
+@EnableWebFluxSecurity
 //ConditionalOnClass(name="org.jasig.cas.client.session.SingleSignOutFilter")
-//@ConditionalOnProperty(prefix = "security.login.cas", name = "enabled")
-//@EnableConfigurationProperties(SecurityProperties.class)
+@ConditionalOnProperty(prefix = "security.login.cas", name = "enabled")
+@EnableConfigurationProperties(SecurityProperties.class)
 public class WebSecurityCasConfig extends WebSecurityBaseConfig {
 
     //自定义的鉴权服务，通过鉴权的才能继续访问某个请求
@@ -53,11 +57,7 @@ public class WebSecurityCasConfig extends WebSecurityBaseConfig {
 
     //security的鉴权排除列表
     private static final String[] excludedAuthPages = {
-        "/system/mainframe/login",
-        "/system/mainframe/logout",
-        "/system/exception",
-        "/oauth/check_token",
-        "/mainframe/test"
+        "/**"
     };
 
     @Bean
