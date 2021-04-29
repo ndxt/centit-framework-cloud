@@ -16,7 +16,7 @@ spring:
         authorization-uri: http://auth-server:8080/cas/oauth2.0/authorize
         access-token-uri: http://auth-server8080/cas/oauth2.0/accessToken
         user-info-uri: http://auth-server8080/cas/oauth2.0/profile
-        redirect-uri: http://localhost:8080/authorized
+        redirect-uri: http://localhost:8080/gateway/frame/callback
   cloud:
     nacos:
       discovery:
