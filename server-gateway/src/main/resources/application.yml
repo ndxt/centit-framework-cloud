@@ -13,9 +13,12 @@ spring:
         client-id: 100001
         client-secret: 100001abcdefg
         grant-type: authorization_code
-        authorization-uri: http://codefanpc:8088/cas/oauth2.0/authorize
-        access-token-uri: http://codefanpc:8088/cas/oauth2.0/accessToken
-        user-info-uri: http://codefanpc:8088/cas/oauth2.0/profile
+#        authorization-uri: http://codefanpc:8088/cas/oauth2.0/authorize
+#        access-token-uri: http://codefanpc:8088/cas/oauth2.0/accessToken
+#        user-info-uri: http://codefanpc:8088/cas/oauth2.0/profile
+        authorization-uri: http://localhost:8080/cas/oauth2.0/authorize
+        access-token-uri: http://localhost:8080/cas/oauth2.0/accessToken
+        user-info-uri: http://localhost:8080/cas/oauth2.0/profile
         redirect-uri: http://localhost:10088/frame/callback
       resourceserver:
         jwt:

@@ -1,5 +1,6 @@
 package com.centit.framework.servergateway;
 
+import com.centit.framework.config.OAuth2ClientProperties;
 import com.centit.framework.security.*;
 import com.centit.framework.security.model.CentitUserDetailsService;
 import com.centit.support.algorithm.StringBaseOpt;
@@ -11,6 +12,9 @@ public abstract class WebSecurityBaseConfig {//extends WebSecurityConfigurerAdap
 
     @Autowired
     protected SecurityProperties securityProperties;
+
+    @Autowired
+    protected OAuth2ClientProperties oauthProperties;
 
     @Autowired(required = false)
     //protected CsrfTokenRepository csrfTokenRepository;

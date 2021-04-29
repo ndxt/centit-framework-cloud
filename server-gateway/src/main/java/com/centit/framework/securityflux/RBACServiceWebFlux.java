@@ -2,6 +2,7 @@ package com.centit.framework.securityflux;
 
 import com.centit.framework.security.DaoInvocationSecurityMetadataSource;
 import com.centit.framework.security.model.CentitSecurityMetadata;
+import com.centit.framework.security.model.JsonCentitUserDetails;
 import com.centit.framework.security.model.TopUnitSecurityMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,14 +12,16 @@ import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.util.CollectionUtils;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -36,43 +39,52 @@ public class RBACServiceWebFlux implements ReactiveAuthorizationManager<Authoriz
     private DaoInvocationSecurityMetadataSource daoInvocationSecurityMetadataSource;
 
     @Override
-    public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext object) {
+    public Mono<AuthorizationDecision> check(Mono<Authentication> monoauthentication, AuthorizationContext object) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ServerHttpRequest request = object.getExchange().getRequest();
         String uri = request.getPath().pathWithinApplication().value();
 
         //TODO 认证后需将url映射到业务操作，并查找对应的角色集合，并判断用户是否有权限访问资源
-        //http://localhost:10088/system/mainframe/logincas模拟鉴权调用
-        //TopUnitSecurityMetadata metadata = CentitSecurityMetadata.securityMetadata.getCachedValue("DxxkJ664");
-        TopUnitSecurityMetadata metadata = CentitSecurityMetadata.securityMetadata.getCachedValue("all");
+        //http://localhost:10088/system/mainframe/logincas 模拟鉴权调用
+        if (authentication == null) {
+            return Mono.just(new AuthorizationDecision(false));
+        }
+        String topUnitCode = ((JsonCentitUserDetails) authentication).getTopUnitCode();
+        Collection<? extends GrantedAuthority> userRoles = authentication.getAuthorities();
+        //待优化调整
+        TopUnitSecurityMetadata metadata = CentitSecurityMetadata.securityMetadata.getCachedValue(topUnitCode);
         FilterInvocation filterInvocation = new FilterInvocation(uri, request.getMethod().name());
         List<ConfigAttribute> configAttributes = metadata.matchUrlToRole(uri, filterInvocation.getHttpRequest());
-        List<String> needRoles = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(configAttributes)) {
-            configAttributes.forEach(c -> needRoles.add(c.getAttribute()));
+        boolean isAccess = false;
+        if (configAttributes == null) {
+            isAccess = true;
         }
+        if (userRoles != null && configAttributes != null) {
+            Iterator<? extends GrantedAuthority> userRolesItr = userRoles.iterator();
+            Iterator<ConfigAttribute> needRolesItr = configAttributes.iterator();
 
-        return authentication
-            .filter(a -> a.isAuthenticated())
-            .flatMapIterable(a -> a.getAuthorities())
-            .map(g -> g.getAuthority())
-            .any(c -> {
-                if (null == needRoles || needRoles.size() == 0) {
-                    logger.info("无需鉴权");
-                    return true;
-                } else {
-                    String[] roles = c.split(",");
-                    for (String role : roles) {
-                        if (needRoles.contains(role)) {
-                            logger.info("鉴权成功");
-                            return true;
-                        }
-                    }
-                    return false;
+            //将两个集合排序 是可以提高效率的， 但考虑到这两个集合都比较小（一般应该不会大于3）所以优化的意义不大
+            String needRole = needRolesItr.next().getAttribute();
+            String userRole = userRolesItr.next().getAuthority();
+            while (true) {
+                int n = needRole.compareTo(userRole);
+                if (n == 0) {
+                    isAccess = true;
+                    break; // 匹配成功
                 }
 
-            })
-            .map(hasAuthority -> new AuthorizationDecision(hasAuthority))
-            .defaultIfEmpty(new AuthorizationDecision(false));
+                if (n < 0) {
+                    if (!needRolesItr.hasNext())
+                        break;
+                    needRole = needRolesItr.next().getAttribute();
+                } else {
+                    if (!userRolesItr.hasNext())
+                        break;
+                    userRole = userRolesItr.next().getAuthority();
+                }
+            }
+        }
+        return Mono.just(new AuthorizationDecision(isAccess));
     }
 
     @Override
