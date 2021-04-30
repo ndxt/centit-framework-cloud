@@ -7,22 +7,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.cas.ServiceProperties;
-import org.springframework.security.cas.web.CasAuthenticationEntryPoint;
-import org.springframework.security.cas.web.CasAuthenticationFilter;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.RedirectServerAuthenticationEntryPoint;
-import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -50,10 +38,6 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
     //无权限访问被拒绝时的自定义处理器。如不自己处理，默认返回403错误
     @Autowired
     private AccessDeniedHandlerWebFlux accessDeniedHandlerWebFlux;
-
-    //未登录访问资源时的处理类，若无此处理类，前端页面会弹出登录窗口
-    @Autowired
-    private ServerAuthenticationEntryPointWebFlux serverAuthenticationEntryPointWebFlux;
 
     //security的鉴权排除列表
     private static final String[] excludedAuthPages = {
@@ -89,9 +73,10 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
             .and().formLogin().loginPage("/frame/login")
             .authenticationSuccessHandler(loginSuccessHandlerWebFlux)//认证成功
             .authenticationFailureHandler(loginFailedHandlerWebFlux)//登陆验证失败
+            //.and().addFilterAt()
             .and().exceptionHandling().accessDeniedHandler(accessDeniedHandlerWebFlux) // 处理未授权
             .authenticationEntryPoint(loginPoint)//处理未认证
-            //.authenticationEntryPoint(serverAuthenticationEntryPointWebFlux)//处理未认证
+            //.authenticationEntryPoint(serverAuthenticationEntryPointWebFlux)//认证入口
             .and().csrf().disable()//必须支持跨域
             .logout().logoutUrl("/frame/logout")
             .logoutSuccessHandler(logoutSuccessHandlerWebFlux);//成功登出时调用的自定义处理类

@@ -1,8 +1,8 @@
 package com.centit.framework.oauth.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.centit.framework.oauth.constant.RedisConstant;
 import com.centit.framework.oauth.service.ResourceService;
-import cn.hutool.core.collection.CollUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 

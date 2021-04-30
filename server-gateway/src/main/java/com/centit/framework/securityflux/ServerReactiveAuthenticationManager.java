@@ -4,12 +4,12 @@ import com.centit.framework.model.adapter.PlatformEnvironment;
 import com.centit.framework.security.model.CentitUserDetailsService;
 import com.centit.framework.security.model.JsonCentitUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 /**
@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
  * 由于SpringGateWay基于WebFlux，所以SpringSecruity很多原有写法，都得改为WebFlux的方式才能生效！
  */
 //此类会自动注入到SpringSecurity中，无需手动指定配置
-@Configuration
+@Component
 public class ServerReactiveAuthenticationManager implements ReactiveAuthenticationManager {
 
     //解密用的（在SpringSecurityConfig中配置的bean）

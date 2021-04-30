@@ -1,7 +1,6 @@
 package com.centit.framework.oauth.component;
 
 import com.centit.framework.oauth.service.principal.UserPrincipal;
-//import com.centit.framework.security.model.JsonCentitUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -11,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+
+//import com.centit.framework.security.model.JsonCentitUserDetails;
 
 
 /**

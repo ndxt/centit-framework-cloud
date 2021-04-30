@@ -30,7 +30,7 @@ import java.net.URI;
 
 @Component
 @RequestMapping("/frame")
-public class CasLoginController /*extends BaseController*/ {
+public class OAuth20LoginController /*extends BaseController*/ {
 
     @Autowired
     protected OAuth2ClientProperties oauthProperties;

@@ -1,10 +1,10 @@
 package com.centit.framework.oauth.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.centit.framework.oauth.constant.MessageConstant;
 import com.centit.framework.oauth.domain.entity.Client;
 import com.centit.framework.oauth.service.ClientService;
 import com.centit.framework.oauth.service.principal.ClientPrincipal;
-import cn.hutool.core.collection.CollUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientDetails;

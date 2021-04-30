@@ -1,10 +1,10 @@
 package com.centit.framework.oauth.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.centit.framework.oauth.constant.MessageConstant;
 import com.centit.framework.oauth.domain.entity.User;
 import com.centit.framework.oauth.service.UserService;
 import com.centit.framework.oauth.service.principal.UserPrincipal;
-import cn.hutool.core.collection.CollUtil;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.DisabledException;

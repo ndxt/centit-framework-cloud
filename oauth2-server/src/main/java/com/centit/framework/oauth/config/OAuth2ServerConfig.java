@@ -3,14 +3,12 @@ package com.centit.framework.oauth.config;
 import com.centit.framework.oauth.component.JwtTokenEnhancer;
 import com.centit.framework.oauth.service.ClientService;
 import com.centit.framework.oauth.service.UserService;
-//import com.centit.framework.security.model.CentitUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -25,8 +23,9 @@ import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 
 import java.security.KeyPair;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+//import com.centit.framework.security.model.CentitUserDetailsService;
 
 /**
  * 认证服务器配置
