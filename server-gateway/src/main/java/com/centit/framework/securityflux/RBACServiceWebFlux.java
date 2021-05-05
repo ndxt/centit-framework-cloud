@@ -50,6 +50,9 @@ public class RBACServiceWebFlux implements ReactiveAuthorizationManager<Authoriz
             return Mono.just(new AuthorizationDecision(false));
         }
         String topUnitCode = ((JsonCentitUserDetails) authentication).getTopUnitCode();
+        if (topUnitCode == null) {
+            topUnitCode = "";
+        }
         Collection<? extends GrantedAuthority> userRoles = authentication.getAuthorities();
         //待优化调整
         TopUnitSecurityMetadata metadata = CentitSecurityMetadata.securityMetadata.getCachedValue(topUnitCode);

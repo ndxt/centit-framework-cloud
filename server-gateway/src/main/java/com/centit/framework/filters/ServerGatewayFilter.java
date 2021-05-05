@@ -1,20 +1,23 @@
 package com.centit.framework.filters;
 
+import com.centit.framework.common.WebOptUtils;
+import com.centit.framework.security.model.CentitUserDetails;
+import com.centit.framework.security.model.JsonCentitUserDetails;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
+import java.util.UUID;
 
 /**
  * @author zfg
@@ -27,22 +30,33 @@ public class ServerGatewayFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        List<String> headers = request.getHeaders().get("x-auth-token");
-        String sessionId = null;
-        if (!CollectionUtils.isEmpty(headers)) {
-            for (String header : headers) {
-                sessionId = request.getQueryParams().getFirst(header);
-                if (StringUtils.isNotBlank(sessionId)) {
-                    break;
-                }
-            }
-        }
-        /*if (sessionId == null) {
+        Authentication ud = SecurityContextHolder.getContext().getAuthentication();
+        if (ud == null) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
-        }*/
-        //Authentication ud = SecurityContextHolder.getContext().getAuthentication();
-
+        } else {
+            CentitUserDetails userDetails = (JsonCentitUserDetails) ud;
+            String correlationId = request.getHeaders().getFirst(WebOptUtils.CORRELATION_ID);
+            if (StringUtils.isBlank(correlationId)) {
+                correlationId = UUID.randomUUID().toString();
+            }
+            String sessionId = request.getHeaders().getFirst(WebOptUtils.SESSION_ID_TOKEN);
+            if (StringUtils.isBlank(sessionId)) {
+                //SESSION  JSESSIONID
+                if (request.getCookies().getFirst("JSESSIONID") != null) {
+                    sessionId = request.getCookies().getFirst("JSESSIONID").getValue();
+                }
+            }
+            final String correlationRelId = correlationId;
+            final String relSessionId = sessionId;
+            request.mutate().headers(httpHeaders -> {
+                httpHeaders.add(WebOptUtils.CORRELATION_ID, correlationRelId);
+                httpHeaders.add(WebOptUtils.SESSION_ID_TOKEN, relSessionId);
+                httpHeaders.add(WebOptUtils.CURRENT_USER_CODE_TAG, userDetails.getUserCode());
+                httpHeaders.add(WebOptUtils.CURRENT_UNIT_CODE_TAG, userDetails.getCurrentUnitCode());
+                httpHeaders.add(WebOptUtils.CURRENT_STATION_ID_TAG, userDetails.getCurrentStation().getString("userUnitId"));
+            }).build();
+        }
         return chain.filter(exchange);
     }
 
