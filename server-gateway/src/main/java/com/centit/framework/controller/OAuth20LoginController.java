@@ -19,14 +19,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @RequestMapping("/frame")
@@ -57,7 +59,7 @@ public class OAuth20LoginController /*extends BaseController*/ {
     @ApiOperation(value = "当前登录用户", notes = "获取当前登录用户详情")
     @RequestMapping(value = "/callback",method = RequestMethod.GET)
     @ResponseBody
-    public void callback(ServerWebExchange exchange) throws IOException {
+    public void callback(ServerWebExchange exchange, ServerHttpResponse response) throws IOException {
         String token = exchange.getRequest().getQueryParams().getFirst("code");
         CloseableHttpClient request = HttpExecutor.createHttpClient();
         HttpExecutorContext executorContext = HttpExecutorContext.create(request);
@@ -82,7 +84,16 @@ public class OAuth20LoginController /*extends BaseController*/ {
         JSONObject user = JSONObject.parseObject(userInfo);
         CentitUserDetails ud =platformEnvironment.loadUserDetailsByLoginName(user.getString("id"));
         SecurityContextHolder.getContext().setAuthentication(ud);
-        //return exchange.getSession(); //JSON.toJSONString(ud);
+        Map<String, String> refMap = new HashMap<>();
+        exchange.getSession().flatMap(
+            webSession -> {
+                String referer = webSession.getAttribute("Referer");
+                refMap.put("Referer", referer);
+                return Mono.just(webSession);
+            }
+        ).subscribe();
+        response.setStatusCode(HttpStatus.FOUND);
+        response.getHeaders().setLocation(URI.create(refMap.get("Referer")));
     }
 
     @ApiOperation(value = "当前登录用户", notes = "获取当前登录用户详情")
@@ -94,14 +105,9 @@ public class OAuth20LoginController /*extends BaseController*/ {
 
     @ApiOperation(value = "当前用户登出", notes = "当前用户登出")
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
+    @ResponseBody
     public String logoutOAuth2() {
         SecurityContextHolder.getContext().setAuthentication(AnonymousUserDetails.createAnonymousUser());
-        return ResponseData.successResponse.toJSONString();
-    }
-
-    @GetMapping("/hello")
-    @ResponseBody
-    public String hello() {
-        return "Hello World !";
+        return ResponseData.successResponse.toString();
     }
 }

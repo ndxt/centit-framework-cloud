@@ -40,7 +40,7 @@ public class ServerGatewayConfiguration {
      * 重定向登录请求
      * @return
      */
-    @Bean
+    /*@Bean
     public RouterFunction<ServerResponse> initRouterFunction(){
         String redirectUrl = oauthProperties.getAuthorizationUri() +
             "?response_type=code&client_id=" + oauthProperties.getClientId() +
@@ -48,7 +48,7 @@ public class ServerGatewayConfiguration {
         return RouterFunctions.route()
             .GET("/frame/login",serverRequest -> ServerResponse.temporaryRedirect(URI.create(redirectUrl)).build())
             .build();
-    }
+    }*/
 
     /**
      * 测试重定向登录后权限过滤请求

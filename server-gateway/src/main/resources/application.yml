@@ -27,7 +27,8 @@ spring:
     nacos:
       discovery:
         #server-addr: 192.168.137.49:8847,192.168.137.49:8848,192.168.137.49:8849   # nacos discovery地址
-        server-addr: 192.168.131.61:8847,192.168.131.61:8848,192.168.131.61:8849   #开发服务器地址
+        #server-addr: 192.168.131.61:8847,192.168.131.61:8848,192.168.131.61:8849   #开发服务器地址
+        server-addr: localhost:8847,localhost:8848,localhost:8849
         #ip: 192.168.137.49
         #namespace: d0e7c836-f1a3-4586-936b-9b7da8ce5471
     gateway:
@@ -79,6 +80,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://192.168.134.6:3308/framework?useUnicode=true&characterEncoding=utf-8&useSSL=false
     #url: jdbc:mysql://127.0.0.1:3306/framework?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    #url: jdbc:mysql://192.168.131.43:3306/zb_sysmgr?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     password: root
     dbcp2:
@@ -91,15 +93,15 @@ spring:
 secure:
   ignore:
     urls: # 配置白名单路径
-    - "/actuator/**"
-    - "/oauth/token"
-    - "/oauth/authorize"
-    - "/login"
-#    - "/framework/test/get"
-    - "cas/oauth2.0/authorize"
-    - "cas/oauth2.0/accessToken"
-    - "cas/oauth2.0/profile"
-
+    - "/frame/login"
+    - "/frame/callback"
+    - "/frame/userinfo"
+    - "/frame/logout"
+    - "/cas/login"
+    - "/cas/oauth2.0/authorize"
+    - "/cas/oauth2.0/accessToken"
+    - "/cas/oauth2.0/profile"
+    - "/cas/**"
 
 http:
   csrf:

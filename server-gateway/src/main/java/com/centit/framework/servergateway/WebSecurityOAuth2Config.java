@@ -1,5 +1,6 @@
 package com.centit.framework.servergateway;
 
+import com.centit.framework.filters.ServerRequestReferFilter;
 import com.centit.framework.securityflux.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.RedirectServerAuthenticationEntryPoint;
@@ -39,6 +41,9 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
     @Autowired
     private AccessDeniedHandlerWebFlux accessDeniedHandlerWebFlux;
 
+    @Autowired
+    private ServerRequestReferFilter serverRequestReferFilter;
+
     //security的鉴权排除列表
     private static final String[] excludedAuthPages = {
         "/frame/login",
@@ -46,15 +51,10 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
         "/frame/userinfo",
         "/frame/logout",
         "/cas/**"
-        //"/**"
     };
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-       /* String redirectUrl = oauthProperties.getAuthorizationUri() +
-            "?response_type=code&client_id=" + oauthProperties.getClientId() +
-            "&redirect_uri=" + oauthProperties.getRedirectUri();*/
-        //securityProperties.getLogin().getCas().getCasHome()
         RedirectServerAuthenticationEntryPoint loginPoint =
             new RedirectServerAuthenticationEntryPoint("/frame/login");
         //支持跨域
@@ -63,6 +63,7 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
         } else {
             http.csrf().disable();
         }*/
+        http.addFilterBefore(serverRequestReferFilter, SecurityWebFiltersOrder.FIRST);
         http.authorizeExchange()
             .pathMatchers(excludedAuthPages).permitAll()
             .pathMatchers(HttpMethod.OPTIONS).permitAll()

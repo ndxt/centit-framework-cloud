@@ -2,6 +2,7 @@ package com.centit.framework.securityflux;
 
 import com.centit.framework.security.DaoInvocationSecurityMetadataSource;
 import com.centit.framework.security.model.CentitSecurityMetadata;
+import com.centit.framework.security.model.CentitUserDetails;
 import com.centit.framework.security.model.JsonCentitUserDetails;
 import com.centit.framework.security.model.TopUnitSecurityMetadata;
 import org.slf4j.Logger;
@@ -49,7 +50,8 @@ public class RBACServiceWebFlux implements ReactiveAuthorizationManager<Authoriz
         if (authentication == null) {
             return Mono.just(new AuthorizationDecision(false));
         }
-        String topUnitCode = ((JsonCentitUserDetails) authentication).getTopUnitCode();
+        CentitUserDetails userDetails = (JsonCentitUserDetails) authentication;
+        String topUnitCode = userDetails.getTopUnitCode();
         if (topUnitCode == null) {
             topUnitCode = "";
         }
@@ -86,6 +88,9 @@ public class RBACServiceWebFlux implements ReactiveAuthorizationManager<Authoriz
                     userRole = userRolesItr.next().getAuthority();
                 }
             }
+        }
+        if ("anonymousUser".equals(userDetails.getUserCode())) {
+            isAccess = false;
         }
         return Mono.just(new AuthorizationDecision(isAccess));
     }
