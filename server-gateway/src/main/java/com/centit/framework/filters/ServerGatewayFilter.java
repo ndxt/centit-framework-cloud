@@ -1,13 +1,11 @@
 package com.centit.framework.filters;
 
 import com.centit.framework.common.WebOptUtils;
-import com.centit.framework.config.SecureIgnoreProperties;
 import com.centit.framework.security.model.CentitUserDetails;
 import com.centit.framework.security.model.JsonCentitUserDetails;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -27,9 +25,6 @@ import java.util.UUID;
 public class ServerGatewayFilter implements GlobalFilter, Ordered {
 
     private static final Logger logger = LoggerFactory.getLogger(ServerGatewayFilter.class);
-
-    @Autowired
-    protected SecureIgnoreProperties secureIgnoreProperties;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
