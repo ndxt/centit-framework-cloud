@@ -1,4 +1,4 @@
-package com.centit.framework.servergateway;
+package com.centit.framework.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

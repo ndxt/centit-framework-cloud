@@ -1,6 +1,7 @@
 package com.centit.framework.servergateway;
 
 import com.centit.framework.config.OAuth2ClientProperties;
+import com.centit.framework.config.SecurityProperties;
 import com.centit.framework.security.*;
 import com.centit.framework.security.model.CentitUserDetailsService;
 import com.centit.support.algorithm.StringBaseOpt;

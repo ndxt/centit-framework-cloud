@@ -1,4 +1,4 @@
-package com.centit.framework.servergateway;
+package com.centit.framework.filters;
 
 import com.centit.framework.util.RequestUrlUtils;
 import org.springframework.core.Ordered;

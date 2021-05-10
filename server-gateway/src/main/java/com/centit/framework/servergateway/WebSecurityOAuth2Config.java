@@ -1,7 +1,8 @@
 package com.centit.framework.servergateway;
 
+import com.centit.framework.config.SecurityProperties;
 import com.centit.framework.filters.ServerRequestReferFilter;
-import com.centit.framework.securityflux.*;
+import com.centit.framework.securityflux.RBACServiceWebFlux;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -24,22 +25,6 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
     //自定义的鉴权服务，通过鉴权的才能继续访问某个请求
     @Autowired
     private RBACServiceWebFlux rbacServiceWebFlux;
-
-    //登录成功时调用的自定义处理类
-    @Autowired
-    private LoginSuccessHandlerWebFlux loginSuccessHandlerWebFlux;
-
-    //登录失败时调用的自定义处理类
-    @Autowired
-    private LoginFailedHandlerWebFlux loginFailedHandlerWebFlux;
-
-    //成功登出时调用的自定义处理类
-    @Autowired
-    private LogoutSuccessHandlerWebFlux logoutSuccessHandlerWebFlux;
-
-    //无权限访问被拒绝时的自定义处理器。如不自己处理，默认返回403错误
-    @Autowired
-    private AccessDeniedHandlerWebFlux accessDeniedHandlerWebFlux;
 
     @Autowired
     private ServerRequestReferFilter serverRequestReferFilter;
@@ -69,15 +54,10 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
             .and().httpBasic()
             //.and().formLogin().loginPage(securityProperties.getLogin().getCas().getCasHome())
             .and().formLogin().loginPage("/frame/login")
-            .authenticationSuccessHandler(loginSuccessHandlerWebFlux)//认证成功
-            .authenticationFailureHandler(loginFailedHandlerWebFlux)//登陆验证失败
-            //.and().addFilterAt()
-            .and().exceptionHandling().accessDeniedHandler(accessDeniedHandlerWebFlux) // 处理未授权
             .authenticationEntryPoint(loginPoint)//处理未认证
             //.authenticationEntryPoint(serverAuthenticationEntryPointWebFlux)//认证入口
             .and().csrf().disable()//必须支持跨域
-            .logout().logoutUrl("/frame/logout")
-            .logoutSuccessHandler(logoutSuccessHandlerWebFlux);//成功登出时调用的自定义处理类
+            .logout().logoutUrl("/frame/logout");
 
         return http.build();
     }

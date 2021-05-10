@@ -33,15 +33,12 @@ public class ServerRequestReferFilter implements WebFilter {
         exchange.getSession().flatMap(
             webSession -> {
                 String lastReferer = webSession.getAttribute("urlReferer");
-                System.out.println("sessionid:======" +webSession.getId()+"---------------开始"+lastReferer);
                 //将Referer存在WebSession中
                 if ((ud == null || (userDetails != null && "anonymousUser".equals(userDetails.getUserCode())))
                     && StringUtils.isBlank(lastReferer)) {
-                    System.out.println("sessionid:======" +webSession.getId()+"---------------覆盖"+uri.toString());
                     webSession.getAttributes().put("urlReferer", uri.toString());
                 } else if (null != ud && !"anonymousUser".equals(userDetails.getUserCode())
                     && uri.toString().equals(lastReferer)) {
-                    System.out.println("sessionid:======" +webSession.getId()+"---------------删除"+uri.toString());
                     webSession.getAttributes().remove("urlReferer");
                 }
                 return Mono.just(webSession);

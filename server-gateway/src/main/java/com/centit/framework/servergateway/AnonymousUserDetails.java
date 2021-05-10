@@ -1,4 +1,4 @@
-package com.centit.framework.security;
+package com.centit.framework.servergateway;
 
 
 import com.alibaba.fastjson.JSON;
