@@ -25,7 +25,6 @@ spring:
   cloud:
     nacos:
       discovery:
-        #server-addr: 192.168.137.49:8847,192.168.137.49:8848,192.168.137.49:8849   # nacos discovery地址
         #server-addr: 192.168.131.61:8847,192.168.131.61:8848,192.168.131.61:8849   #开发服务器地址
         server-addr: localhost:8847,localhost:8848,localhost:8849
         #ip: 192.168.137.49
@@ -78,7 +77,6 @@ spring:
     type: org.apache.commons.dbcp2.BasicDataSource
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://192.168.134.6:3308/framework?useUnicode=true&characterEncoding=utf-8&useSSL=false
-    #url: jdbc:mysql://127.0.0.1:3306/framework?useUnicode=true&characterEncoding=utf-8&useSSL=false
     #url: jdbc:mysql://192.168.131.43:3306/zb_sysmgr?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     password: root
