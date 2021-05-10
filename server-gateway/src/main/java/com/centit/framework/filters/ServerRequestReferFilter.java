@@ -1,10 +1,12 @@
 package com.centit.framework.filters;
 
+import com.centit.framework.security.model.CentitUserDetails;
+import com.centit.framework.security.model.JsonCentitUserDetails;
+import com.centit.framework.util.RequestUrlUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -22,22 +24,25 @@ public class ServerRequestReferFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        ServerHttpResponse response = exchange.getResponse();
         URI uri = request.getURI();
+        if (RequestUrlUtils.ignoreUrl(uri)) {
+            return chain.filter(exchange);
+        }
         Authentication ud = SecurityContextHolder.getContext().getAuthentication();
+        CentitUserDetails userDetails = (JsonCentitUserDetails) ud;
         exchange.getSession().flatMap(
             webSession -> {
-                String lastReferer = webSession.getAttribute("Referer");
-                //让浏览器把Referer保存在cookie中
-                /*response.addCookie(ResponseCookie.from("Referer", uri.toString())
-                    .httpOnly(true).path("/").build());*/
-                //把Referer也存一份在WebSession中
-                if (ud == null && StringUtils.isBlank(lastReferer)) {
-                    /*response.addCookie(ResponseCookie.from("Referer", uri.toString())
-                        .httpOnly(true).path("/").build());*/
-                    webSession.getAttributes().put("Referer", uri.toString());
-                } else if (null != ud && uri.toString().equals(lastReferer)) {
-                    webSession.getAttributes().remove("Referer");
+                String lastReferer = webSession.getAttribute("urlReferer");
+                System.out.println("sessionid:======" +webSession.getId()+"---------------开始"+lastReferer);
+                //将Referer存在WebSession中
+                if ((ud == null || (userDetails != null && "anonymousUser".equals(userDetails.getUserCode())))
+                    && StringUtils.isBlank(lastReferer)) {
+                    System.out.println("sessionid:======" +webSession.getId()+"---------------覆盖"+uri.toString());
+                    webSession.getAttributes().put("urlReferer", uri.toString());
+                } else if (null != ud && !"anonymousUser".equals(userDetails.getUserCode())
+                    && uri.toString().equals(lastReferer)) {
+                    System.out.println("sessionid:======" +webSession.getId()+"---------------删除"+uri.toString());
+                    webSession.getAttributes().remove("urlReferer");
                 }
                 return Mono.just(webSession);
             }

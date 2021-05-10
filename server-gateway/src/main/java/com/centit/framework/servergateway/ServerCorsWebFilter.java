@@ -1,5 +1,6 @@
 package com.centit.framework.servergateway;
 
+import com.centit.framework.util.RequestUrlUtils;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +27,9 @@ public class ServerCorsWebFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+        if (RequestUrlUtils.ignoreUrl(request.getURI())) {
+            return chain.filter(exchange);
+        }
         if (CorsUtils.isCorsRequest(request)) {
             HttpHeaders requestHeaders = request.getHeaders();
             ServerHttpResponse response = exchange.getResponse();

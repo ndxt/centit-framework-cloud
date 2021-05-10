@@ -50,6 +50,9 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
         "/frame/callback",
         "/frame/userinfo",
         "/frame/logout",
+        "/cas/oauth2.0/authorize",
+        "/cas/oauth2.0/accessToken",
+        "/cas/oauth2.0/profile",
         "/cas/**"
     };
 
@@ -57,12 +60,6 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         RedirectServerAuthenticationEntryPoint loginPoint =
             new RedirectServerAuthenticationEntryPoint("/frame/login");
-        //支持跨域
-        /*if (securityProperties.getHttp().isCsrfEnable()) {
-            http.csrf().csrfTokenRepository(serverCsrfTokenRepository);
-        } else {
-            http.csrf().disable();
-        }*/
         http.addFilterBefore(serverRequestReferFilter, SecurityWebFiltersOrder.FIRST);
         http.authorizeExchange()
             .pathMatchers(excludedAuthPages).permitAll()

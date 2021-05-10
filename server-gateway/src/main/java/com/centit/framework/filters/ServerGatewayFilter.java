@@ -3,6 +3,7 @@ package com.centit.framework.filters;
 import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.security.model.CentitUserDetails;
 import com.centit.framework.security.model.JsonCentitUserDetails;
+import com.centit.framework.util.RequestUrlUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,9 @@ public class ServerGatewayFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+        if (RequestUrlUtils.ignoreUrl(request.getURI())) {
+            return chain.filter(exchange);
+        }
         Authentication ud = SecurityContextHolder.getContext().getAuthentication();
         if (null != ud) {
             CentitUserDetails userDetails = (JsonCentitUserDetails) ud;

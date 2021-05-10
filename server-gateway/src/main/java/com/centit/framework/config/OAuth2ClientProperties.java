@@ -17,4 +17,5 @@ public class OAuth2ClientProperties {
     private String accessTokenUri;
     private String userInfoUri;
     private String redirectUri;
+    private String logOutUri;
 }
