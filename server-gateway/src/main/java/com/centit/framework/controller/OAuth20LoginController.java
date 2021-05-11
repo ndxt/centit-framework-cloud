@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.centit.framework.common.ResponseData;
 import com.centit.framework.config.OAuth2ClientProperties;
 import com.centit.framework.model.adapter.PlatformEnvironment;
+import com.centit.framework.security.model.JsonCentitUserDetails;
 import com.centit.framework.servergateway.AnonymousUserDetails;
 import com.centit.framework.security.model.CentitUserDetails;
 import com.centit.framework.security.model.CentitUserDetailsService;
@@ -12,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,10 +52,16 @@ public class OAuth20LoginController /*extends BaseController*/ {
     @ApiOperation(value = "登录", notes = "登录")
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public void loginOAuth2(ServerHttpResponse response) {
+        Authentication ud = SecurityContextHolder.getContext().getAuthentication();
+        CentitUserDetails userDetails = (JsonCentitUserDetails) ud;
         response.setStatusCode(HttpStatus.FOUND);
-        response.getHeaders().setLocation(URI.create(oauthProperties.getAuthorizationUri() +
-            "?response_type=code&client_id=" + oauthProperties.getClientId() +
-            "&redirect_uri=" + oauthProperties.getRedirectUri()));
+        if (ud == null || (userDetails != null && "anonymousUser".equals(userDetails.getUserCode()))) {
+            response.getHeaders().setLocation(URI.create(oauthProperties.getAuthorizationUri() +
+                "?response_type=code&client_id=" + oauthProperties.getClientId() +
+                "&redirect_uri=" + oauthProperties.getRedirectUri()));
+        } else {
+            response.getHeaders().setLocation(URI.create(oauthProperties.getLoginIndexUri()));
+        }
     }
 
     @ApiOperation(value = "当前登录用户", notes = "获取当前登录用户详情")

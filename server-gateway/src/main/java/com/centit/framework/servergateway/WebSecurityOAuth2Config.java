@@ -1,5 +1,6 @@
 package com.centit.framework.servergateway;
 
+import com.centit.framework.config.SecureIgnoreProperties;
 import com.centit.framework.config.SecurityProperties;
 import com.centit.framework.filters.ServerRequestReferFilter;
 import com.centit.framework.securityflux.RBACServiceWebFlux;
@@ -28,6 +29,9 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
 
     @Autowired
     private ServerRequestReferFilter serverRequestReferFilter;
+
+    @Autowired
+    private SecureIgnoreProperties secureIgnoreProperties;
 
     //security的鉴权排除列表
     private static final String[] excludedAuthPages = {
