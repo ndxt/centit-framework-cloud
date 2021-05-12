@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.security.web.server.savedrequest.WebSessionServerRequestCache;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -88,6 +89,11 @@ public class SystemBeanConfiguation {
     @Bean
     public InstantiationServiceBeanPostProcessor instantiationServiceBeanPostProcessor() {
         return new InstantiationServiceBeanPostProcessor();
+    }
+
+    @Bean
+    public WebSessionServerRequestCache webSessionServerRequestCache() {
+        return new WebSessionServerRequestCache();
     }
 }
 

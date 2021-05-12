@@ -2,7 +2,6 @@ package com.centit.framework.servergateway;
 
 import com.centit.framework.config.SecureIgnoreProperties;
 import com.centit.framework.config.SecurityProperties;
-import com.centit.framework.filters.ServerRequestReferFilter;
 import com.centit.framework.securityflux.RBACServiceWebFlux;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -11,10 +10,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.RedirectServerAuthenticationEntryPoint;
+import org.springframework.security.web.server.savedrequest.WebSessionServerRequestCache;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -28,10 +27,10 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
     private RBACServiceWebFlux rbacServiceWebFlux;
 
     @Autowired
-    private ServerRequestReferFilter serverRequestReferFilter;
+    private SecureIgnoreProperties secureIgnoreProperties;
 
     @Autowired
-    private SecureIgnoreProperties secureIgnoreProperties;
+    private WebSessionServerRequestCache webSessionServerRequestCache;
 
     //security的鉴权排除列表
     private static final String[] excludedAuthPages = {
@@ -49,7 +48,8 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         RedirectServerAuthenticationEntryPoint loginPoint =
             new RedirectServerAuthenticationEntryPoint("/frame/login");
-        http.addFilterBefore(serverRequestReferFilter, SecurityWebFiltersOrder.FIRST);
+        loginPoint.setRequestCache(webSessionServerRequestCache);
+        //http.addFilterBefore(serverRequestReferFilter, SecurityWebFiltersOrder.FIRST);
         http.authorizeExchange()
             .pathMatchers(excludedAuthPages).permitAll()
             .pathMatchers(HttpMethod.OPTIONS).permitAll()

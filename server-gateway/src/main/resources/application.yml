@@ -5,7 +5,7 @@ spring:
   application:
     name: GATEWAY-SERVICE
   redis:
-    host: 192.168.137.49
+    host: 127.0.0.1
     port: 6379
   security:
     oauth2:
@@ -13,14 +13,16 @@ spring:
         client-id: 100001
         client-secret: 100001abcdefg
         grant-type: authorization_code
-        authorization-uri: http://192.168.137.49:10088/cas/oauth2.0/authorize
-        access-token-uri: http://192.168.137.49:10088/cas/oauth2.0/accessToken
-        user-info-uri: http://192.168.137.49:10088/cas/oauth2.0/profile
-        log-out-uri: http://192.168.137.49:10088/cas/logout
+        authorization-uri: http://192.168.137.49:8080/cas/oauth2.0/authorize
+        access-token-uri: http://192.168.137.49:8080/cas/oauth2.0/accessToken
+        user-info-uri: http://192.168.137.49:8080/cas/oauth2.0/profile
+        log-out-uri: http://192.168.137.49:8080/cas/logout
+        default-uri: http://192.168.137.49:10088
         login-index-uri: http://192.168.136.24:8090
 #        authorization-uri: http://CAS-SERVICE/cas/oauth2.0/authorize
 #        access-token-uri: http://CAS-SERVICE/cas/oauth2.0/accessToken
 #        user-info-uri: http://CAS-SERVICE/cas/oauth2.0/profile
+        #redirect-uri: http://192.168.137.49:10088/frame/callback
         redirect-uri: http://localhost:10088/frame/callback
 
   cloud:
@@ -124,7 +126,7 @@ framework:
 
 session:
   redis:
-    host: 192.168.137.49
+    host: 127.0.0.1
     port: 6379
 
 security:

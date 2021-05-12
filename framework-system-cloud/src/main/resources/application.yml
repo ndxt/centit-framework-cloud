@@ -83,5 +83,5 @@ sys:
 
 session:
     redis:
-      host: 192.168.134.9
+      host: 192.168.137.49
       port: 6379

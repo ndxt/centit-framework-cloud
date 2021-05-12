@@ -11,7 +11,7 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 @Configuration
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 120)
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 7200)
 @EnableConfigurationProperties(SessionProperties.class)
 public class FrameworkHttpSessionConfiguration {
 
