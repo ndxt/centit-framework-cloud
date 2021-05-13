@@ -44,16 +44,6 @@
             </Policies>
         </RollingFile>
 
-        <RollingFile name="RollingFileDebug" fileName="${LOG_HOME}/debug.log"
-                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/debug-%d{yyyy-MM-dd}-%i.log">
-            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
-            <Policies>
-                <TimeBasedTriggeringPolicy/>
-                <SizeBasedTriggeringPolicy size="100 MB"/>
-            </Policies>
-        </RollingFile>
-
     </Appenders>
 
     <Loggers>
@@ -62,7 +52,6 @@
             <AppenderRef ref="RollingFileInfo" />
             <AppenderRef ref="RollingFileWarn" />
             <AppenderRef ref="RollingFileError" />
-            <AppenderRef ref="RollingFileDebug" />
         </Root>
     </Loggers>
 </Configuration>

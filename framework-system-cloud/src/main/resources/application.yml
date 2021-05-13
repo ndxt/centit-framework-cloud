@@ -1,11 +1,11 @@
 server:
   port: 10081
   servlet: # 添加统一服务前缀
-      context-path: /framework
+      context-path: /framework/system
 
 spring:
-  #application:
-    #name: FRAMEWORK-SERVICE
+  application:
+    name: FRAMEWORK-SERVICE
   cloud:
     nacos:
       discovery:
@@ -83,5 +83,5 @@ sys:
 
 session:
     redis:
-      host: 192.168.137.49
+      host: 127.0.0.1
       port: 6379

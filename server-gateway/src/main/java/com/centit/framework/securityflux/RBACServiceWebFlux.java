@@ -5,6 +5,7 @@ import com.centit.framework.security.model.CentitSecurityMetadata;
 import com.centit.framework.security.model.CentitUserDetails;
 import com.centit.framework.security.model.JsonCentitUserDetails;
 import com.centit.framework.security.model.TopUnitSecurityMetadata;
+import com.centit.framework.util.RedisService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import reactor.core.publisher.Mono;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * 自定义的鉴权服务，通过鉴权的才能继续访问某个请求<br>
@@ -39,23 +38,38 @@ public class RBACServiceWebFlux implements ReactiveAuthorizationManager<Authoriz
     @Autowired
     private DaoInvocationSecurityMetadataSource daoInvocationSecurityMetadataSource;
 
+    @Autowired
+    private RedisService redisService;
+
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> monoauthentication, AuthorizationContext object) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ServerHttpRequest request = object.getExchange().getRequest();
         String uri = request.getPath().pathWithinApplication().value();
+        CentitUserDetails userDetails = null;
+        Map<String, CentitUserDetails> userDetailsHashMap = new HashMap<>();
+        object.getExchange().getSession().flatMap(
+            webSession -> {
+                CentitUserDetails details = (JsonCentitUserDetails) redisService.get(webSession.getId());
+                if (null != details) {
+                    userDetailsHashMap.put("details", details);
+                }
+                return Mono.just(webSession);
+            }
+        ).subscribe();
 
+        userDetails = userDetailsHashMap.get("details");
         //TODO 认证后需将url映射到业务操作，并查找对应的角色集合，并判断用户是否有权限访问资源
         //http://localhost:10088/system/mainframe/logincas 模拟鉴权调用
-        if (authentication == null) {
+        if (userDetails == null) {
             return Mono.just(new AuthorizationDecision(false));
         }
-        CentitUserDetails userDetails = (JsonCentitUserDetails) authentication;
+        //CentitUserDetails userDetails = (JsonCentitUserDetails) authentication;
         String topUnitCode = userDetails.getTopUnitCode();
         if (topUnitCode == null) {
             topUnitCode = "";
         }
-        Collection<? extends GrantedAuthority> userRoles = authentication.getAuthorities();
+        Collection<? extends GrantedAuthority> userRoles = userDetails.getAuthorities();
         //待优化调整
         TopUnitSecurityMetadata metadata = CentitSecurityMetadata.securityMetadata.getCachedValue(topUnitCode);
         FilterInvocation filterInvocation = new FilterInvocation(uri, request.getMethod().name());

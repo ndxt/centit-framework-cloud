@@ -9,6 +9,7 @@ import com.centit.framework.model.adapter.PlatformEnvironment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Created by codefan on 17-7-6.
@@ -30,6 +31,7 @@ public class InstantiationServiceBeanPostProcessor implements ApplicationListene
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_THREADLOCAL);
         //sysRoleManager.loadRoleSecurityMetadata();
         CodeRepositoryCache.setPlatformEnvironment(platformEnvironment);
         if(innerMessageManager!=null)

@@ -35,8 +35,8 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
     //security的鉴权排除列表
     private static final String[] excludedAuthPages = {
         "/frame/login",
+        "/frame/currentuser",
         "/frame/callback",
-        "/frame/userinfo",
         "/frame/logout",
         "/cas/oauth2.0/authorize",
         "/cas/oauth2.0/accessToken",
@@ -58,7 +58,7 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
             .and().httpBasic()
             //.and().formLogin().loginPage(securityProperties.getLogin().getCas().getCasHome())
             .and().formLogin().loginPage("/frame/login")
-            .authenticationEntryPoint(loginPoint)//处理未认证
+            //.authenticationEntryPoint(loginPoint)//处理未认证
             //.authenticationEntryPoint(serverAuthenticationEntryPointWebFlux)//认证入口
             .and().csrf().disable()//必须支持跨域
             .logout().logoutUrl("/frame/logout");

@@ -3,7 +3,7 @@
 
     <properties>
         <!--<property name="LOG_HOME">/logs/sample</property>-->
-        <property name="LOG_HOME">D:/Projects/RunData/ip_home/logs</property>
+        <property name="LOG_HOME">D:/Projects/RunData/ipsystem_home/logs</property>
     </properties>
 
     <Appenders>

@@ -23,7 +23,7 @@ spring:
 #        access-token-uri: http://CAS-SERVICE/cas/oauth2.0/accessToken
 #        user-info-uri: http://CAS-SERVICE/cas/oauth2.0/profile
         #redirect-uri: http://192.168.137.49:10088/frame/callback
-        redirect-uri: http://localhost:10088/frame/callback
+        redirect-uri: http://192.168.137.49:10088/frame/callback
 
   cloud:
     nacos:
@@ -66,6 +66,11 @@ spring:
         predicates:
         - Path=/cas/**
 
+#      - id: BOTON-AUTH
+#        uri: lb://BOTON-AUTH
+#        predicates:
+#        - Path=/framework/system/**
+
       - id: FRAMEWORK-SERVICE         # 当前路由的标识, 要求唯一
         uri: lb://FRAMEWORK-SERVICE   # lb指的是从nacos中按照名称获取微服务,并遵循负载均衡策略
         predicates:                  # 断言(就是路由转发要满足的条件)
@@ -95,7 +100,6 @@ secure:
     urls: # 配置白名单路径
     - "/frame/login"
     - "/frame/callback"
-    - "/frame/userinfo"
     - "/frame/logout"
     - "/cas/login"
     - "/cas/oauth2.0/authorize"
