@@ -2,7 +2,9 @@ package com.centit.framework.servergateway;
 
 import com.centit.framework.config.SecureIgnoreProperties;
 import com.centit.framework.config.SecurityProperties;
+import com.centit.framework.securityflux.AccessDeniedHandlerWebFlux;
 import com.centit.framework.securityflux.RBACServiceWebFlux;
+import com.centit.framework.securityflux.ServerAuthenticationEntryPointWebFlux;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -32,6 +34,13 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
     @Autowired
     private WebSessionServerRequestCache webSessionServerRequestCache;
 
+    //未登录访问资源时的处理类，若无此处理类，前端页面会弹出登录窗口
+    @Autowired
+    private ServerAuthenticationEntryPointWebFlux serverAuthenticationEntryPointWebFlux;
+
+    @Autowired
+    private AccessDeniedHandlerWebFlux accessDeniedHandlerWebFlux;
+
     //security的鉴权排除列表
     private static final String[] excludedAuthPages = {
         "/frame/login",
@@ -58,8 +67,10 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
             .and().httpBasic()
             //.and().formLogin().loginPage(securityProperties.getLogin().getCas().getCasHome())
             .and().formLogin().loginPage("/frame/login")
+            //.and().exceptionHandling().authenticationEntryPoint(loginPoint)
+            //.and().exceptionHandling().accessDeniedHandler(accessDeniedHandlerWebFlux)
             //.authenticationEntryPoint(loginPoint)//处理未认证
-            //.authenticationEntryPoint(serverAuthenticationEntryPointWebFlux)//认证入口
+            //.authenticationEntryPoint(serverAuthenticationEntryPointWebFlux)//处理未认证
             .and().csrf().disable()//必须支持跨域
             .logout().logoutUrl("/frame/logout");
 

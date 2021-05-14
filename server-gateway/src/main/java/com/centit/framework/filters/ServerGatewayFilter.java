@@ -15,6 +15,7 @@ import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -31,8 +32,8 @@ public class ServerGatewayFilter implements GlobalFilter, Ordered {
 
     private static final Logger logger = LoggerFactory.getLogger(ServerGatewayFilter.class);
 
-    @Autowired
-    private RedisService redisService;
+    //@Autowired
+    //private RedisService redisService;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -43,7 +44,8 @@ public class ServerGatewayFilter implements GlobalFilter, Ordered {
         Map<String, CentitUserDetails> userDetailsHashMap = new HashMap<>();
         exchange.getSession().flatMap(
             webSession -> {
-                CentitUserDetails details = (JsonCentitUserDetails) redisService.get(webSession.getId());
+                //CentitUserDetails details = (JsonCentitUserDetails) redisService.get(webSession.getId());
+                CentitUserDetails details = webSession.getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
                 if (null != details) {
                     userDetailsHashMap.put("details", details);
                 }

@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,7 +37,7 @@ import java.util.Map;
 
 @Component
 @RequestMapping("/frame")
-public class OAuth20LoginController /*extends BaseController*/ {
+public class OAuth20LoginController {
 
     private static final Logger logger = LoggerFactory.getLogger(OAuth20LoginController.class);
 
@@ -49,8 +50,8 @@ public class OAuth20LoginController /*extends BaseController*/ {
     @Autowired
     private CentitUserDetailsService userDetailsService;
 
-    @Autowired
-    private RedisService redisService;
+    //@Autowired(required = false)
+    //private RedisService redisService;
 
     //@Autowired
     //private RestTemplate restTemplate;
@@ -80,15 +81,12 @@ public class OAuth20LoginController /*extends BaseController*/ {
             "&client_id=" + oauthProperties.getClientId() + "&client_secret=" + oauthProperties.getClientSecret() +
             "&code=" + token + "&redirect_uri=" + oauthProperties.getRedirectUri()
         );*/
-        logger.error("---------tokenUrl" + token);
         try {
-            logger.error("---------getAccessTokenUri:" + oauthProperties.getAccessTokenUri());
             Map<String, Object> accessMap = CollectionsOpt.createHashMap("grant_type", "authorization_code",
                 "client_id", oauthProperties.getClientId(),
                 "client_secret", oauthProperties.getClientSecret(),
                 "code", token,
                 "redirect_uri", oauthProperties.getRedirectUri());
-            logger.error("---------accessMap:" + accessMap.toString());
             CloseableHttpClient request = HttpExecutor.createHttpClient();
             logger.error("---------request创建成功");
             HttpExecutorContext executorContext = HttpExecutorContext.create(request);
@@ -110,31 +108,18 @@ public class OAuth20LoginController /*extends BaseController*/ {
             );
             request.close();
 
-            logger.error("---------userInfo用户信息1：", userInfo.toString());
             JSONObject user = JSONObject.parseObject(userInfo);
-            logger.error("---------user用户信息2：", user);
             CentitUserDetails ud = platformEnvironment.loadUserDetailsByLoginName(user.getString("id"));
-            logger.error("---------ud用户信息3：", ud);
             //SecurityContextHolder.getContext().setAuthentication(ud);
-            redisService.set(webSession.getId(), ud, 24 * 3600L);
+            //redisService.set(webSession.getId(), ud, 24 * 3600L);
+            webSession.getAttributes().put(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, ud);
             Map<String, String> refMap = new HashMap<>();
-            String domain = "";
-            logger.error("----webSession-id:" + webSession.getId());
             String referer = webSession.getAttribute("SPRING_SECURITY_SAVED_REQUEST");
             logger.error("---------获取SPRING_SECURITY_SAVED_REQUEST：" + referer);
             String redirectUrl = "";
             if (StringUtils.isNotBlank(referer) && referer.indexOf("?") > 0) {
                 redirectUrl = referer.substring(referer.indexOf("?") + 1, referer.length());
                 redirectUrl = UrlOptUtils.splitUrlParamter(redirectUrl).get("redirectUrl");
-                //String domainUrl = redirectUrl.replaceAll("http://","").replaceAll("https://","");
-                if (StringUtils.isNotBlank(redirectUrl)) {
-                    String[] domainUrl = redirectUrl.replaceAll("http://", "")
-                        .replaceAll("https://", "").split(":");
-                    if (domainUrl.length > 0) {
-                        String temp = domainUrl[0];
-                        refMap.put("domain", temp);
-                    }
-                }
             }
             if (StringUtils.isBlank(redirectUrl)) {
                 if (StringUtils.isNotBlank(referer)) {
@@ -145,14 +130,10 @@ public class OAuth20LoginController /*extends BaseController*/ {
             }
             logger.error("sessionid:======" + webSession.getId() + "---------------实际调用：" + referer);
             refMap.put("urlReferer", referer);
-            logger.error("---------domain：" + refMap.get("domain"));
             if (null != refMap.get("urlReferer") && !"null".equals(refMap.get("urlReferer"))) {
                 logger.error("---------进入重定向：");
-              /*response.addCookie(ResponseCookie.from("SESSION", serverHttpRequest.getCookies().getFirst("SESSION").getValue())
-                 .httpOnly(true).path("/").domain(refMap.get("domain")).build());*/
-                /*response.addCookie(ResponseCookie.from("SESSION", serverHttpRequest.getCookies().getFirst("SESSION").getValue())
-                    .httpOnly(true).path("/").build());*/
                 String xtoken = serverHttpRequest.getCookies().getFirst("SESSION").getValue();
+                logger.error("---------xtoken：" + xtoken);
                 response.setStatusCode(HttpStatus.FOUND);
                 response.getHeaders().setLocation(URI.create(refMap.get("urlReferer") + "?xtoken=" + xtoken));
             }
@@ -165,7 +146,8 @@ public class OAuth20LoginController /*extends BaseController*/ {
     @RequestMapping(value = "/currentuser", method = RequestMethod.GET)
     @ResponseBody
     public String getUserInfo(WebSession session, ServerWebExchange exchange) {
-        CentitUserDetails userDetails = (JsonCentitUserDetails) redisService.get(session.getId());
+        //CentitUserDetails userDetails = (JsonCentitUserDetails) redisService.get(session.getId());
+        CentitUserDetails userDetails = session.getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
         if (userDetails == null || (null != userDetails && "anonymousUser".equals(userDetails.getUserCode()))) {
             return ResponseData.makeErrorMessage(ResponseData.ERROR_USER_NOT_LOGIN,
                 "用户没有登录或者超时，请重新登录！").toString();
@@ -186,7 +168,8 @@ public class OAuth20LoginController /*extends BaseController*/ {
     public String logoutOAuth2(WebSession webSession, ServerWebExchange exchange) {
         SecurityContextHolder.getContext().setAuthentication(null);
         ServerHttpResponse response = exchange.getResponse();
-        redisService.remove(webSession.getId());
+        //redisService.remove(webSession.getId());
+        webSession.getAttributes().remove(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
         URI logoutUrl = URI.create(oauthProperties.getLogOutUri());
         response.setStatusCode(HttpStatus.FOUND);
         response.getHeaders().setLocation(logoutUrl);

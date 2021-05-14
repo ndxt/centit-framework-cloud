@@ -6,6 +6,7 @@ import com.centit.framework.security.model.CentitUserDetails;
 import com.centit.framework.security.model.JsonCentitUserDetails;
 import com.centit.framework.security.model.TopUnitSecurityMetadata;
 import com.centit.framework.util.RedisService;
+import com.centit.framework.util.RequestUrlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.FilterInvocation;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -38,19 +40,22 @@ public class RBACServiceWebFlux implements ReactiveAuthorizationManager<Authoriz
     @Autowired
     private DaoInvocationSecurityMetadataSource daoInvocationSecurityMetadataSource;
 
-    @Autowired
-    private RedisService redisService;
+    //@Autowired
+    //private RedisService redisService;
 
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> monoauthentication, AuthorizationContext object) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ServerHttpRequest request = object.getExchange().getRequest();
         String uri = request.getPath().pathWithinApplication().value();
-        CentitUserDetails userDetails = null;
+        if (RequestUrlUtils.ignoreUrl(request.getURI())) {
+            return Mono.just(new AuthorizationDecision(true));
+        }
+
         Map<String, CentitUserDetails> userDetailsHashMap = new HashMap<>();
         object.getExchange().getSession().flatMap(
             webSession -> {
-                CentitUserDetails details = (JsonCentitUserDetails) redisService.get(webSession.getId());
+                //CentitUserDetails details = (JsonCentitUserDetails) redisService.get(webSession.getId());
+                CentitUserDetails details = webSession.getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
                 if (null != details) {
                     userDetailsHashMap.put("details", details);
                 }
@@ -58,7 +63,7 @@ public class RBACServiceWebFlux implements ReactiveAuthorizationManager<Authoriz
             }
         ).subscribe();
 
-        userDetails = userDetailsHashMap.get("details");
+        CentitUserDetails userDetails = userDetailsHashMap.get("details");
         //TODO 认证后需将url映射到业务操作，并查找对应的角色集合，并判断用户是否有权限访问资源
         //http://localhost:10088/system/mainframe/logincas 模拟鉴权调用
         if (userDetails == null) {

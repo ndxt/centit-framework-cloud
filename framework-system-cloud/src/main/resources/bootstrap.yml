@@ -1,14 +1,13 @@
 spring:
   application:
     # 要根据这个微服务名称从远程库中查找与其对应的配置文件
-    name: FRAMEWORK-SERVICE
+    name: BOTON-AUTH
 
   cloud:
     nacos:
       config:
         #server-addr: localhost:8847,localhost:8848,localhost:8849
-        server-addr: localhost:8847
-        #server-addr: 192.168.137.49:8847,192.168.137.49:8848,192.168.137.49:8849
+        server-addr: 192.168.134.10:8848
         #server-addr: 192.168.131.61:8847,192.168.131.61:8848,192.168.131.61:8849
         # 指定远程库中的配置文件类型，默认为properties
         file-extension: yml

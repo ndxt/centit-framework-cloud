@@ -5,7 +5,7 @@ server:
 
 spring:
   application:
-    name: FRAMEWORK-SERVICE
+    name: BOTON-AUTH
   cloud:
     nacos:
       discovery:
