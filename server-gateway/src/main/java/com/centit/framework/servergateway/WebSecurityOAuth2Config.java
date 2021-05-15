@@ -34,13 +34,6 @@ public class WebSecurityOAuth2Config extends WebSecurityBaseConfig {
     @Autowired
     private WebSessionServerRequestCache webSessionServerRequestCache;
 
-    //未登录访问资源时的处理类，若无此处理类，前端页面会弹出登录窗口
-    @Autowired
-    private ServerAuthenticationEntryPointWebFlux serverAuthenticationEntryPointWebFlux;
-
-    @Autowired
-    private AccessDeniedHandlerWebFlux accessDeniedHandlerWebFlux;
-
     //security的鉴权排除列表
     private static final String[] excludedAuthPages = {
         "/frame/login",
