@@ -56,7 +56,7 @@
 
       <dependency>
           <groupId>com.centit.framework</groupId>
-          <artifactId>framework-session-core</artifactId>
+          <artifactId>framework-session-redis</artifactId>
           <version>${centit.framework.version}</version>
           <exclusions>
               <exclusion>
@@ -78,11 +78,11 @@
           </exclusions>
       </dependency>
 
-      <dependency>
+     <!-- <dependency>
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-starter-data-redis</artifactId>
       </dependency>
-
+-->
 
       <dependency>
           <groupId>org.projectlombok</groupId>

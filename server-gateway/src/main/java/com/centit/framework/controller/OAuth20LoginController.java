@@ -88,14 +88,14 @@ public class OAuth20LoginController {
                 "code", token,
                 "redirect_uri", oauthProperties.getRedirectUri());
             CloseableHttpClient request = HttpExecutor.createHttpClient();
-            logger.error("---------request创建成功");
+            //logger.error("---------request创建成功");
             HttpExecutorContext executorContext = HttpExecutorContext.create(request);
             String access_token = HttpExecutor.simpleGet(executorContext,
                 oauthProperties.getAccessTokenUri(), accessMap
             );
             //String access_token = restTemplate.getForObject(tokenUrl, String.class);
             access_token = UrlOptUtils.splitUrlParamter(access_token).get("access_token");
-            logger.error("---------access_token" + access_token);
+            //logger.error("---------access_token" + access_token);
 
             /*URI userUrl = URI.create("http://CAS-SERVICE/cas/oauth2.0/profile" + "?grant_type=authorization_code" +
                 "&access_token=" + access_token);
@@ -115,7 +115,7 @@ public class OAuth20LoginController {
             webSession.getAttributes().put(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, ud);
             Map<String, String> refMap = new HashMap<>();
             String referer = webSession.getAttribute("SPRING_SECURITY_SAVED_REQUEST");
-            logger.error("---------获取SPRING_SECURITY_SAVED_REQUEST：" + referer);
+            //logger.error("---------获取SPRING_SECURITY_SAVED_REQUEST：" + referer);
             String redirectUrl = "";
             if (StringUtils.isNotBlank(referer) && referer.indexOf("?") > 0) {
                 redirectUrl = referer.substring(referer.indexOf("?") + 1, referer.length());
@@ -128,12 +128,12 @@ public class OAuth20LoginController {
             } else {
                 referer = redirectUrl;
             }
-            logger.error("sessionid:======" + webSession.getId() + "---------------实际调用：" + referer);
+            //logger.error("sessionid:======" + webSession.getId() + "---------------实际调用：" + referer);
             refMap.put("urlReferer", referer);
             if (null != refMap.get("urlReferer") && !"null".equals(refMap.get("urlReferer"))) {
-                logger.error("---------进入重定向：");
+                //logger.error("---------进入重定向：");
                 String xtoken = serverHttpRequest.getCookies().getFirst("SESSION").getValue();
-                logger.error("---------xtoken：" + xtoken);
+                //logger.error("---------xtoken：" + xtoken);
                 response.setStatusCode(HttpStatus.FOUND);
                 response.getHeaders().setLocation(URI.create(refMap.get("urlReferer") + "?xtoken=" + xtoken));
             }
@@ -155,7 +155,7 @@ public class OAuth20LoginController {
         return ResponseData.makeResponseData(userDetails).toString();
     }
 
-    @ApiOperation(value = "当前登录用户", notes = "获取当前登录用户详情")
+    @ApiOperation(value = "cas单点登录验证接口", notes = "cas单点登录验证接口")
     @RequestMapping(value = "/logincas", method = RequestMethod.GET)
     @ResponseBody
     public String getLogin(WebSession webSession) {
